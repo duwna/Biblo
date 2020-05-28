@@ -9,4 +9,64 @@
 
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
+    <string name="text_on_fab_groups">Новая группа</string>
+    <string name="loading">Loading...</string>
+    <string name="et_add_group_name">Название</string>
+    <string name="tv_choose_currency">Выберите валюту:</string>
+    <string name="et_add_group_currency">Валюта</string>
+    <string name="switch_your_currency">Своя валюта</string>
+    <string name="tv_choose_avatar">Выберите аватар:</string>
+    <string name="tv_add_members">Добавьте участников:</string>
+    <string name="btn_create_group">Создать группу</string>
+    <string name="btn_search">Найти пользователя</string>
+    <string name="vtn_create">Создать</string>
+    <string name="name">Имя</string>
+    <string name="label_avatar">Аватар:</string>
+    <string name="title_all_groups">Все группы</string>
+    <string name="title_add_group">Создание группы</string>
+    <string name="title_add_members">Добавление участников</string>
+
+    <string-array name="currency">
+        <item>₽</item>
+        <item>$</item>
+        <item>¢</item>
+        <item>£</item>
+        <item>¤</item>
+        <item>¥</item>
+        <item>֏</item>
+        <item>৲</item>
+        <item>৳</item>
+        <item>৻</item>
+        <item>૱</item>
+        <item>௹</item>
+        <item>฿</item>
+        <item>៛</item>
+        <item>₠</item>
+        <item>₡</item>
+        <item>₢</item>
+        <item>₣</item>
+        <item>₤</item>
+        <item>₥</item>
+        <item>₦</item>
+        <item>₧</item>
+        <item>₨</item>
+        <item>₩</item>
+        <item>₪</item>
+        <item>₫</item>
+        <item>€</item>
+        <item>₭</item>
+        <item>₮</item>
+        <item>₯</item>
+        <item>₰</item>
+        <item>₲</item>
+        <item>₳</item>
+        <item>₴</item>
+        <item>₵</item>
+        <item>₶</item>
+        <item>₷</item>
+        <item>₸</item>
+        <item>₹</item>
+        <item>₺</item>
+    </string-array>
+
 </resources>

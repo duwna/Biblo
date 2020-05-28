@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rv_groups"
+        tools:listitem="@layout/item_group"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" />
+
+    <me.itangqi.waveloadingview.WaveLoadingView
+        android:id="@+id/wave_view"
+        android:layout_width="150dp"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:layout_height="150dp"
+        android:layout_gravity="center"
+        app:wlv_borderColor="@color/color_accent"
+        app:wlv_borderWidth="4dp"
+        app:wlv_shapeType="circle"
+        app:wlv_waveColor="@color/color_primary_dark" />
+
+    <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+        android:id="@+id/fab"
+        app:layout_behavior=".ui.custom.FabBehavior"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        android:layout_marginEnd="@dimen/fab_margin_end"
+        android:layout_marginBottom="@dimen/fab_margin_bottom"
+        android:backgroundTint="@color/color_accent"
+        android:text="@string/text_on_fab_groups"
+        android:textAllCaps="false"
+        app:icon="@drawable/ic_people" />
+
+
+</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -3,7 +3,7 @@
     <color name="color_primary">#0040FF</color>
     <color name="color_primary_dark">#002BAB</color>
     <color name="color_accent">#FFAE00</color>
-    <color name="color_surface">#F6F6F6</color>
-    <color name="color_on_surface">#202020</color>
-    <color name="color_on_primary">#FFFFFF</color>
+    <color name="color_surface">#272727</color>
+    <color name="color_on_surface">#FFFFFF</color>
+    <color name="color_on_primary">#C8C8C8</color>
 </resources>

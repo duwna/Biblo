@@ -3,26 +3,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/FirstFragment">
-
+    app:startDestination="@id/navigation_groups">
     <fragment
-        android:id="@+id/FirstFragment"
-        android:name="com.duwna.biblo.FirstFragment"
-        android:label="@string/first_fragment_label"
-        tools:layout="@layout/fragment_first">
-
+        tools:layout="@layout/fragment_groups"
+        android:id="@+id/navigation_groups"
+        android:name="com.duwna.biblo.ui.groups.GroupsFragment"
+        android:label="@string/title_all_groups"
+        >
         <action
-            android:id="@+id/action_FirstFragment_to_SecondFragment"
-            app:destination="@id/SecondFragment" />
+            android:id="@+id/action_groups_to_add_group"
+            app:destination="@id/navigation_add_group" />
     </fragment>
     <fragment
-        android:id="@+id/SecondFragment"
-        android:name="com.duwna.biblo.SecondFragment"
-        android:label="@string/second_fragment_label"
-        tools:layout="@layout/fragment_second">
-
+        android:id="@+id/navigation_add_group"
+        android:name="com.duwna.biblo.ui.groups.add.AddGroupFragment"
+        android:label="@string/title_add_group"
+        tools:layout="@layout/fragment_add_group" >
         <action
-            android:id="@+id/action_SecondFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
+            android:id="@+id/action_navigation_add_group_to_addMembersFragment"
+            app:destination="@id/navigation_add_members" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_add_members"
+        android:name="com.duwna.biblo.ui.groups.add.members.AddMembersFragment"
+        android:label="@string/title_add_members"
+        tools:layout="@layout/add_members_fragment" >
+        <argument
+            android:name="group_name"
+            app:argType="string" />
+        <argument
+            android:name="group_avatar_uri"
+            app:argType="android.net.Uri"
+            app:nullable="true" />
+        <argument
+            android:name="group_currency"
+            app:argType="string" />
     </fragment>
 </navigation>
