@@ -3,18 +3,18 @@ package com.duwna.biblo.ui.groups
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.view.children
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
 import com.duwna.biblo.R
 import com.duwna.biblo.models.items.GroupItem
-import com.google.android.material.chip.Chip
+import com.duwna.biblo.utils.toInitials
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_group.view.*
 
-class GroupsAdapter(private val listener: (GroupItem) -> Unit) :
-    ListAdapter<GroupItem, GroupViewHolder>(ArticleDiffCallback()) {
+class GroupsAdapter(private val onItemClicked: (GroupItem) -> Unit) :
+    ListAdapter<GroupItem, GroupViewHolder>(GroupsDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupViewHolder {
         val containerView =
@@ -23,12 +23,12 @@ class GroupsAdapter(private val listener: (GroupItem) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: GroupViewHolder, position: Int) {
-        holder.bind(getItem(position), listener)
+        holder.bind(getItem(position), onItemClicked)
     }
 
 }
 
-class ArticleDiffCallback : DiffUtil.ItemCallback<GroupItem>() {
+class GroupsDiffCallback : DiffUtil.ItemCallback<GroupItem>() {
     override fun areItemsTheSame(oldItem: GroupItem, newItem: GroupItem): Boolean {
         return oldItem.id == newItem.id
     }
@@ -43,24 +43,28 @@ class GroupViewHolder(
 ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
     fun bind(
         item: GroupItem,
-        listener: (GroupItem) -> Unit
+        onItemClicked: (GroupItem) -> Unit
     ) = itemView.run {
 
         tv_name.text = item.name
-        tv_last_updare.text = item.lastUpdate
+        tv_last_update.text = item.lastUpdate
         tv_currency.text = item.currency
-        iv_avatar.setInitials(item.name.first().toString())
-        chip_group.removeAllViews()
 
-        item.members.forEach { member ->
-            Chip(context).apply {
-                text = member
-                chipIcon = resources.getDrawable(R.drawable.ic_people, context.theme)
-                isClickable = false
-                isFocusable = false
-            }.also { chip_group.addView(it) }
+        if (item.avatarUrl == null) {
+            iv_avatar.isAvatarMode = false
+            iv_avatar.setInitials(item.name.toInitials())
+        } else {
+            iv_avatar.isAvatarMode = true
+            Glide.with(context)
+                .load(item.avatarUrl)
+                .into(iv_avatar)
         }
 
-        setOnClickListener { listener(item) }
+        tv_members.text = buildString {
+            item.members.forEach { append("$it, ") }
+            delete(length - 2, length - 1)
+        }
+
+        setOnClickListener { onItemClicked(item) }
     }
 }

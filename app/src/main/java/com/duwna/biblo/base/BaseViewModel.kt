@@ -20,6 +20,11 @@ abstract class BaseViewModel<T : IViewModelState>(
 
     protected inline fun updateState(update: (currentState: T) -> T) {
         val updatedState: T = update(currentState)
+        state.value = updatedState
+    }
+
+    protected inline fun postUpdateState(update: (currentState: T) -> T) {
+        val updatedState: T = update(currentState)
         state.postValue(updatedState)
     }
 

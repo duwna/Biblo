@@ -1,23 +1,22 @@
 package com.duwna.biblo.ui.groups
 
 import androidx.lifecycle.viewModelScope
+import com.duwna.biblo.base.BaseRepository
 import com.duwna.biblo.base.BaseViewModel
 import com.duwna.biblo.base.IViewModelState
-import com.duwna.biblo.models.database.Group
+import com.duwna.biblo.base.Notify
 import com.duwna.biblo.models.items.GroupItem
-import com.duwna.biblo.utils.log
-import com.google.firebase.firestore.FieldPath
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.firestore.ktx.toObject
-import com.google.firebase.ktx.Firebase
+import com.duwna.biblo.repositories.GroupsRepository
+import com.duwna.biblo.utils.getGroupList
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.tasks.await
 
 class GroupsViewModel : BaseViewModel<GroupsViewModelState>(
     GroupsViewModelState()
 ) {
+
+    private val repository = GroupsRepository()
 
     init {
         loadGroups()
@@ -27,19 +26,22 @@ class GroupsViewModel : BaseViewModel<GroupsViewModelState>(
         viewModelScope.launch(IO) {
             delay(3000)
 //            val list = getGroupList()
-//            updateState { it.copy(groups = list, isLoading = false) }
-
-
-
+//            postUpdateState { it.copy(groups = list, isLoading = false) }
+            try {
+                val groupItems = repository.loadGroupItems()
+                postUpdateState { it.copy(groups = groupItems, isLoading = false) }
+            } catch (e: BaseRepository.NoAuthException){
+                postUpdateState { it.copy(isAuth = false, isLoading = false) }
+            } catch (t: Throwable) {
+                notify(Notify.Error())
+            }
         }
     }
-
-
 }
-
 
 
 data class GroupsViewModelState(
     val groups: List<GroupItem> = emptyList(),
-    val isLoading: Boolean = true
+    val isLoading: Boolean = true,
+    val isAuth: Boolean = false
 ) : IViewModelState

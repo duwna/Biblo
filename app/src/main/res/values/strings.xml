@@ -18,13 +18,20 @@
     <string name="tv_choose_avatar">Выберите аватар:</string>
     <string name="tv_add_members">Добавьте участников:</string>
     <string name="btn_create_group">Создать группу</string>
-    <string name="btn_search">Найти пользователя</string>
+    <string name="btn_search">Найти</string>
     <string name="vtn_create">Создать</string>
     <string name="name">Имя</string>
     <string name="label_avatar">Аватар:</string>
     <string name="title_all_groups">Все группы</string>
     <string name="title_add_group">Создание группы</string>
     <string name="title_add_members">Добавление участников</string>
+    <string name="btn_add">Добавить</string>
+    <string name="btn_add_members">Добавить участников</string>
+    <string name="tv_group_avatar">Аватар группы</string>
+    <string name="tv_enter">Войти</string>
+    <string name="tv_registration">Регистрация</string>
+    <string name="tv_email">E-mail</string>
+    <string name="tv_password">Пароль</string>
 
     <string-array name="currency">
         <item>₽</item>

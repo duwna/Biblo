@@ -13,7 +13,7 @@
 
     <me.itangqi.waveloadingview.WaveLoadingView
         android:id="@+id/wave_view"
-        android:layout_width="150dp"
+        android:layout_width="100dp"
         android:visibility="gone"
         tools:visibility="visible"
         android:layout_height="150dp"

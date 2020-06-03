@@ -13,6 +13,12 @@
         <action
             android:id="@+id/action_groups_to_add_group"
             app:destination="@id/navigation_add_group" />
+        <action
+            android:id="@+id/action_groups_to_auth"
+            app:destination="@id/navigation_auth"
+            app:launchSingleTop="false"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
     </fragment>
     <fragment
         android:id="@+id/navigation_add_group"
@@ -20,23 +26,29 @@
         android:label="@string/title_add_group"
         tools:layout="@layout/fragment_add_group" >
         <action
-            android:id="@+id/action_navigation_add_group_to_addMembersFragment"
+            android:id="@+id/action_add_group_to_add_members"
             app:destination="@id/navigation_add_members" />
     </fragment>
     <fragment
         android:id="@+id/navigation_add_members"
         android:name="com.duwna.biblo.ui.groups.add.members.AddMembersFragment"
         android:label="@string/title_add_members"
-        tools:layout="@layout/add_members_fragment" >
+        tools:layout="@layout/fragment_add_members" >
         <argument
             android:name="group_name"
             app:argType="string" />
         <argument
             android:name="group_avatar_uri"
             app:argType="android.net.Uri"
-            app:nullable="true" />
+            app:nullable="true"
+            android:defaultValue="@null" />
         <argument
             android:name="group_currency"
             app:argType="string" />
     </fragment>
+    <fragment
+        tools:layout="@layout/fragment_auth"
+        android:id="@+id/navigation_auth"
+        android:name="com.duwna.biblo.ui.auth.AuthFragment"
+        android:label="AuthFragment" />
 </navigation>

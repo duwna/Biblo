@@ -28,7 +28,6 @@ val names = listOf(
 
 val groupNames = listOf(
     "Сервис",
-    "Дом",
     "Альянс",
     "Фото",
     "Альфа",
@@ -44,26 +43,29 @@ val groupNames = listOf(
     "Комплект"
 )
 
-//fun getGroupList(): List<GroupItem> {
-//    val list = mutableListOf<GroupItem>()
-//    groupNames.forEach {
-//        val members = mutableListOf<GroupItem.Member>().apply {
-//            repeat((2..5).random()) {
-//                add(GroupItem.Member(names[(names.indices).random()], ""))
-//            }
-//        }
-//        val groupItem = GroupItem(
-//            "",
-//            it,
-//            "",
-//            "Р",
-//            Date().addDays((-10..10).random()).format(),
-//            members
-//        )
-//        list.add(groupItem)
-//    }
-//    return list
-//}
+fun getGroupList(): List<GroupItem> {
+    val list = mutableListOf<GroupItem>()
+    groupNames.forEach {
+        val members = buildList<String> {
+            repeat((2..5).random()) {
+                add(names[names.indices.random()])
+            }
+        }
+        val groupItem = GroupItem(
+            "",
+            it,
+            null,
+            "Р",
+            Date().addDays((-10..10).random()).format(),
+            members
+        )
+        list.add(groupItem)
+    }
+    return list
+}
 
 fun Date.addDays(days: Int) = Date(time + TimeUnit.DAYS.toMillis(1))
 
+inline fun <E> buildList(builderAction: MutableList<E>.() -> Unit): List<E> {
+    return ArrayList<E>().apply(builderAction)
+}

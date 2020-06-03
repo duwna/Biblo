@@ -9,7 +9,6 @@ import com.duwna.biblo.R
 import com.duwna.biblo.base.BaseFragment
 import com.duwna.biblo.base.IViewModelState
 import com.duwna.biblo.utils.circularHide
-import com.duwna.biblo.utils.circularShow
 import kotlinx.android.synthetic.main.fragment_groups.*
 
 class GroupsFragment : BaseFragment<GroupsViewModel>() {
@@ -17,15 +16,17 @@ class GroupsFragment : BaseFragment<GroupsViewModel>() {
     override val viewModel: GroupsViewModel by viewModels()
     override val layout: Int = R.layout.fragment_groups
 
-    private val searchAdapter = GroupsAdapter {
+    private val groupsAdapter = GroupsAdapter(
+        onItemClicked = {
 
-    }
+        }
+    )
 
     override fun setupViews() {
 
         rv_groups.apply {
             layoutManager = LinearLayoutManager(context)
-            adapter = searchAdapter
+            adapter = groupsAdapter
         }
 
         fab.setOnClickListener {
@@ -35,11 +36,8 @@ class GroupsFragment : BaseFragment<GroupsViewModel>() {
         }
     }
 
-    var isOpen = true
-
     override fun bindState(state: IViewModelState) {
         state as GroupsViewModelState
-
 
         when {
             state.isLoading -> wave_view.isVisible = true
@@ -47,8 +45,9 @@ class GroupsFragment : BaseFragment<GroupsViewModel>() {
             else -> wave_view.isVisible = false
         }
 
-//        wave_view.isVisible = state.isLoading
-//        if (state.isLoading) wave_view.circularShow() else wave_view.circularHide()
-        searchAdapter.submitList(state.groups)
+//        findNavController().popBackStack()
+        if (!state.isAuth) findNavController().navigate(R.id.action_groups_to_auth)
+
+        groupsAdapter.submitList(state.groups)
     }
 }

@@ -58,7 +58,7 @@
                 tools:text="@tools:sample/cities" />
 
         <TextView
-            android:id="@+id/tv_last_updare"
+            android:id="@+id/tv_last_update"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -69,21 +69,51 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_currency"
             tools:text="@tools:sample/cities" />
 
-        <com.google.android.material.chip.ChipGroup
-            android:clickable="false"
-            android:focusable="false"
-            android:id="@+id/chip_group"
+        <TextView
+            android:id="@+id/tv_members"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
+            android:textColor="?attr/colorOnSurface"
+            android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/iv_avatar"
-            app:layout_constraintTop_toBottomOf="@+id/tv_last_updare">
+            app:layout_constraintTop_toBottomOf="@+id/view"
+            tools:text="@tools:sample/lorem" />
 
-        </com.google.android.material.chip.ChipGroup>
+        <View
+            android:id="@+id/view"
+            android:layout_width="0dp"
+            android:layout_height="1dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:background="?attr/colorOnBackground"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/iv_avatar"
+            app:layout_constraintTop_toBottomOf="@id/tv_last_update" />
+
+
+        <!--        <com.google.android.material.chip.ChipGroup-->
+<!--            android:clickable="false"-->
+<!--            android:focusable="false"-->
+<!--            android:id="@+id/chip_group"-->
+<!--            android:layout_width="0dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_marginStart="8dp"-->
+<!--            android:layout_marginBottom="8dp"-->
+<!--            app:layout_constraintBottom_toBottomOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.0"-->
+<!--            app:layout_constraintStart_toEndOf="@+id/iv_avatar"-->
+<!--            app:layout_constraintTop_toBottomOf="@+id/tv_last_updare">-->
+
+<!--        </com.google.android.material.chip.ChipGroup>-->
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
