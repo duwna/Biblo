@@ -1,10 +1,11 @@
 package com.duwna.biblo.repositories
 
 import android.net.Uri
-import com.duwna.biblo.base.BaseRepository
-import com.duwna.biblo.models.database.Group
-import com.duwna.biblo.models.database.User
-import com.duwna.biblo.models.items.GroupItem
+import com.duwna.biblo.entities.database.Group
+import com.duwna.biblo.entities.database.User
+import com.duwna.biblo.entities.items.AddMemberItem
+import com.duwna.biblo.entities.items.GroupItem
+import com.duwna.biblo.entities.items.MemberItem
 import com.duwna.biblo.utils.format
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.ktx.toObject
@@ -15,32 +16,50 @@ class GroupsRepository : BaseRepository() {
 
     suspend fun loadGroupItems(): List<GroupItem> {
         val groups = database.collection("groups")
-//            .whereArrayContains("users", firebaseUserId)
+            .whereArrayContains("usersIds", firebaseUserId)
             .get()
             .await()
             .documents
             .map { it!!.toObject<Group>()!!.apply { idGroup = it.id } }
 
+        if (groups.isEmpty()) return emptyList()
+
         val userIds = groups.flatMap { it.usersIds }.toSet().toList()
 
-        val userNames = mutableMapOf<String, String>().apply {
+        val memberItems = mutableMapOf<String, MemberItem>().apply {
             database.collection("users")
                 .whereIn(FieldPath.documentId(), userIds)
                 .get()
                 .await()
-                .forEach { put(it.id, it.getString("name")!!) }
+                .forEach {
+                    val name = it.getString("name")!!
+                    val avatarUrl = getImageUrl("users", it.id)
+                    put(it.id, MemberItem(name, avatarUrl))
+                }
         }
 
         return groups.map {
             GroupItem(
                 it.idGroup, it.name,
-                getImageUrl(it.idGroup),
+                getImageUrl("groups", it.idGroup),
                 it.currency,
                 it.lastUpdate.format("HH:mm\ndd.MM"),
-                it.usersIds.map { idUser -> userNames[idUser]!! }
+                it.usersIds.map { idUser -> memberItems[idUser]!! }
             )
         }
     }
+
+    suspend fun getUserInfo(): AddMemberItem {
+        val name = database.collection("users")
+            .document(firebaseUserId)
+            .get()
+            .await()
+            .getString("name")!!
+
+        val avatarUri = getImageUrl("users", firebaseUserId)?.let { Uri.parse(it) }
+        return AddMemberItem(name, avatarUri)
+    }
+
 
     suspend fun insertGroup(
         name: String,
@@ -50,10 +69,16 @@ class GroupsRepository : BaseRepository() {
     ) {
 
         val userIds = mutableListOf<String>().apply {
-            users.forEach { user ->
-                val userId = insertUser(user)
-                add(userId)
-                user.avatarUri?.let { addUserAvatar(userId, it) }
+            users.forEachIndexed { index, user ->
+                if (index != 0) {
+                    // create user
+                    val userId = createUser(user)
+                    add(userId)
+                    user.avatarUri?.let { addAvatar("users", userId, it) }
+                } else {
+                    // current user
+                    add(firebaseUserId)
+                }
             }
         }
 
@@ -64,38 +89,14 @@ class GroupsRepository : BaseRepository() {
             .await()
             .id
 
-        avatarUri?.let { addGroupAvatar(idGroup, it) }
+        avatarUri?.let { addAvatar("groups", idGroup, it) }
     }
 
-    private suspend fun insertUser(user: User): String {
+    private suspend fun createUser(user: User): String {
         return database.collection("users")
             .add(user)
             .await()
             .id
-    }
-
-    private suspend fun getImageUrl(path: String): String? = try {
-        storage.child("group_avatars")
-            .child(path)
-            .downloadUrl
-            .await()
-            .toString()
-    } catch (t: Throwable) {
-        null
-    }
-
-    private suspend fun addGroupAvatar(idGroup: String, avatarUri: Uri) {
-        storage.child("group_avatars")
-            .child(idGroup)
-            .putFile(avatarUri)
-            .await()
-    }
-
-    private suspend fun addUserAvatar(idUser: String, avatarUri: Uri) {
-        storage.child("user_avatars")
-            .child(idUser)
-            .putFile(avatarUri)
-            .await()
     }
 
     fun signOut() {

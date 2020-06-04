@@ -1,4 +1,4 @@
-package com.duwna.biblo.ui.groups.add.members
+package com.duwna.biblo.ui.groups.members
 
 import android.app.Activity
 import android.content.Intent
@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.duwna.biblo.R
-import com.duwna.biblo.base.BaseFragment
-import com.duwna.biblo.base.IViewModelState
+import com.duwna.biblo.ui.base.BaseFragment
+import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.utils.*
 import kotlinx.android.synthetic.main.fragment_add_members.*
 
@@ -80,7 +80,8 @@ class AddMembersFragment : BaseFragment<AddMembersViewModel>() {
 
         addMemberAdapter.submitList(state.members)
 
-        state.ready?.run { findNavController().popBackStack(R.id.navigation_groups, true) }
+
+        state.ready?.let { findNavController().navigate(R.id.action_add_members_to_groups) }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

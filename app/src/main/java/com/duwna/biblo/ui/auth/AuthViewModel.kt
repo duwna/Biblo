@@ -1,9 +1,9 @@
 package com.duwna.biblo.ui.auth
 
 import androidx.lifecycle.viewModelScope
-import com.duwna.biblo.base.BaseViewModel
-import com.duwna.biblo.base.IViewModelState
-import com.duwna.biblo.base.Notify
+import com.duwna.biblo.ui.base.BaseViewModel
+import com.duwna.biblo.ui.base.IViewModelState
+import com.duwna.biblo.ui.base.Notify
 import com.duwna.biblo.repositories.AuthRepository
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -16,7 +16,7 @@ class AuthViewModel : BaseViewModel<AuthState>(AuthState()) {
         updateState { copy(isLoading = true) }
         viewModelScope.launch(IO) {
             try {
-                repository.firebaseAuthWithGoogle(idToken)
+                repository.authWithGoogle(idToken)
                 postUpdateState { copy(ready = Unit) }
             } catch (t: Throwable) {
                 notify(Notify.TextMessage("Возникла ошибка авторизации"))
@@ -29,7 +29,7 @@ class AuthViewModel : BaseViewModel<AuthState>(AuthState()) {
         updateState { copy(isLoading = true) }
         viewModelScope.launch(IO) {
             try {
-                repository.signInWithEmailAndPassword(email, password)
+                repository.signInWithEmail(email, password)
                 postUpdateState { copy(ready = Unit) }
             } catch (t: Throwable) {
                 notify(Notify.TextMessage("Возникла ошибка авторизации"))

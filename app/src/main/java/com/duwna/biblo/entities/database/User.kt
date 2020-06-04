@@ -1,4 +1,4 @@
-package com.duwna.biblo.models.database
+package com.duwna.biblo.entities.database
 
 import android.net.Uri
 import com.google.firebase.firestore.Exclude

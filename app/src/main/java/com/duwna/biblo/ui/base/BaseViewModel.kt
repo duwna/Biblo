@@ -1,9 +1,8 @@
-package com.duwna.biblo.base
+package com.duwna.biblo.ui.base
 
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.*
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.launch
 
 abstract class BaseViewModel<T : IViewModelState>(
     initState: T
@@ -32,12 +31,24 @@ abstract class BaseViewModel<T : IViewModelState>(
         notifications.postValue(Event(content))
     }
 
+    protected fun doAsync(block: suspend () -> Unit) {
+        viewModelScope.launch(IO) {
+            try {
+                block()
+            } catch (t: Throwable) {
+                t.printStackTrace()
+                notify(Notify.Error())
+            }
+        }
+    }
+
     fun observeState(owner: LifecycleOwner, onChanged: (newState: T) -> Unit) {
         state.observe(owner, Observer { onChanged(it!!) })
     }
 
     fun observeNotifications(owner: LifecycleOwner, onNotify: (notification: Notify) -> Unit) {
-        notifications.observe(owner, EventObserver { onNotify(it) })
+        notifications.observe(owner,
+            EventObserver { onNotify(it) })
     }
 
 }

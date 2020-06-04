@@ -1,12 +1,11 @@
 package com.duwna.biblo.ui.groups
 
 import androidx.lifecycle.viewModelScope
-import com.duwna.biblo.base.BaseViewModel
-import com.duwna.biblo.base.IViewModelState
-import com.duwna.biblo.base.Notify
-import com.duwna.biblo.models.items.GroupItem
+import com.duwna.biblo.ui.base.BaseViewModel
+import com.duwna.biblo.ui.base.IViewModelState
+import com.duwna.biblo.ui.base.Notify
+import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.repositories.GroupsRepository
-import com.duwna.biblo.utils.getGroupList
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
@@ -29,6 +28,8 @@ class GroupsViewModel : BaseViewModel<GroupsViewModelState>(
 //                val groupItems = getGroupList()
                 postUpdateState { copy(groups = groupItems, isLoading = false) }
             } catch (t: Throwable) {
+                throw t
+                t.printStackTrace()
                 notify(Notify.Error())
             }
         }

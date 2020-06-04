@@ -1,4 +1,4 @@
-package com.duwna.biblo.base
+package com.duwna.biblo.ui.base
 
 import android.os.Bundle
 import android.view.LayoutInflater

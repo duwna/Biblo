@@ -2,11 +2,7 @@ package com.duwna.biblo
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import android.view.Menu
-import android.view.MenuItem
-import androidx.navigation.findNavController
-import com.duwna.biblo.R
-import com.duwna.biblo.base.Notify
+import com.duwna.biblo.ui.base.Notify
 import com.google.android.material.snackbar.Snackbar
 
 import kotlinx.android.synthetic.main.activity_main.*

@@ -2,9 +2,9 @@ package com.duwna.biblo.ui.auth.registration
 
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
-import com.duwna.biblo.base.BaseViewModel
-import com.duwna.biblo.base.IViewModelState
-import com.duwna.biblo.base.Notify
+import com.duwna.biblo.ui.base.BaseViewModel
+import com.duwna.biblo.ui.base.IViewModelState
+import com.duwna.biblo.ui.base.Notify
 import com.duwna.biblo.repositories.AuthRepository
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,7 +17,7 @@ class RegistrationViewModel : BaseViewModel<RegistrationState>(RegistrationState
         updateState { copy(isLoading = true) }
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                repository.registerUser(name, email, password, currentState.avatarUri)
+                repository.registerUserWithEmail(name, email, password, currentState.avatarUri)
                 postUpdateState { copy(ready = Unit) }
             } catch (t: Throwable) {
                 notify(Notify.TextMessage(t.localizedMessage ?: "Возникла ошибка регистрации"))

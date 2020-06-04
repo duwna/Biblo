@@ -31,9 +31,9 @@ class MemberView private constructor(
     }
 
     constructor(
+        context: Context,
         name: String,
         avatarUrl: String?,
-        context: Context,
         attributes: AttributeSet? = null
     ) : this(context, attributes) {
 
@@ -48,18 +48,14 @@ class MemberView private constructor(
             val size = context.dpToIntPx(30)
             layoutParams = LayoutParams(size, size)
 
-            borderWidth = context.dpToPx(2)
-            borderColor = Color.BLACK
+            borderWidth = context.dpToPx(1)
+            borderColor = context.attrValue(R.attr.colorOnSurface)
 
             setMarginOptionally(right = context.dpToIntPx(4))
 
-            if (avatarUrl != null) {
-                isAvatarMode = true
-                Glide.with(this).load(avatarUrl).into(this)
-            } else {
-                isAvatarMode = false
-                setInitials(name.toInitials())
-            }
+            isAvatarMode = true
+            if (avatarUrl != null) Glide.with(this).load(avatarUrl).into(this)
+            else setImageResource(R.drawable.ic_baseline_account_circle_24)
         }
 
         addView(imageView)

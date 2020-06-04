@@ -7,11 +7,10 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.duwna.biblo.R
-import com.duwna.biblo.base.BaseFragment
-import com.duwna.biblo.base.IViewModelState
+import com.duwna.biblo.ui.base.BaseFragment
+import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.utils.circularHide
 import kotlinx.android.synthetic.main.fragment_groups.*
 
@@ -49,6 +48,7 @@ class GroupsFragment : BaseFragment<GroupsViewModel>() {
             else -> wave_view.isVisible = false
         }
 
+        tv_no_groups.isVisible = !state.isLoading && state.groups.isEmpty()
 
         groupsAdapter.submitList(state.groups)
     }
@@ -60,7 +60,7 @@ class GroupsFragment : BaseFragment<GroupsViewModel>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_sign_out ->{
+            R.id.action_sign_out -> {
                 viewModel.signOut()
                 true
             }

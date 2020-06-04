@@ -8,10 +8,9 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.duwna.biblo.R
-import com.duwna.biblo.base.BaseFragment
-import com.duwna.biblo.base.IViewModelState
+import com.duwna.biblo.ui.base.BaseFragment
+import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.utils.PICK_IMAGE_CODE
-import com.duwna.biblo.utils.log
 import com.duwna.biblo.utils.pickImageFromGallery
 import com.duwna.biblo.utils.toInitials
 import kotlinx.android.synthetic.main.fragment_add_group.*

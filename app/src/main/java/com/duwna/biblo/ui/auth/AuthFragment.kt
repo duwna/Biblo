@@ -5,8 +5,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.duwna.biblo.R
-import com.duwna.biblo.base.BaseFragment
-import com.duwna.biblo.base.IViewModelState
+import com.duwna.biblo.ui.base.BaseFragment
+import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.utils.hideKeyBoard
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions

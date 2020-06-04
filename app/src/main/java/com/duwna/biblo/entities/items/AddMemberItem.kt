@@ -1,4 +1,4 @@
-package com.duwna.biblo.models.items
+package com.duwna.biblo.entities.items
 
 import android.net.Uri
 

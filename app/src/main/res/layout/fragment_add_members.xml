@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.groups.add.members.AddMembersFragment">
+    tools:context=".ui.groups.members.AddMembersFragment">
 
     <me.itangqi.waveloadingview.WaveLoadingView
         android:id="@+id/wave_view"
@@ -28,7 +28,6 @@
         android:layout_height="60dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
-        android:src="@drawable/ic_people"
         app:aiv_borderColor="?attr/colorOnSurface"
         app:aiv_initials="AA"
         app:layout_constraintStart_toStartOf="parent"

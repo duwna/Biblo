@@ -8,12 +8,13 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.duwna.biblo.R
-import com.duwna.biblo.models.items.GroupItem
+import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.ui.custom.MemberView
 import com.duwna.biblo.utils.toInitials
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_group.view.*
-import java.util.*
+import kotlinx.android.synthetic.main.item_group.view.iv_avatar
+import kotlinx.android.synthetic.main.item_group.view.tv_name
 
 class GroupsAdapter(private val onItemClicked: (GroupItem) -> Unit) :
     ListAdapter<GroupItem, GroupViewHolder>(GroupsDiffCallback()) {
@@ -62,20 +63,9 @@ class GroupViewHolder(
                 .into(iv_avatar)
         }
 
-//        tv_members.text = buildString {
-//            item.members.forEach { append("$it, ") }
-//            delete(length - 2, length - 1)
-//        }
-
         flexbox.removeAllViews()
         item.members.forEach {
-            val memberView = MemberView(
-                it,
-                if (Random().nextBoolean())
-                "https://firebasestorage.googleapis.com/v0/b/biblo-6d48f.appspot.com/o/user_avatars%2F9Te9ZX74ndqUEL3Qu0kT?alt=media&token=a108b817-4559-4f2d-b0e2-b61db8547214"
-                else null,
-                context
-            )
+            val memberView = MemberView(context, it.name, it.avatarUrl)
             flexbox.addView(memberView)
         }
 
