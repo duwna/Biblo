@@ -11,12 +11,14 @@ import android.util.Log
 import android.util.TypedValue
 import android.view.View
 import android.view.ViewAnimationUtils
+import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
+import android.widget.Toast
 import androidx.annotation.AttrRes
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.content.ContextCompat
-import androidx.core.view.isVisible
+import androidx.core.view.*
 import androidx.fragment.app.Fragment
 import java.text.SimpleDateFormat
 import java.util.*
@@ -75,6 +77,10 @@ fun Any.log(msg: Any?, tag: String = this::class.java.simpleName) {
     Log.e(tag, msg.toString())
 }
 
+fun Context.toast(msg: Any?, tag: String = this::class.java.simpleName) {
+    Toast.makeText(this, msg.toString(), Toast.LENGTH_SHORT).show()
+}
+
 fun String.toInitials(): String = when {
     length >= 2 -> substring(0, 2).toUpperCase(Locale.US)
     isNotBlank() -> substring(0, 1).toUpperCase(Locale.US)
@@ -95,6 +101,24 @@ fun Fragment.pickImageFromGallery() {
     }
     val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
     startActivityForResult(gallery, PICK_IMAGE_CODE)
+}
+
+fun View.setMarginOptionally(
+    left: Int = marginLeft,
+    top: Int = marginTop,
+    right: Int = marginRight,
+    bottom: Int = marginBottom
+) = updateLayoutParams<ViewGroup.MarginLayoutParams> {
+    setMargins(left, top, right, bottom)
+}
+
+fun View.setPaddingOptionally(
+    left: Int = paddingLeft,
+    top: Int = paddingTop,
+    right: Int = paddingRight,
+    bottom: Int = paddingBottom
+) {
+    setPadding(left, top, right, bottom)
 }
 
 const val PERMISSION_REQUEST_CODE = 200

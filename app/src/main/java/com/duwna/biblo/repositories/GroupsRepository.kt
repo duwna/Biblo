@@ -14,9 +14,6 @@ import java.util.*
 class GroupsRepository : BaseRepository() {
 
     suspend fun loadGroupItems(): List<GroupItem> {
-
-        if (auth.currentUser == null) throw NoAuthException()
-
         val groups = database.collection("groups")
 //            .whereArrayContains("users", firebaseUserId)
             .get()
@@ -39,7 +36,7 @@ class GroupsRepository : BaseRepository() {
                 it.idGroup, it.name,
                 getImageUrl(it.idGroup),
                 it.currency,
-                it.lastUpdate.format(),
+                it.lastUpdate.format("HH:mm\ndd.MM"),
                 it.usersIds.map { idUser -> userNames[idUser]!! }
             )
         }
@@ -99,6 +96,10 @@ class GroupsRepository : BaseRepository() {
             .child(idUser)
             .putFile(avatarUri)
             .await()
+    }
+
+    fun signOut() {
+        auth.signOut()
     }
 }
 

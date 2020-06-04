@@ -32,7 +32,8 @@ class AvatarImageView @JvmOverloads constructor(
     var borderWidth: Float = context.dpToPx(DEFAULT_BORDER_WIDTH)
 
     @ColorInt
-    private var borderColor: Int = DEFAULT_BORDER_COLOR
+    var borderColor: Int = DEFAULT_BORDER_COLOR
+
     private var initials: String = ""
     private var backgroundInitialsColor = DEFAULT_BACKGROUND_COLOR
     private var initialsColor = DEFAULT_INITIALS_COLOR

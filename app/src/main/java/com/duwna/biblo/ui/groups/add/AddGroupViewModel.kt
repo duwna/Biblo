@@ -21,7 +21,7 @@ class AddGroupViewModel : BaseViewModel<AddGroupState>(AddGroupState()) {
     }
 
     fun setImageUri(uri: Uri?) {
-        updateState { it.copy(memberAvatarUri = uri) }
+        updateState { copy(memberAvatarUri = uri) }
     }
 
 }

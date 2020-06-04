@@ -1,9 +1,13 @@
 package com.duwna.biblo.ui.groups
 
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.duwna.biblo.R
 import com.duwna.biblo.base.BaseFragment
@@ -30,8 +34,6 @@ class GroupsFragment : BaseFragment<GroupsViewModel>() {
         }
 
         fab.setOnClickListener {
-//            viewModel.loadGroups()
-//            if (!isOpen) wave_view.circularShow() else wave_view.circularHide()
             findNavController().navigate(R.id.action_groups_to_add_group)
         }
     }
@@ -39,15 +41,32 @@ class GroupsFragment : BaseFragment<GroupsViewModel>() {
     override fun bindState(state: IViewModelState) {
         state as GroupsViewModelState
 
+        if (!state.isAuth) findNavController().navigate(R.id.action_groups_to_auth)
+
         when {
             state.isLoading -> wave_view.isVisible = true
             wave_view.isVisible && ViewCompat.isAttachedToWindow(wave_view) -> wave_view.circularHide()
             else -> wave_view.isVisible = false
         }
 
-//        findNavController().popBackStack()
-        if (!state.isAuth) findNavController().navigate(R.id.action_groups_to_auth)
 
         groupsAdapter.submitList(state.groups)
     }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_main, menu)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_sign_out ->{
+                viewModel.signOut()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+
 }

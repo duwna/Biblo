@@ -1,10 +1,13 @@
 package com.duwna.biblo.ui.auth
 
 import android.content.Intent
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.duwna.biblo.R
 import com.duwna.biblo.base.BaseFragment
 import com.duwna.biblo.base.IViewModelState
+import com.duwna.biblo.utils.hideKeyBoard
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import kotlinx.android.synthetic.main.fragment_auth.*
@@ -18,11 +21,22 @@ class AuthFragment : BaseFragment<AuthViewModel>() {
         btn_google_sign_in.setOnClickListener {
             googleSignIn()
         }
+
+        btn_registration.setOnClickListener {
+            findNavController().navigate(R.id.action_auth_to_registration)
+        }
+
+        btn_enter.setOnClickListener {
+            root.hideKeyBoard(container)
+            viewModel.enter(et_email.text.toString(), et_password.text.toString())
+        }
     }
 
-
     override fun bindState(state: IViewModelState) {
+        state as AuthState
+        showViews(state.isLoading)
 
+        state.ready?.let { findNavController().navigate(R.id.action_auth_to_groups) }
     }
 
     private fun googleSignIn() {
@@ -51,5 +65,8 @@ class AuthFragment : BaseFragment<AuthViewModel>() {
         private const val RC_SIGN_IN = 100
     }
 
-
+    private fun showViews(isLoading: Boolean) {
+        container.isVisible = !isLoading
+        wave_view.isVisible = isLoading
+    }
 }

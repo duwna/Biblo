@@ -38,6 +38,7 @@ android {
 
 dependencies {
 
+
     //android
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -54,6 +55,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:18.0.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
 
+    //FlexboxLayout
+    implementation 'com.google.android:flexbox:2.0.1'
 
     //navigation
     implementation 'androidx.navigation:navigation-fragment-ktx:2.2.2'

@@ -28,6 +28,8 @@ abstract class BaseFragment<T : BaseViewModel<out IViewModelState>> : Fragment()
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        setHasOptionsMenu(true)
+
         setupViews()
         viewModel.observeState(viewLifecycleOwner) { state -> bindState(state) }
         viewModel.observeNotifications(viewLifecycleOwner) { root.renderNotification(it) }

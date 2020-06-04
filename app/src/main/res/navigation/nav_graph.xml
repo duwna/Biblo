@@ -5,18 +5,25 @@
     android:id="@+id/nav_graph"
     app:startDestination="@id/navigation_groups">
     <fragment
-        tools:layout="@layout/fragment_groups"
         android:id="@+id/navigation_groups"
         android:name="com.duwna.biblo.ui.groups.GroupsFragment"
         android:label="@string/title_all_groups"
-        >
+        tools:layout="@layout/fragment_groups">
         <action
             android:id="@+id/action_groups_to_add_group"
-            app:destination="@id/navigation_add_group" />
+            app:destination="@id/navigation_add_group"
+            app:enterAnim="@anim/slide_from_right_to_center"
+            app:exitAnim="@anim/slide_from_center_to_left"
+            app:popEnterAnim="@anim/slide_from_left_to_center"
+            app:popExitAnim="@anim/slide_from_center_to_right" />
         <action
             android:id="@+id/action_groups_to_auth"
             app:destination="@id/navigation_auth"
+            app:enterAnim="@anim/nav_default_enter_anim"
+            app:exitAnim="@anim/nav_default_exit_anim"
             app:launchSingleTop="false"
+            app:popEnterAnim="@anim/nav_default_pop_enter_anim"
+            app:popExitAnim="@anim/nav_default_pop_exit_anim"
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
     </fragment>
@@ -24,31 +31,68 @@
         android:id="@+id/navigation_add_group"
         android:name="com.duwna.biblo.ui.groups.add.AddGroupFragment"
         android:label="@string/title_add_group"
-        tools:layout="@layout/fragment_add_group" >
+        tools:layout="@layout/fragment_add_group">
         <action
             android:id="@+id/action_add_group_to_add_members"
-            app:destination="@id/navigation_add_members" />
+            app:destination="@id/navigation_add_members"
+            app:enterAnim="@anim/slide_from_right_to_center"
+            app:exitAnim="@anim/slide_from_center_to_left"
+            app:popEnterAnim="@anim/slide_from_left_to_center"
+            app:popExitAnim="@anim/slide_from_center_to_right" />
     </fragment>
     <fragment
         android:id="@+id/navigation_add_members"
         android:name="com.duwna.biblo.ui.groups.add.members.AddMembersFragment"
         android:label="@string/title_add_members"
-        tools:layout="@layout/fragment_add_members" >
+        tools:layout="@layout/fragment_add_members">
         <argument
             android:name="group_name"
             app:argType="string" />
         <argument
             android:name="group_avatar_uri"
+            android:defaultValue="@null"
             app:argType="android.net.Uri"
-            app:nullable="true"
-            android:defaultValue="@null" />
+            app:nullable="true" />
         <argument
             android:name="group_currency"
             app:argType="string" />
     </fragment>
     <fragment
-        tools:layout="@layout/fragment_auth"
         android:id="@+id/navigation_auth"
         android:name="com.duwna.biblo.ui.auth.AuthFragment"
-        android:label="AuthFragment" />
+        android:label="AuthFragment"
+        tools:layout="@layout/fragment_auth">
+        <action
+            android:id="@+id/action_auth_to_groups"
+            app:destination="@id/navigation_groups"
+            app:enterAnim="@anim/slide_from_right_to_center"
+            app:exitAnim="@anim/slide_from_center_to_left"
+            app:launchSingleTop="false"
+            app:popEnterAnim="@anim/slide_from_left_to_center"
+            app:popExitAnim="@anim/slide_from_center_to_right"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+        <action
+            android:id="@+id/action_auth_to_registration"
+            app:destination="@id/navigation_registration"
+            app:enterAnim="@anim/slide_from_right_to_center"
+            app:exitAnim="@anim/slide_from_center_to_left"
+            app:popEnterAnim="@anim/slide_from_left_to_center"
+            app:popExitAnim="@anim/slide_from_center_to_right" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_registration"
+        android:name="com.duwna.biblo.ui.auth.registration.RegistrationFragment"
+        android:label="fragmen_tregistration"
+        tools:layout="@layout/fragmen_tregistration">
+        <action
+            android:id="@+id/action_registration_to_groups"
+            app:destination="@id/navigation_groups"
+            app:enterAnim="@anim/slide_from_right_to_center"
+            app:exitAnim="@anim/slide_from_center_to_left"
+            app:popEnterAnim="@anim/slide_from_left_to_center"
+            app:popExitAnim="@anim/slide_from_center_to_right"
+            app:popUpTo="@id/nav_graph"
+            app:popUpToInclusive="true" />
+    </fragment>
 </navigation>

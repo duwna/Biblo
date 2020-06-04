@@ -21,7 +21,7 @@ open class BaseRepository {
 
     protected val storage = Firebase.storage.reference
 
-    class NoAuthException : Throwable()
+    fun userExists() = auth.currentUser != null
 }
 
 

@@ -34,29 +34,29 @@ class AddMembersViewModel : BaseViewModel<AddMembersState>(AddMembersState()) {
     }
 
     fun setImageUri(uri: Uri?) {
-        updateState { it.copy(memberAvatarUri = uri) }
+        updateState { copy(memberAvatarUri = uri) }
     }
 
     fun createGroup(groupName: String, groupCurrency: String, groupAvatarUri: Uri?) {
-        updateState { it.copy(isLoading = true) }
+        updateState { copy(isLoading = true) }
         viewModelScope.launch(IO) {
             try {
                 val users = currentState.members.map {
                     User(name = it.name, avatarUri = it.avatarUri)
                 }
                 repository.insertGroup(groupName, groupCurrency, groupAvatarUri, users)
-                postUpdateState { it.copy(ready = Unit) }
+                postUpdateState { copy(ready = Unit) }
             } catch (t: Throwable) {
                 t.printStackTrace()
                 notify(Notify.Error())
             }
-            postUpdateState { it.copy(isLoading = false) }
+            postUpdateState { copy(isLoading = false) }
         }
     }
 
     private fun updateList(block: MutableList<AddMemberItem>.() -> Unit) {
         updateState {
-            it.copy(members = currentState.members.toMutableList().apply {
+            copy(members = currentState.members.toMutableList().apply {
                 block()
             })
         }

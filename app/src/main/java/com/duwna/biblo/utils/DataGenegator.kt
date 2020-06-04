@@ -56,7 +56,7 @@ fun getGroupList(): List<GroupItem> {
             it,
             null,
             "Р",
-            Date().addDays((-10..10).random()).format(),
+            Date().addDays((-10..10).random()).format("HH:mm\ndd.MM"),
             members
         )
         list.add(groupItem)
