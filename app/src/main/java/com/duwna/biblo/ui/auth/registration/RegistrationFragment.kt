@@ -14,11 +14,11 @@ import com.duwna.biblo.utils.PICK_IMAGE_CODE
 import com.duwna.biblo.utils.hideKeyBoard
 import com.duwna.biblo.utils.pickImageFromGallery
 import com.duwna.biblo.utils.toInitials
-import kotlinx.android.synthetic.main.fragmen_tregistration.*
+import kotlinx.android.synthetic.main.fragment_registration.*
 
 class RegistrationFragment : BaseFragment<RegistrationViewModel>() {
     override val viewModel: RegistrationViewModel by viewModels()
-    override val layout: Int = R.layout.fragmen_tregistration
+    override val layout: Int = R.layout.fragment_registration
 
     override fun setupViews() {
         btn_registration.setOnClickListener {

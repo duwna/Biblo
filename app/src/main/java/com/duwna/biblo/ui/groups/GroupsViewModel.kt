@@ -1,11 +1,11 @@
 package com.duwna.biblo.ui.groups
 
 import androidx.lifecycle.viewModelScope
+import com.duwna.biblo.entities.items.GroupItem
+import com.duwna.biblo.repositories.GroupsRepository
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.ui.base.Notify
-import com.duwna.biblo.entities.items.GroupItem
-import com.duwna.biblo.repositories.GroupsRepository
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
@@ -16,9 +16,12 @@ class GroupsViewModel : BaseViewModel<GroupsViewModelState>(
     private val repository = GroupsRepository()
 
     init {
-        if (!repository.userExists()) updateState { copy(isAuth = false) }
-        updateState { copy(isLoading = true) }
-        loadGroups()
+        if (repository.userExists()) {
+            updateState { copy(isLoading = true) }
+            loadGroups()
+        } else {
+            updateState { copy(isAuth = false) }
+        }
     }
 
     private fun loadGroups() {

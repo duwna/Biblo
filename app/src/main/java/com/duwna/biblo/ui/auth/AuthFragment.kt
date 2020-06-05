@@ -1,6 +1,7 @@
 package com.duwna.biblo.ui.auth
 
 import android.content.Intent
+import android.view.MenuItem
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -10,7 +11,9 @@ import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.utils.hideKeyBoard
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_auth.*
+import kotlinx.android.synthetic.main.fragment_auth.container
 
 class AuthFragment : BaseFragment<AuthViewModel>() {
     override val viewModel: AuthViewModel by viewModels()
@@ -69,4 +72,5 @@ class AuthFragment : BaseFragment<AuthViewModel>() {
         container.isVisible = !isLoading
         wave_view.isVisible = isLoading
     }
+
 }

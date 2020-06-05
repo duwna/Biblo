@@ -33,7 +33,12 @@
     <string name="tv_email">E-mail</string>
     <string name="tv_password">Пароль</string>
     <string name="btn_registration">Зарегистрироваться</string>
-    <string name="label_no_groups">Нет ни одной группы...\nСоздайте новую</string>
+    <string name="label_no_groups">Нет ни одной группы…\nСоздайте новую</string>
+    <string name="title_auth">Авторизация</string>
+    <string name="title_registration">Регистрация</string>
+    <string name="title_all_bills">Все чеки</string>
+    <string name="text_on_fab_bills">Новый чек</string>
+    <string name="label_no_bills">Нет ни одного чека…\nСоздайте новый</string>
 
     <string-array name="currency">
         <item>₽</item>

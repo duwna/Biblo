@@ -12,6 +12,8 @@ import com.duwna.biblo.R
 import com.duwna.biblo.ui.base.BaseFragment
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.utils.circularHide
+import com.duwna.biblo.utils.circularShow
+import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_groups.*
 
 class GroupsFragment : BaseFragment<GroupsViewModel>() {
@@ -21,7 +23,8 @@ class GroupsFragment : BaseFragment<GroupsViewModel>() {
 
     private val groupsAdapter = GroupsAdapter(
         onItemClicked = {
-
+            val action = GroupsFragmentDirections.actionGroupsToBills(it)
+            findNavController().navigate(action)
         }
     )
 
@@ -48,7 +51,11 @@ class GroupsFragment : BaseFragment<GroupsViewModel>() {
             else -> wave_view.isVisible = false
         }
 
-        tv_no_groups.isVisible = !state.isLoading && state.groups.isEmpty()
+        if (!state.isLoading && state.groups.isEmpty()) {
+            tv_no_groups.animate().alpha(1f).duration = 500
+        } else {
+            tv_no_groups.alpha = 0f
+        }
 
         groupsAdapter.submitList(state.groups)
     }

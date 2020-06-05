@@ -1,5 +1,7 @@
 package com.duwna.biblo.entities.items
 
+import java.io.Serializable
+
 data class GroupItem(
     val id: String,
     val name: String,
@@ -7,7 +9,7 @@ data class GroupItem(
     val currency: String,
     val lastUpdate: String,
     val members: List<MemberItem>
-)
+) : Serializable
 
 data class MemberItem(
     val name: String,
