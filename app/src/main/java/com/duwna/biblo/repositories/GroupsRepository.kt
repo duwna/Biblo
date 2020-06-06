@@ -26,7 +26,7 @@ class GroupsRepository : BaseRepository() {
 
         val userIds = groups.flatMap { it.usersIds }.toSet().toList()
 
-        val memberItems = mutableMapOf<String, MemberItem>().apply {
+        val memberItems = mutableListOf<MemberItem>().apply {
             database.collection("users")
                 .whereIn(FieldPath.documentId(), userIds)
                 .get()
@@ -34,17 +34,18 @@ class GroupsRepository : BaseRepository() {
                 .forEach {
                     val name = it.getString("name")!!
                     val avatarUrl = getImageUrl("users", it.id)
-                    put(it.id, MemberItem(name, avatarUrl))
+                    add(MemberItem(it.id, name, avatarUrl))
                 }
         }
 
-        return groups.map {
+        return groups.map { group ->
             GroupItem(
-                it.idGroup, it.name,
-                getImageUrl("groups", it.idGroup),
-                it.currency,
-                it.lastUpdate.format("HH:mm\ndd.MM"),
-                it.usersIds.map { idUser -> memberItems[idUser]!! }
+                group.idGroup,
+                group.name,
+                getImageUrl("groups", group.idGroup),
+                group.currency,
+                group.lastUpdate.format("HH:mm\ndd.MM"),
+                group.usersIds.map { idUser -> memberItems.find { it.id == idUser }!! }
             )
         }
     }

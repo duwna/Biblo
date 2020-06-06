@@ -12,8 +12,6 @@ import com.duwna.biblo.R
 import com.duwna.biblo.ui.base.BaseFragment
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.utils.circularHide
-import com.duwna.biblo.utils.circularShow
-import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_groups.*
 
 class GroupsFragment : BaseFragment<GroupsViewModel>() {
@@ -22,8 +20,8 @@ class GroupsFragment : BaseFragment<GroupsViewModel>() {
     override val layout: Int = R.layout.fragment_groups
 
     private val groupsAdapter = GroupsAdapter(
-        onItemClicked = {
-            val action = GroupsFragmentDirections.actionGroupsToBills(it)
+        onItemClicked = { groupItem ->
+            val action = GroupsFragmentDirections.actionGroupsToGroup(groupItem)
             findNavController().navigate(action)
         }
     )

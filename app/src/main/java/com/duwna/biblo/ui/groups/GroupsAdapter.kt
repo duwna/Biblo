@@ -14,7 +14,7 @@ import com.duwna.biblo.utils.toInitials
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_group.view.*
 import kotlinx.android.synthetic.main.item_group.view.iv_avatar
-import kotlinx.android.synthetic.main.item_group.view.tv_name
+import kotlinx.android.synthetic.main.item_group.view.tv_title
 
 class GroupsAdapter(private val onItemClicked: (GroupItem) -> Unit) :
     ListAdapter<GroupItem, GroupViewHolder>(GroupsDiffCallback()) {
@@ -49,8 +49,8 @@ class GroupViewHolder(
         onItemClicked: (GroupItem) -> Unit
     ) = itemView.run {
 
-        tv_name.text = item.name
-        tv_last_update.text = item.lastUpdate
+        tv_title.text = item.name
+        tv_timestamp.text = item.lastUpdate
         tv_currency.text = item.currency
 
         if (item.avatarUrl == null) {
@@ -63,10 +63,10 @@ class GroupViewHolder(
                 .into(iv_avatar)
         }
 
-        flexbox.removeAllViews()
+        flexbox_payers.removeAllViews()
         item.members.forEach {
             val memberView = MemberView(context, it.name, it.avatarUrl)
-            flexbox.addView(memberView)
+            flexbox_payers.addView(memberView)
         }
 
         setOnClickListener { onItemClicked(item) }

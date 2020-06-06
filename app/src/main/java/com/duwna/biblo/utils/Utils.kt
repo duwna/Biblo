@@ -1,12 +1,10 @@
 package com.duwna.biblo.utils
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.provider.MediaStore
 import android.util.Log
-import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import java.text.SimpleDateFormat
@@ -42,6 +40,10 @@ fun Fragment.pickImageFromGallery() {
     val gallery = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI)
     startActivityForResult(gallery, PICK_IMAGE_CODE)
 }
+
+fun Double.format(digits: Int = 2) = "%.${digits}f".format(Locale.US, this)
+
+fun Double.equalsDelta(other: Double) = kotlin.math.abs(this / other - 1) < 0.01
 
 const val PERMISSION_REQUEST_CODE = 200
 const val PICK_IMAGE_CODE = 100

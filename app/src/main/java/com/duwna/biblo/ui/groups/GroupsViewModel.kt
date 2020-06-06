@@ -6,7 +6,9 @@ import com.duwna.biblo.repositories.GroupsRepository
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.ui.base.Notify
+import com.duwna.biblo.utils.getGroupList
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 class GroupsViewModel : BaseViewModel<GroupsViewModelState>(
@@ -28,6 +30,7 @@ class GroupsViewModel : BaseViewModel<GroupsViewModelState>(
         viewModelScope.launch(IO) {
             try {
                 val groupItems = repository.loadGroupItems()
+//                delay(500)
 //                val groupItems = getGroupList()
                 postUpdateState { copy(groups = groupItems, isLoading = false) }
             } catch (t: Throwable) {

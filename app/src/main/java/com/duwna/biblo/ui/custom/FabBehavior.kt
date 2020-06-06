@@ -20,16 +20,28 @@ class FabBehavior(context: Context, attributeSet: AttributeSet) :
         type: Int
     ): Boolean = axes == ViewCompat.SCROLL_AXIS_VERTICAL
 
-    override fun onNestedPreScroll(
+    override fun onNestedScroll(
         coordinatorLayout: CoordinatorLayout,
         child: ExtendedFloatingActionButton,
         target: View,
-        dx: Int,
-        dy: Int,
-        consumed: IntArray,
-        type: Int
+        dxConsumed: Int,
+        dyConsumed: Int,
+        dxUnconsumed: Int,
+        dyUnconsumed: Int,
+        type: Int,
+        consumed: IntArray
     ) {
-        if (dy > 0) child.shrink() else child.extend()
-        super.onNestedPreScroll(coordinatorLayout, child, target, dx, dy, consumed, type)
+        if (dyConsumed > 0) child.shrink() else child.extend()
+        super.onNestedScroll(
+            coordinatorLayout,
+            child,
+            target,
+            dxConsumed,
+            dyConsumed,
+            dxUnconsumed,
+            dyUnconsumed,
+            type,
+            consumed
+        )
     }
 }

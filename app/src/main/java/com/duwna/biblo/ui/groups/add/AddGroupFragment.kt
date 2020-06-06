@@ -26,7 +26,7 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
 
         switch_currency.setOnClickListener {
             spinner.isInvisible = switch_currency.isChecked
-            til_name.isInvisible = !switch_currency.isChecked
+            til_title.isInvisible = !switch_currency.isChecked
         }
 
         btn_add_members.setOnClickListener {

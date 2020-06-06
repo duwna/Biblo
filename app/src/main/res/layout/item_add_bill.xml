@@ -8,15 +8,27 @@
     android:paddingTop="8dp"
     android:paddingBottom="8dp">
 
-    <ImageView
-        android:id="@+id/iv_delete"
-        android:layout_width="32dp"
-        android:layout_height="32dp"
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/til_sum"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_remove_circle_outline_black_24dp" />
+        app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
+        app:layout_constraintEnd_toStartOf="@+id/checkbox"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/iv_avatar">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/et_sum"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+            android:maxLines="1" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
 
     <com.duwna.biblo.ui.custom.AvatarImageView
         android:id="@+id/iv_avatar"
@@ -30,20 +42,14 @@
         app:layout_constraintVertical_bias="0.5"
         tools:aiv_initials="AA" />
 
-    <TextView
-        android:id="@+id/tv_title"
+    <CheckBox
+        android:id="@+id/checkbox"
+        android:checked="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:textColor="?attr/colorOnSurface"
-        android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
-        app:layout_constraintEnd_toStartOf="@+id/iv_delete"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/iv_avatar"
-        app:layout_constraintTop_toTopOf="@+id/iv_avatar"
-        app:layout_constraintVertical_bias="0.5"
-        tools:text="TextView" />
+        app:layout_constraintBottom_toBottomOf="@+id/til_sum"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/til_sum" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

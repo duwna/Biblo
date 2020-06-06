@@ -10,7 +10,7 @@
     <string name="hello_first_fragment">Hello first fragment</string>
     <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="text_on_fab_groups">Новая группа</string>
-    <string name="loading">Loading...</string>
+    <string name="loading">Loading…</string>
     <string name="et_add_group_name">Название</string>
     <string name="tv_choose_currency">Выберите валюту:</string>
     <string name="label_currency">Валюта</string>
@@ -39,6 +39,8 @@
     <string name="title_all_bills">Все чеки</string>
     <string name="text_on_fab_bills">Новый чек</string>
     <string name="label_no_bills">Нет ни одного чека…\nСоздайте новый</string>
+    <string name="title_bills">Чеки</string>
+    <string name="title_chat">Чат</string>
 
     <string-array name="currency">
         <item>₽</item>
@@ -82,5 +84,18 @@
         <item>₹</item>
         <item>₺</item>
     </string-array>
+
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_who_payed">Кто платил:</string>
+    <string name="title_for_whom">За кого:</string>
+    <string name="label_title">Заголовок</string>
+    <string name="switch_current_date">Текущая дата</string>
+    <string name="description">Описание</string>
+    <string name="label_sum">Сумма</string>
+    <string name="title_add_bill">Создание чека</string>
+    <string name="title_enter_sum_for_payers">Введите сумму для тех, кто платил:</string>
+    <string name="title_enter_sum_for_debtors">Введите сумму для тех, кто должен:</string>
+    <string name="btn_split_text">Разделить поровну</string>
+    <string name="btn_create_bill">Создать чек</string>
 
 </resources>

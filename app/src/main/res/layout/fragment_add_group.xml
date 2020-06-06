@@ -20,7 +20,7 @@
         app:counterMaxLength="20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/tv_choose_avatar">
+        app:layout_constraintTop_toBottomOf="@+id/tv_timestamp">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/et_group_name"
@@ -56,7 +56,7 @@
 
 
     <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/til_name"
+        android:id="@+id/til_title"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -92,7 +92,7 @@
         app:layout_constraintTop_toBottomOf="@+id/tv_choose_currency" />
 
     <TextView
-        android:id="@+id/tv_choose_avatar"
+        android:id="@+id/tv_timestamp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

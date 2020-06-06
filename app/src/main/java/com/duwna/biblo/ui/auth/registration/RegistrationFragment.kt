@@ -26,7 +26,7 @@ class RegistrationFragment : BaseFragment<RegistrationViewModel>() {
             viewModel.registerUser(
                 et_name.text.toString(),
                 et_email.text.toString(),
-                et_password.text.toString()
+                et_sum.text.toString()
             )
         }
 
