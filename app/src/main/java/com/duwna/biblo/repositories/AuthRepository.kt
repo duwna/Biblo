@@ -13,7 +13,6 @@ class AuthRepository : BaseRepository() {
 
         val user = User(name = auth.currentUser?.displayName ?: "", email = auth.currentUser?.email)
         insertUser(user)
-//        auth.currentUser?.photoUrl?.let { addAvatar("users", firebaseUserId, it) }
     }
 
     suspend fun registerUserWithEmail(name: String, email: String, password: String, avatarUri: Uri?) {

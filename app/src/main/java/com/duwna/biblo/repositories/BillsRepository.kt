@@ -21,6 +21,6 @@ class BillsRepository : BaseRepository() {
             .get()
             .await()
             .documents
-            .map { it.toObject<Bill>()!! }
+            .map { it.toObject<Bill>()!!.apply { idBill = it.id } }
     }
 }

@@ -7,6 +7,7 @@
     android:layout_marginStart="12dp"
     android:layout_marginEnd="12dp"
     android:layout_marginTop="6dp"
+    android:foreground="?android:attr/selectableItemBackground"
     android:layout_marginBottom="6dp"
     android:clickable="true"
     app:cardElevation="8dp"
@@ -169,45 +170,45 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/view4">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/background_member_view"
-                android:padding="8dp"
-                android:text="dsgsfdgreg"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="16sp" />
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="8dp"-->
+<!--                android:background="@drawable/background_member_view"-->
+<!--                android:padding="8dp"-->
+<!--                android:text="dsgsfdgreg"-->
+<!--                android:textColor="?attr/colorOnSurface"-->
+<!--                android:textSize="16sp" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/background_member_view"
-                android:padding="8dp"
-                android:text="dsgsfdgreg"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="16sp" />
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="8dp"-->
+<!--                android:background="@drawable/background_member_view"-->
+<!--                android:padding="8dp"-->
+<!--                android:text="dsgsfdgreg"-->
+<!--                android:textColor="?attr/colorOnSurface"-->
+<!--                android:textSize="16sp" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/background_member_view"
-                android:padding="8dp"
-                android:text="dsgsfdgreg"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="16sp" />
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="8dp"-->
+<!--                android:background="@drawable/background_member_view"-->
+<!--                android:padding="8dp"-->
+<!--                android:text="dsgsfdgreg"-->
+<!--                android:textColor="?attr/colorOnSurface"-->
+<!--                android:textSize="16sp" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/background_member_view"
-                android:padding="8dp"
-                android:text="dsgsfdgreg"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="16sp" />
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="8dp"-->
+<!--                android:background="@drawable/background_member_view"-->
+<!--                android:padding="8dp"-->
+<!--                android:text="dsgsfdgreg"-->
+<!--                android:textColor="?attr/colorOnSurface"-->
+<!--                android:textSize="16sp" />-->
         </com.google.android.flexbox.FlexboxLayout>
 
         <com.google.android.flexbox.FlexboxLayout
@@ -224,45 +225,45 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="@+id/view3">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/background_member_view"
-                android:padding="8dp"
-                android:text="dsgsfdgreg"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="16sp" />
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="8dp"-->
+<!--                android:background="@drawable/background_member_view"-->
+<!--                android:padding="8dp"-->
+<!--                android:text="dsgsfdgreg"-->
+<!--                android:textColor="?attr/colorOnSurface"-->
+<!--                android:textSize="16sp" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/background_member_view"
-                android:padding="8dp"
-                android:text="dsgsfdgreg"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="16sp" />
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="8dp"-->
+<!--                android:background="@drawable/background_member_view"-->
+<!--                android:padding="8dp"-->
+<!--                android:text="dsgsfdgreg"-->
+<!--                android:textColor="?attr/colorOnSurface"-->
+<!--                android:textSize="16sp" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/background_member_view"
-                android:padding="8dp"
-                android:text="dsgsfdgreg"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="16sp" />
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="8dp"-->
+<!--                android:background="@drawable/background_member_view"-->
+<!--                android:padding="8dp"-->
+<!--                android:text="dsgsfdgreg"-->
+<!--                android:textColor="?attr/colorOnSurface"-->
+<!--                android:textSize="16sp" />-->
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_margin="8dp"
-                android:background="@drawable/background_member_view"
-                android:padding="8dp"
-                android:text="dsgsfdgreg"
-                android:textColor="?attr/colorOnSurface"
-                android:textSize="16sp" />
+<!--            <TextView-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_margin="8dp"-->
+<!--                android:background="@drawable/background_member_view"-->
+<!--                android:padding="8dp"-->
+<!--                android:text="dsgsfdgreg"-->
+<!--                android:textColor="?attr/colorOnSurface"-->
+<!--                android:textSize="16sp" />-->
         </com.google.android.flexbox.FlexboxLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

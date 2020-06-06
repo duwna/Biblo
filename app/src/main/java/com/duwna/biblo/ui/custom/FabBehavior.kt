@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import android.view.View
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.core.view.ViewCompat
+import com.duwna.biblo.utils.log
 import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 
 
@@ -31,7 +32,10 @@ class FabBehavior(context: Context, attributeSet: AttributeSet) :
         type: Int,
         consumed: IntArray
     ) {
-        if (dyConsumed > 0) child.shrink() else child.extend()
+
+        if (dyConsumed > 0) child.shrink()
+        else if (dyConsumed < 0) child.extend()
+
         super.onNestedScroll(
             coordinatorLayout,
             child,

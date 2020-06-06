@@ -63,10 +63,10 @@ class GroupViewHolder(
                 .into(iv_avatar)
         }
 
-        flexbox_payers.removeAllViews()
+        flexbox_members.removeAllViews()
         item.members.forEach {
             val memberView = MemberView(context, it.name, it.avatarUrl)
-            flexbox_payers.addView(memberView)
+            flexbox_members.addView(memberView)
         }
 
         setOnClickListener { onItemClicked(item) }

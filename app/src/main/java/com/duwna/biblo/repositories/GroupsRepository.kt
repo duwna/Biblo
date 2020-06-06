@@ -15,10 +15,14 @@ import java.util.*
 class GroupsRepository : BaseRepository() {
 
     suspend fun loadGroupItems(): List<GroupItem> {
+
+        var isFromCache: Boolean
+
         val groups = database.collection("groups")
             .whereArrayContains("usersIds", firebaseUserId)
             .get()
             .await()
+            .apply { isFromCache = metadata.isFromCache }
             .documents
             .map { it!!.toObject<Group>()!!.apply { idGroup = it.id } }
 
@@ -33,7 +37,13 @@ class GroupsRepository : BaseRepository() {
                 .await()
                 .forEach {
                     val name = it.getString("name")!!
-                    val avatarUrl = getImageUrl("users", it.id)
+
+                    val avatarUrl = when {
+                        it.id == firebaseUserId -> auth.currentUser?.photoUrl?.toString()
+                        !isFromCache -> getImageUrl("users", it.id)
+                        else -> null
+                    }
+
                     add(MemberItem(it.id, name, avatarUrl))
                 }
         }
@@ -42,7 +52,7 @@ class GroupsRepository : BaseRepository() {
             GroupItem(
                 group.idGroup,
                 group.name,
-                getImageUrl("groups", group.idGroup),
+                if (!isFromCache) getImageUrl("groups", group.idGroup) else null,
                 group.currency,
                 group.lastUpdate.format("HH:mm\ndd.MM"),
                 group.usersIds.map { idUser -> memberItems.find { it.id == idUser }!! }
@@ -51,13 +61,18 @@ class GroupsRepository : BaseRepository() {
     }
 
     suspend fun getUserInfo(): AddMemberItem {
+
+        var isFromCache: Boolean
+
         val name = database.collection("users")
             .document(firebaseUserId)
             .get()
             .await()
+            .apply { isFromCache = metadata.isFromCache }
             .getString("name")!!
 
-        val avatarUri = getImageUrl("users", firebaseUserId)?.let { Uri.parse(it) }
+        val avatarUri = if (!isFromCache) getImageUrl("users", firebaseUserId)
+            ?.let { Uri.parse(it) } else null
         return AddMemberItem(name, avatarUri)
     }
 

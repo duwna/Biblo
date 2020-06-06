@@ -88,7 +88,7 @@ class AddBillViewModel(private val groupItem: GroupItem) : BaseViewModel<AddBill
         }
 
         if (title.isBlank()) {
-            notify(Notify.TextMessage("Добавьте описание"))
+            notify(Notify.TextMessage("Добавьте заголовок"))
             return
         }
 

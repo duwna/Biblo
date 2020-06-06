@@ -23,7 +23,7 @@ open class BaseRepository {
             .build()
     }
 
-    protected val storage = Firebase.storage.reference
+    private val storage = Firebase.storage.reference
 
     protected suspend fun addAvatar(path: String, id: String, avatarUri: Uri) {
         storage.child(path)

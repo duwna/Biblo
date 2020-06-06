@@ -6,6 +6,7 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.duwna.biblo.R
 import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.ui.base.BaseFragment
@@ -15,14 +16,30 @@ import kotlinx.android.synthetic.main.fragment_bills.*
 
 class BillsFragment : BaseFragment<BillsViewModel>() {
 
+    override val layout: Int = R.layout.fragment_bills
+
     private lateinit var groupItem: GroupItem
 
-    override val viewModel: BillsViewModel by viewModels()
-    override val layout: Int = R.layout.fragment_bills
+    override val viewModel: BillsViewModel by viewModels {
+        BillsViewModelFactory(groupItem)
+    }
+
+    private val billsAdapter = BillsAdapter(
+        onItemClicked = { billItem -> }
+    )
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.loadBills()
+    }
 
     override fun setupViews() {
         groupItem = arguments?.getSerializable("groupItem") as GroupItem
 
+        rv_bills.apply {
+            layoutManager = LinearLayoutManager(context)
+            adapter = billsAdapter
+        }
 
         fab.setOnClickListener {
             findNavController().navigate(
@@ -54,6 +71,8 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
         } else {
             tv_no_bills.alpha = 0f
         }
+
+        billsAdapter.submitList(state.bills)
     }
 
     companion object {
