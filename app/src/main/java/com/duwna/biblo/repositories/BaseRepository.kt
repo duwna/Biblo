@@ -25,7 +25,7 @@ open class BaseRepository {
 
     private val storage = Firebase.storage.reference
 
-    protected suspend fun addAvatar(path: String, id: String, avatarUri: Uri) {
+    protected suspend fun uploadImg(path: String, id: String, avatarUri: Uri) {
         storage.child(path)
             .child(id)
             .putFile(avatarUri)

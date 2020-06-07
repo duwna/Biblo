@@ -15,4 +15,4 @@ data class MemberItem(
     val id: String,
     val name: String,
     val avatarUrl: String?
-)
+) : Serializable

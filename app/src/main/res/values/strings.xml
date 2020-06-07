@@ -97,5 +97,6 @@
     <string name="title_enter_sum_for_debtors">Введите сумму для тех, кто должен:</string>
     <string name="btn_split_text">Разделить поровну</string>
     <string name="btn_create_bill">Создать чек</string>
+    <string name="message">Сообщение</string>
 
 </resources>

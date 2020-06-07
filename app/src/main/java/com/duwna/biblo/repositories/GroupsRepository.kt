@@ -8,6 +8,7 @@ import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.entities.items.MemberItem
 import com.duwna.biblo.utils.format
 import com.google.firebase.firestore.FieldPath
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
 import java.util.*
@@ -19,6 +20,7 @@ class GroupsRepository : BaseRepository() {
         var isFromCache: Boolean
 
         val groups = database.collection("groups")
+//            .orderBy("lastUpdate", Query.Direction.ASCENDING)
             .whereArrayContains("usersIds", firebaseUserId)
             .get()
             .await()
@@ -90,7 +92,7 @@ class GroupsRepository : BaseRepository() {
                     // create user
                     val userId = createUser(user)
                     add(userId)
-                    user.avatarUri?.let { addAvatar("users", userId, it) }
+                    user.avatarUri?.let { uploadImg("users", userId, it) }
                 } else {
                     // current user
                     add(firebaseUserId)
@@ -105,7 +107,7 @@ class GroupsRepository : BaseRepository() {
             .await()
             .id
 
-        avatarUri?.let { addAvatar("groups", idGroup, it) }
+        avatarUri?.let { uploadImg("groups", idGroup, it) }
     }
 
     private suspend fun createUser(user: User): String {

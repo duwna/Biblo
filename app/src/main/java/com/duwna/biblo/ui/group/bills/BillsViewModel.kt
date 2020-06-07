@@ -71,7 +71,7 @@ class BillsViewModel(private val groupItem: GroupItem) : BaseViewModel<BillsStat
         }
         billItems.add(
             0,
-            Header(groupItem.name, groupItem.currency, groupItem.avatarUrl, headerMembers).also { log(it) }
+            Header(groupItem.name, groupItem.currency, groupItem.avatarUrl, headerMembers)
         )
         return billItems
     }

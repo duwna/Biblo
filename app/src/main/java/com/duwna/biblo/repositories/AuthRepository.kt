@@ -22,7 +22,7 @@ class AuthRepository : BaseRepository() {
         val user = User(firebaseUserId, name, email, avatarUri)
         insertUser(user)
 
-        avatarUri?.let { addAvatar("users", firebaseUserId, it) }
+        avatarUri?.let { uploadImg("users", firebaseUserId, it) }
     }
 
     suspend fun signInWithEmail(email: String, password: String) {
