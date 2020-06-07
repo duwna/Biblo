@@ -18,7 +18,7 @@
     <string name="tv_choose_avatar">Выберите аватар:</string>
     <string name="tv_add_members">Добавьте участников:</string>
     <string name="btn_create_group">Создать группу</string>
-    <string name="btn_search">Найти</string>
+    <string name="btn_search">Поиск</string>
     <string name="vtn_create">Создать</string>
     <string name="name">Имя</string>
     <string name="label_avatar">Аватар</string>
@@ -41,6 +41,10 @@
     <string name="label_no_bills">Нет ни одного чека…\nСоздайте новый</string>
     <string name="title_bills">Чеки</string>
     <string name="title_chat">Чат</string>
+    <string name="btn_make_search">Найти</string>
+    <string name="btn_cancel">Отмена</string>
+
+
 
     <string-array name="currency">
         <item>₽</item>

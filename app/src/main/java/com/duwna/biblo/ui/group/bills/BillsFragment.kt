@@ -67,8 +67,10 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
         }
 
         if (!state.isLoading && state.bills.isEmpty()) {
+            tv_no_bills.isVisible = true
             tv_no_bills.animate().alpha(1f).duration = 500
         } else {
+            tv_no_bills.isVisible = false
             tv_no_bills.alpha = 0f
         }
 

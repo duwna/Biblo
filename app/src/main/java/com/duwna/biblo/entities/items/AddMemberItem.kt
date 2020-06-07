@@ -4,5 +4,6 @@ import android.net.Uri
 
 data class AddMemberItem(
     val name: String,
-    val avatarUri: Uri? = null
+    val avatarUri: Uri? = null,
+    val id: String? = null
 )

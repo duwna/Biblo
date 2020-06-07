@@ -2,12 +2,12 @@ package com.duwna.biblo.ui.groups.members
 
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
-import com.duwna.biblo.ui.base.BaseViewModel
-import com.duwna.biblo.ui.base.IViewModelState
-import com.duwna.biblo.ui.base.Notify
 import com.duwna.biblo.entities.database.User
 import com.duwna.biblo.entities.items.AddMemberItem
 import com.duwna.biblo.repositories.GroupsRepository
+import com.duwna.biblo.ui.base.BaseViewModel
+import com.duwna.biblo.ui.base.IViewModelState
+import com.duwna.biblo.ui.base.Notify
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
@@ -35,8 +35,22 @@ class AddMembersViewModel : BaseViewModel<AddMembersState>(AddMembersState()) {
                 notify(Notify.TextMessage("Участник с таким именем и аватаром уже содержится")); return
             }
         }
-        updateList { add(AddMemberItem(name, currentState.memberAvatarUri)) }
-        setImageUri(null)
+
+        if (currentState.isSearch) {
+            viewModelScope.launch(IO) {
+                try {
+                    val memberItem = repository.searchMember(name)
+                    if (memberItem != null) postUpdateList { add(memberItem) }
+                    else notify(Notify.TextMessage("Пользователя с таким адресом не найдено"))
+                } catch (t: Throwable) {
+                    t.printStackTrace()
+                    notify(Notify.Error())
+                }
+            }
+        } else {
+            updateList { add(AddMemberItem(name, currentState.memberAvatarUri)) }
+            setImageUri(null)
+        }
     }
 
     fun removeMember(position: Int) {
@@ -59,7 +73,7 @@ class AddMembersViewModel : BaseViewModel<AddMembersState>(AddMembersState()) {
         viewModelScope.launch(IO) {
             try {
                 val users = currentState.members.map {
-                    User(name = it.name, avatarUri = it.avatarUri)
+                    User(name = it.name, avatarUri = it.avatarUri, idUser = it.id ?: "")
                 }
                 repository.insertGroup(groupName, groupCurrency, groupAvatarUri, users)
                 postUpdateState { copy(ready = Unit) }
@@ -68,6 +82,10 @@ class AddMembersViewModel : BaseViewModel<AddMembersState>(AddMembersState()) {
                 postUpdateState { copy(isLoading = false) }
             }
         }
+    }
+
+    fun handleSearchMode() {
+        updateState { copy(isSearch = !currentState.isSearch) }
     }
 
     private fun updateList(block: MutableList<AddMemberItem>.() -> Unit) {
@@ -90,13 +108,12 @@ class AddMembersViewModel : BaseViewModel<AddMembersState>(AddMembersState()) {
         return currentState.members
             .find { it.name == name && it.avatarUri == currentState.memberAvatarUri } != null
     }
-
-
 }
 
 data class AddMembersState(
     val members: List<AddMemberItem> = emptyList(),
     val memberAvatarUri: Uri? = null,
     val isLoading: Boolean = false,
+    val isSearch: Boolean = false,
     val ready: Unit? = null
 ) : IViewModelState

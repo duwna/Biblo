@@ -2,6 +2,7 @@ package com.duwna.biblo.ui.groups.members
 
 import android.app.Activity
 import android.content.Intent
+import android.text.InputType
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -39,7 +40,7 @@ class AddMembersFragment : BaseFragment<AddMembersViewModel>() {
 
         btn_add_member.setOnClickListener {
             viewModel.insertMember(et_member_name.text.toString())
-            et_member_name.setText("")
+            if (!viewModel.currentState.isSearch) et_member_name.setText("")
             root.hideKeyBoard(requireView())
         }
 
@@ -58,6 +59,10 @@ class AddMembersFragment : BaseFragment<AddMembersViewModel>() {
         iv_avatar.setOnClickListener {
             pickImageFromGallery()
         }
+
+        btn_search_member.setOnClickListener {
+            viewModel.handleSearchMode()
+        }
     }
 
     override fun bindState(state: IViewModelState) {
@@ -69,7 +74,9 @@ class AddMembersFragment : BaseFragment<AddMembersViewModel>() {
             else -> wave_view.isVisible = true
         }
 
+        showSearch(state.isSearch)
         showViews(state.isLoading)
+        showAvatar(!state.isSearch && !state.isLoading)
 
         if (state.memberAvatarUri != null) {
             iv_avatar.isAvatarMode = true
@@ -77,10 +84,7 @@ class AddMembersFragment : BaseFragment<AddMembersViewModel>() {
         } else {
             iv_avatar.isAvatarMode = false
         }
-
         addMemberAdapter.submitList(state.members)
-
-
         state.ready?.let { findNavController().navigate(R.id.action_add_members_to_groups) }
     }
 
@@ -91,14 +95,33 @@ class AddMembersFragment : BaseFragment<AddMembersViewModel>() {
         }
     }
 
+    private fun showAvatar(show: Boolean) {
+        iv_avatar.isVisible = show
+        iv_picture.isVisible = show
+    }
+
     private fun showViews(isLoading: Boolean) {
         rv_members.isVisible = !isLoading
-        iv_picture.isVisible = !isLoading
         btn_add_member.isVisible = !isLoading
         btn_create_group.isVisible = !isLoading
         btn_search_member.isVisible = !isLoading
         til_member_name.isVisible = !isLoading
         iv_avatar.isVisible = !isLoading
+    }
+
+    private fun showSearch(isSearch: Boolean) {
+        btn_add_member.text = requireContext().getString(
+            if (isSearch) R.string.btn_make_search else R.string.btn_add
+        )
+        btn_search_member.text = requireContext().getString(
+            if (isSearch) R.string.btn_cancel else R.string.btn_search
+        )
+        til_member_name.hint = requireContext().getString(
+            if (isSearch) R.string.tv_email else R.string.name
+        )
+        et_member_name.inputType = if (isSearch)
+            InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+        else InputType.TYPE_TEXT_VARIATION_PERSON_NAME
     }
 
 }

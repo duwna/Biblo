@@ -12,7 +12,7 @@ class ChatRepository : BaseRepository() {
     suspend fun insertMessage(idGroup: String, text: String, imgUri: Uri?) {
         val message = Message(firebaseUserId, text, Date())
 
-        val id = database.collection("group")
+        val id = database.collection("groups")
             .document(idGroup)
             .collection("messages")
             .add(message)
@@ -23,7 +23,7 @@ class ChatRepository : BaseRepository() {
     }
 
     suspend fun getMessagesList(idGroup: String): List<Message> {
-        return database.collection("group")
+        return database.collection("groups")
             .document(idGroup)
             .collection("messages")
             .orderBy("timestamp", Query.Direction.ASCENDING)
