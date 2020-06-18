@@ -6,14 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.duwna.biblo.entities.database.Bill
 import com.duwna.biblo.entities.items.BillMemberItem
 import com.duwna.biblo.entities.items.BillsViewItem
-import com.duwna.biblo.entities.items.BillsViewItem.Header
 import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.repositories.BillsRepository
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.ui.base.Notify
 import com.duwna.biblo.utils.format
-import com.duwna.biblo.utils.log
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -49,6 +47,36 @@ class BillsViewModel(private val groupItem: GroupItem) : BaseViewModel<BillsStat
         }
     }
 
+    fun generateEmailMessage() = buildString {
+        currentState.bills.forEach { billItem ->
+            when (billItem) {
+                is BillsViewItem.Header -> {
+                    append(
+                        "Группа: ${billItem.name}\nВалюта: ${billItem.currency}\nCтатистика\nКто платил:"
+                    )
+                    billItem.members.filter { it.sum > 0 }.forEach { member ->
+                        append("\n${member.name}: ${member.sum.format()}")
+                    }
+                    append("\nЗа кого:")
+                    billItem.members.filter { it.sum < 0 }.forEach { member ->
+                        append("\n${member.name}: ${member.sum.format()}")
+                    }
+                    append("\n\nЧеки")
+                }
+                is BillsViewItem.Bill -> {
+                    append("\n\n${billItem.title}\n${billItem.description}\n${billItem.timestamp}\nКто платил:")
+                    billItem.payers.forEach { member ->
+                        append("\n${member.name}: ${member.sum.format()}")
+                    }
+                    append("\nЗа кого:")
+                    billItem.debtors.forEach { member ->
+                        append("\n${member.name}: ${member.sum.format()}")
+                    }
+                }
+            }
+        }
+    }
+
     private fun List<Bill>.toBillViewItemList(): List<BillsViewItem> {
         //bills + header
         val billItems: MutableList<BillsViewItem> = ArrayList(this.size + 1)
@@ -71,7 +99,12 @@ class BillsViewModel(private val groupItem: GroupItem) : BaseViewModel<BillsStat
         }
         billItems.add(
             0,
-            Header(groupItem.name, groupItem.currency, groupItem.avatarUrl, headerMembers)
+            BillsViewItem.Header(
+                groupItem.name,
+                groupItem.currency,
+                groupItem.avatarUrl,
+                headerMembers
+            )
         )
         return billItems
     }

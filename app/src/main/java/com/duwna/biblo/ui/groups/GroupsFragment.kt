@@ -59,7 +59,7 @@ class GroupsFragment : BaseFragment<GroupsViewModel>() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        inflater.inflate(R.menu.menu_main, menu)
+        inflater.inflate(R.menu.menu_groups, menu)
     }
 
 

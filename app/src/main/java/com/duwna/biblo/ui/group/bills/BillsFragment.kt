@@ -1,5 +1,11 @@
 package com.duwna.biblo.ui.group.bills
 
+import android.annotation.SuppressLint
+import android.content.Intent
+import android.net.Uri
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import androidx.core.os.bundleOf
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
@@ -13,6 +19,7 @@ import com.duwna.biblo.ui.base.BaseFragment
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.utils.circularHide
 import kotlinx.android.synthetic.main.fragment_bills.*
+
 
 class BillsFragment : BaseFragment<BillsViewModel>() {
 
@@ -75,6 +82,33 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
         }
 
         billsAdapter.submitList(state.bills)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.menu_bills, menu)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_send_email -> {
+                sendEmail()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    @SuppressLint("IntentReset")
+    private fun sendEmail() {
+        val emailIntent = Intent(
+            Intent.ACTION_SENDTO, Uri.fromParts(
+                "mailto", "", null
+            )
+        )
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Biblo statistics")
+        emailIntent.putExtra(Intent.EXTRA_TEXT, viewModel.generateEmailMessage())
+        startActivity(Intent.createChooser(emailIntent, "Отправка по электронной почте"))
     }
 
     companion object {
