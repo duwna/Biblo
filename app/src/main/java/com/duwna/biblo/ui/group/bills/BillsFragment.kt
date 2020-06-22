@@ -32,7 +32,7 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
     }
 
     private val billsAdapter = BillsAdapter(
-        onItemClicked = { billItem -> }
+        onItemClicked = { billItem -> viewModel.deleteBill(billItem.id)}
     )
 
     override fun onResume() {

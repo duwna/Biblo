@@ -127,7 +127,6 @@ class GroupsRepository : BaseRepository() {
             .add(group)
             .await()
             .id
-
         avatarUri?.let { uploadImg("groups", idGroup, it) }
     }
 
@@ -140,6 +139,13 @@ class GroupsRepository : BaseRepository() {
 
     fun signOut() {
         auth.signOut()
+    }
+
+    suspend fun deleteGroup(id: String) {
+        database.collection("groups")
+            .document(id)
+            .delete()
+            .await()
     }
 }
 

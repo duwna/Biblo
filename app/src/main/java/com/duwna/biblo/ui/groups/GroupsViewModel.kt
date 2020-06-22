@@ -30,11 +30,8 @@ class GroupsViewModel : BaseViewModel<GroupsViewModelState>(
         viewModelScope.launch(IO) {
             try {
                 val groupItems = repository.loadGroupItems()
-//                delay(500)
-//                val groupItems = getGroupList()
                 postUpdateState { copy(groups = groupItems, isLoading = false) }
             } catch (t: Throwable) {
-                throw t
                 t.printStackTrace()
                 notify(Notify.Error())
             }
@@ -44,6 +41,17 @@ class GroupsViewModel : BaseViewModel<GroupsViewModelState>(
     fun signOut() {
         repository.signOut()
         updateState { copy(isAuth = false) }
+    }
+
+    fun deleteGroup(id: String) {
+        viewModelScope.launch(IO) {
+            try {
+                repository.deleteGroup(id)
+                loadGroups()
+            } catch (t: Throwable) {
+                notify(Notify.Error())
+            }
+        }
     }
 }
 

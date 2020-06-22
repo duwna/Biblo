@@ -3,6 +3,7 @@ package com.duwna.biblo.ui.groups
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,12 +12,14 @@ import com.duwna.biblo.R
 import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.ui.custom.MemberView
 import com.duwna.biblo.utils.toInitials
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_group.view.*
-import kotlinx.android.synthetic.main.item_group.view.iv_avatar
-import kotlinx.android.synthetic.main.item_group.view.tv_title
 
-class GroupsAdapter(private val onItemClicked: (GroupItem) -> Unit) :
+class GroupsAdapter(
+    private val onItemClicked: (GroupItem) -> Unit,
+    private val onItemLongClicked: (GroupItem) -> Unit
+) :
     ListAdapter<GroupItem, GroupViewHolder>(GroupsDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GroupViewHolder {
@@ -26,7 +29,7 @@ class GroupsAdapter(private val onItemClicked: (GroupItem) -> Unit) :
     }
 
     override fun onBindViewHolder(holder: GroupViewHolder, position: Int) {
-        holder.bind(getItem(position), onItemClicked)
+        holder.bind(getItem(position), onItemClicked, onItemLongClicked)
     }
 
 }
@@ -46,7 +49,8 @@ class GroupViewHolder(
 ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
     fun bind(
         item: GroupItem,
-        onItemClicked: (GroupItem) -> Unit
+        onItemClicked: (GroupItem) -> Unit,
+        onItemLongClicked: (GroupItem) -> Unit
     ) = itemView.run {
 
         tv_title.text = item.name
@@ -70,5 +74,13 @@ class GroupViewHolder(
         }
 
         setOnClickListener { onItemClicked(item) }
+
+        setOnLongClickListener {
+            Snackbar.make(this, "Удаление группы \"${item.name}\"", Snackbar.LENGTH_SHORT)
+                .setAction("Удалить") { onItemLongClicked(item) }
+                .show()
+            true
+        }
+
     }
 }

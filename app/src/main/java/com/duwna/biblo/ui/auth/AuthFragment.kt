@@ -1,6 +1,7 @@
 package com.duwna.biblo.ui.auth
 
 import android.content.Intent
+import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -10,8 +11,9 @@ import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.utils.hideKeyBoard
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_auth.*
-import kotlinx.android.synthetic.main.fragment_auth.container
+
 
 class AuthFragment : BaseFragment<AuthViewModel>() {
     override val viewModel: AuthViewModel by viewModels()
@@ -30,6 +32,22 @@ class AuthFragment : BaseFragment<AuthViewModel>() {
         btn_enter.setOnClickListener {
             root.hideKeyBoard(container)
             viewModel.enter(et_email.text.toString(), et_sum.text.toString())
+        }
+
+        tv_forgot_password.setOnClickListener {
+            if (et_email.text.toString().isBlank()) {
+                Snackbar.make(container, "Пожалуйста, введите E-mail", Snackbar.LENGTH_SHORT).show()
+                return@setOnClickListener
+            }
+            Snackbar.make(
+                container,
+                "Отправить ссылку для восстановления пароля на адрес ${et_email.text}?",
+                Snackbar.LENGTH_LONG
+            ).apply {
+                setAction("Отправить") { viewModel.resetPassword(et_email.text.toString()) }
+                view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)?.maxLines = 5
+                show()
+            }
         }
     }
 

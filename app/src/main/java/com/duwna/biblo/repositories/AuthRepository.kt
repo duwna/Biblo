@@ -15,7 +15,12 @@ class AuthRepository : BaseRepository() {
         insertUser(user)
     }
 
-    suspend fun registerUserWithEmail(name: String, email: String, password: String, avatarUri: Uri?) {
+    suspend fun registerUserWithEmail(
+        name: String,
+        email: String,
+        password: String,
+        avatarUri: Uri?
+    ) {
         auth.createUserWithEmailAndPassword(email, password)
             .await()
 
@@ -35,5 +40,9 @@ class AuthRepository : BaseRepository() {
             .document(firebaseUserId)
             .set(user)
             .await()
+    }
+
+    suspend fun resetPassword(email: String) {
+        auth.sendPasswordResetEmail(email).await()
     }
 }

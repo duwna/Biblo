@@ -23,6 +23,9 @@ class GroupsFragment : BaseFragment<GroupsViewModel>() {
         onItemClicked = { groupItem ->
             val action = GroupsFragmentDirections.actionGroupsToGroup(groupItem)
             findNavController().navigate(action)
+        },
+        onItemLongClicked = { groupItem ->
+            viewModel.deleteGroup(groupItem.id)
         }
     )
 

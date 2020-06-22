@@ -47,6 +47,10 @@ class BillsViewModel(private val groupItem: GroupItem) : BaseViewModel<BillsStat
         }
     }
 
+    fun collectBills() {
+
+    }
+
     fun generateEmailMessage() = buildString {
         currentState.bills.forEach { billItem ->
             when (billItem) {
@@ -123,6 +127,17 @@ class BillsViewModel(private val groupItem: GroupItem) : BaseViewModel<BillsStat
             BillMemberItem(it.key, member.name, member.avatarUrl, it.value)
         }
     )
+
+    fun deleteBill(idBill: String) {
+        viewModelScope.launch(IO) {
+            try {
+                repository.deleteBill(groupItem.id, idBill)
+                loadBills()
+            } catch (t: Throwable) {
+                notify(Notify.Error())
+            }
+        }
+    }
 }
 
 data class BillsState(

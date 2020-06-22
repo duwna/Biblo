@@ -1,10 +1,10 @@
 package com.duwna.biblo.ui.auth
 
 import androidx.lifecycle.viewModelScope
+import com.duwna.biblo.repositories.AuthRepository
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.ui.base.Notify
-import com.duwna.biblo.repositories.AuthRepository
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
@@ -34,6 +34,17 @@ class AuthViewModel : BaseViewModel<AuthState>(AuthState()) {
             } catch (t: Throwable) {
                 notify(Notify.TextMessage("Возникла ошибка авторизации"))
                 postUpdateState { copy(isLoading = false) }
+            }
+        }
+    }
+
+    fun resetPassword(email: String) {
+        viewModelScope.launch(IO) {
+            try {
+                repository.resetPassword(email)
+                notify(Notify.TextMessage("Ссылка отправлена!"))
+            } catch (t: Throwable) {
+                notify(Notify.TextMessage("Пользователя с таким адресом не найдено..."))
             }
         }
     }

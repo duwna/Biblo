@@ -14,13 +14,12 @@ import com.duwna.biblo.entities.items.BillsViewItem.Header
 import com.duwna.biblo.ui.custom.MemberView
 import com.duwna.biblo.utils.format
 import com.duwna.biblo.utils.toInitials
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_bill.view.*
-import kotlinx.android.synthetic.main.item_bill.view.flexbox_debtors
-import kotlinx.android.synthetic.main.item_bill.view.flexbox_payers
 import kotlinx.android.synthetic.main.item_bill_header.view.*
 
-class BillsAdapter(private val onItemClicked: (BillsViewItem) -> Unit) :
+class BillsAdapter(private val onItemClicked: (Bill) -> Unit) :
     ListAdapter<BillsViewItem, BillViewHolder>(BillsDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BillViewHolder {
@@ -65,7 +64,7 @@ class BillViewHolder(
 
     fun bindBill(
         item: Bill,
-        onItemClicked: (BillsViewItem) -> Unit
+        onItemClicked: (Bill) -> Unit
     ) = itemView.run {
 
         tv_title.text = item.title
@@ -85,7 +84,12 @@ class BillViewHolder(
             flexbox_debtors.addView(memberView)
         }
 
-        setOnClickListener { onItemClicked(item) }
+        setOnLongClickListener {
+            Snackbar.make(this, "Удаление чека \"${item.title}\"", Snackbar.LENGTH_SHORT)
+                .setAction("Удалить") { onItemClicked(item) }
+                .show()
+            true
+        }
     }
 
     fun bindHeader(item: Header) = itemView.run {
@@ -111,4 +115,5 @@ class BillViewHolder(
             else flexbox_header_debtors.addView(memberView)
         }
     }
+
 }
