@@ -5,8 +5,10 @@ import com.duwna.biblo.entities.database.Group
 import com.duwna.biblo.entities.database.User
 import com.duwna.biblo.entities.items.AddMemberItem
 import com.duwna.biblo.entities.items.GroupItem
-import com.duwna.biblo.entities.items.MemberItem
+import com.duwna.biblo.entities.items.GroupMemberItem
 import com.duwna.biblo.utils.format
+import com.duwna.biblo.utils.tryOrNull
+import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
 import java.util.*
@@ -15,14 +17,12 @@ class GroupsRepository : BaseRepository() {
 
     suspend fun loadGroupItems(): List<GroupItem> {
 
-        var isFromCache: Boolean
 
         val groups = database.collection("groups")
-//            .orderBy("lastUpdate", Query.Direction.ASCENDING)
+            .orderBy("lastUpdate", Query.Direction.ASCENDING)
             .whereArrayContains("usersIds", firebaseUserId)
             .get()
             .await()
-            .apply { isFromCache = metadata.isFromCache }
             .documents
             .map { it!!.toObject<Group>()!!.apply { idGroup = it.id } }
 
@@ -31,14 +31,14 @@ class GroupsRepository : BaseRepository() {
         val userIds = groups.flatMap { it.usersIds }.toSet()
 
         val memberItems = userIds.map {
-            loadMemberItem(it, isFromCache)
+            loadMemberItem(it)
         }
 
         return groups.map { group ->
             GroupItem(
                 group.idGroup,
                 group.name,
-                if (!isFromCache) getImageUrl("groups", group.idGroup) else null,
+                group.avatarUrl,
                 group.currency,
                 group.lastUpdate.format("HH:mm\ndd.MM"),
                 group.usersIds.map { idUser -> memberItems.find { it.id == idUser }!! }
@@ -46,51 +46,45 @@ class GroupsRepository : BaseRepository() {
         }
     }
 
-    private suspend fun loadMemberItem(idUser: String, isFromCache: Boolean): MemberItem {
+    private suspend fun loadMemberItem(idUser: String): GroupMemberItem {
         val result = database.collection("users")
             .document(idUser)
             .get()
             .await()
 
-        val name = result.getString("name")!!
+        val user = result.toObject<User>()!!
 
-        val avatarUrl = when {
-            result.id == firebaseUserId -> auth.currentUser?.photoUrl?.toString()
-            !isFromCache -> getImageUrl("users", result.id)
+        val url = when {
+            user.avatarUrl != null -> user.avatarUrl
+            firebaseUserId == result.id -> auth.currentUser?.photoUrl?.toString()
             else -> null
         }
 
-        return MemberItem(result.id, name, avatarUrl)
+        return GroupMemberItem(result.id, user.name, url)
     }
 
     suspend fun getUserInfo(): AddMemberItem {
+        val user = loadMemberItem(firebaseUserId)
 
-        var isFromCache: Boolean
-
-        val name = database.collection("users")
-            .document(firebaseUserId)
-            .get()
-            .await()
-            .apply { isFromCache = metadata.isFromCache }
-            .getString("name")!!
-
-        val avatarUri = if (!isFromCache) getImageUrl("users", firebaseUserId)
-            ?.let { Uri.parse(it) } else null
-        return AddMemberItem(name, avatarUri)
+        return AddMemberItem(
+            user.name,
+            tryOrNull { Uri.parse(user.avatarUrl) } ?: auth.currentUser?.photoUrl,
+            firebaseUserId
+        )
     }
 
     suspend fun searchMember(email: String): AddMemberItem? {
-        val result = database.collection("users")
+        val user = database.collection("users")
             .whereEqualTo("email", email)
             .get()
             .await()
             .documents
             .also { if (it.isEmpty()) return null }
             .get(0)
+            .toObject<User>() ?: return null
 
-        val id = result.id
-        val avatarUri = getImageUrl("users", id)?.let { Uri.parse(it) }
-        return AddMemberItem(result.getString("name")!!, avatarUri, id)
+
+        return AddMemberItem(user.name, tryOrNull { Uri.parse(user.avatarUrl) }, user.idUser)
     }
 
     suspend fun insertGroup(
@@ -103,20 +97,12 @@ class GroupsRepository : BaseRepository() {
         val userIds = mutableListOf<String>().apply {
             users.forEachIndexed { index, user ->
                 when {
-                    // found user
-                    user.idUser.isNotEmpty() -> {
-                        add(user.idUser)
-                    }
-                    // create user
-                    index != 0 -> {
-                        val userId = createUser(user)
-                        add(userId)
-                        user.avatarUri?.let { uploadImg("users", userId, it) }
-                    }
+                    //found user
+                    user.idUser != null -> add(user.idUser!!)
+                    //new user
+                    index != 0 -> add(createUser(user))
                     // current user
-                    index == 0 -> {
-                        add(firebaseUserId)
-                    }
+                    index == 0 -> add(firebaseUserId)
                 }
             }
         }
@@ -127,14 +113,26 @@ class GroupsRepository : BaseRepository() {
             .add(group)
             .await()
             .id
-        avatarUri?.let { uploadImg("groups", idGroup, it) }
+
+        avatarUri?.let {
+            val avatarUrl = uploadImg("groups", idGroup, it)
+            database.collection("groups").document(idGroup).update("avatarUrl", avatarUrl)
+        }
     }
 
     private suspend fun createUser(user: User): String {
-        return database.collection("users")
+
+        val idUser = database.collection("users")
             .add(user)
             .await()
             .id
+
+        user.avatarUri?.let {
+            val avatarUrl = uploadImg("users", idUser, it)
+            database.collection("users").document(idUser).update("avatarUrl", avatarUrl)
+        }
+
+        return idUser
     }
 
     fun signOut() {

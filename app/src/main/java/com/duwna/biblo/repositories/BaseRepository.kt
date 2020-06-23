@@ -1,6 +1,7 @@
 package com.duwna.biblo.repositories
 
 import android.net.Uri
+import com.duwna.biblo.utils.randomID
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.ktx.firestore
@@ -25,11 +26,13 @@ open class BaseRepository {
 
     private val storage = Firebase.storage.reference
 
-    protected suspend fun uploadImg(path: String, id: String, avatarUri: Uri) {
-        storage.child(path)
-            .child(id)
-            .putFile(avatarUri)
-            .await()
+    protected suspend fun uploadImg(path: String, name: String, avatarUri: Uri): String {
+        val ref = storage.child(path)
+            .child(name)
+
+        ref.putFile(avatarUri).await()
+
+        return ref.downloadUrl.await().toString()
     }
 
     protected suspend fun getImageUrl(path: String, name: String): String? = try {
@@ -41,6 +44,7 @@ open class BaseRepository {
     } catch (t: Throwable) {
         null
     }
+
 
 }
 

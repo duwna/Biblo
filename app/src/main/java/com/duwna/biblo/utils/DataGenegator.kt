@@ -1,7 +1,7 @@
 package com.duwna.biblo.utils
 
 import com.duwna.biblo.entities.items.GroupItem
-import com.duwna.biblo.entities.items.MemberItem
+import com.duwna.biblo.entities.items.GroupMemberItem
 import java.util.*
 import java.util.concurrent.TimeUnit
 
@@ -60,9 +60,9 @@ fun getGroupList(): List<GroupItem> {
     val list = mutableListOf<GroupItem>()
     groupNames.forEach {
 
-        val members = buildList<MemberItem> {
+        val members = buildList<GroupMemberItem> {
             repeat((2..8).random()) {
-                val memberItem = MemberItem(
+                val memberItem = GroupMemberItem(
                     "",
                     names[names.indices.random()],
                     avatars[avatars.indices.random()]

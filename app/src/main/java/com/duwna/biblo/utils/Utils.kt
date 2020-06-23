@@ -45,5 +45,13 @@ fun Double.format(digits: Int = 2) = "%.${digits}f".format(Locale.US, this)
 
 fun Double.equalsDelta(other: Double) = kotlin.math.abs(this / other - 1) < 0.01
 
+fun randomID() = UUID.randomUUID().toString()
+
+fun <T> tryOrNull(block: () -> T?): T? = try {
+    block()
+} catch (t: Throwable) {
+    null
+}
+
 const val PERMISSION_REQUEST_CODE = 200
 const val PICK_IMAGE_CODE = 100

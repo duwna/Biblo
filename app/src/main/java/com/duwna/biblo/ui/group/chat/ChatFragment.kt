@@ -7,6 +7,7 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.duwna.biblo.R
 import com.duwna.biblo.entities.items.GroupItem
@@ -26,7 +27,19 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         ChatViewModelFactory(groupItem)
     }
 
-    private val chatAdapter = ChatAdapter()
+    private val chatAdapter = ChatAdapter(
+        onItemLongClicked = { messageItem -> viewModel.deleteMessage(messageItem.id) }
+    ).apply {
+        registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
+            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                super.onItemRangeInserted(positionStart, itemCount)
+                if (!viewModel.currentState.hasScrolled && viewModel.currentState.messages.isNotEmpty()) {
+                    rv_messages.scrollToPosition(itemCount)
+                    viewModel.disableScroll()
+                }
+            }
+        })
+    }
 
     override fun setupViews() {
         groupItem = arguments?.getSerializable("groupItem") as GroupItem
@@ -37,7 +50,8 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         }
 
         iv_add_img.setOnClickListener {
-            pickImageFromGallery()
+            if (viewModel.currentState.imgUri != null) viewModel.setImageUri(null)
+            else pickImageFromGallery()
         }
 
         iv_send.setOnClickListener {
@@ -54,9 +68,13 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
             wave_view.isVisible && ViewCompat.isAttachedToWindow(wave_view) -> wave_view.circularHide()
             else -> wave_view.isVisible = false
         }
+
         state.imgUri?.let { Glide.with(this).load(it).into(iv_add_img) }
+            ?: run { iv_add_img.setImageResource(R.drawable.ic_baseline_add_photo_alternate_24) }
 
         chatAdapter.submitList(state.messages)
+        if (state.messages.isNotEmpty() && !state.isLoading)
+            rv_messages.smoothScrollToPosition(state.messages.size)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -10,6 +10,7 @@ data class Group(
     val currency: String = "",
     val usersIds: List<String> = emptyList(),
     val lastUpdate: Date = Date(),
+    val avatarUrl: String? = null,
     @get:Exclude
     var idGroup: String = ""
 )

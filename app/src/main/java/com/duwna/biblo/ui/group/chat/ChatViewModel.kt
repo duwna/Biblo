@@ -22,21 +22,10 @@ class ChatViewModel(private val groupItem: GroupItem) : BaseViewModel<ChatState>
         loadMessages()
     }
 
-    fun loadMessages() {
+    private fun loadMessages() {
         viewModelScope.launch(IO) {
             try {
-                val messageItems = repository.getMessagesList(groupItem.id).map { message ->
-                    val member = groupItem.members.find { it.id == message.from }!!
-                    MessageItem(
-                        message.id,
-                        member.name,
-                        member.avatarUrl,
-                        message.text,
-                        message.timestamp.format(),
-                        repository.getMessageImageUrl(message.id)
-                    )
-                }
-                postUpdateState { copy(isLoading = false, messages = messageItems) }
+                getMessageList()
             } catch (t: Throwable) {
                 postUpdateState { copy(isLoading = false) }
                 notify(Notify.Error())
@@ -44,27 +33,58 @@ class ChatViewModel(private val groupItem: GroupItem) : BaseViewModel<ChatState>
         }
     }
 
+    private suspend fun getMessageList() {
+        val messageItems = repository.getMessagesList(groupItem.id).map { message ->
+            val member = groupItem.members.find { it.id == message.from }!!
+            MessageItem(
+                message.id,
+                member.name,
+                member.avatarUrl,
+                message.text,
+                message.timestamp.format(),
+                message.imgUrl
+            )
+        }
+        postUpdateState { copy(isLoading = false, messages = messageItems, imgUri = null) }
+    }
+
     fun setImageUri(uri: Uri?) {
         updateState { copy(imgUri = uri) }
     }
 
     fun sendMessage(text: String) {
+        if (currentState.imgUri == null && text.isBlank()) return
         viewModelScope.launch(IO) {
             try {
                 repository.insertMessage(groupItem.id, text, currentState.imgUri)
-                postUpdateState { copy(imgUri = null) }
-                loadMessages()
+                getMessageList()
             } catch (t: Throwable) {
                 notify(Notify.Error())
             }
         }
+    }
+
+    fun deleteMessage(idMessage: String) {
+        viewModelScope.launch(IO) {
+            try {
+                repository.deleteMessage(groupItem.id, idMessage)
+                getMessageList()
+            } catch (t: Throwable) {
+                notify(Notify.Error())
+            }
+        }
+    }
+
+    fun disableScroll() {
+        updateState { copy(hasScrolled = true) }
     }
 }
 
 data class ChatState(
     val isLoading: Boolean = true,
     val messages: List<MessageItem> = emptyList(),
-    val imgUri: Uri? = null
+    val imgUri: Uri? = null,
+    val hasScrolled: Boolean = false
 ) : IViewModelState
 
 class ChatViewModelFactory(private val groupItem: GroupItem) : ViewModelProvider.Factory {

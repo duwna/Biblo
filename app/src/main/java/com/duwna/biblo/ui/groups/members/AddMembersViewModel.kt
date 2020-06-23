@@ -16,13 +16,9 @@ class AddMembersViewModel : BaseViewModel<AddMembersState>(AddMembersState()) {
     private val repository = GroupsRepository()
 
     init {
-        loadFirstMember()
-    }
-
-    private fun loadFirstMember() {
         doAsync {
-            val userInfo = repository.getUserInfo()
-            postUpdateList { add(userInfo) }
+            val info = repository.getUserInfo()
+            postUpdateList { add(info) }
         }
     }
 
@@ -73,7 +69,7 @@ class AddMembersViewModel : BaseViewModel<AddMembersState>(AddMembersState()) {
         viewModelScope.launch(IO) {
             try {
                 val users = currentState.members.map {
-                    User(name = it.name, avatarUri = it.avatarUri, idUser = it.id ?: "")
+                    User(name = it.name, avatarUri = it.avatarUri, idUser = it.id)
                 }
                 repository.insertGroup(groupName, groupCurrency, groupAvatarUri, users)
                 postUpdateState { copy(ready = Unit) }

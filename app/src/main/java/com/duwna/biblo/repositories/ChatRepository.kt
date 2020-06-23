@@ -12,14 +12,18 @@ class ChatRepository : BaseRepository() {
     suspend fun insertMessage(idGroup: String, text: String, imgUri: Uri?) {
         val message = Message(firebaseUserId, text, Date())
 
-        val id = database.collection("groups")
+        val ref = database.collection("groups")
             .document(idGroup)
             .collection("messages")
-            .add(message)
+
+        val id = ref.add(message)
             .await()
             .id
 
-        imgUri?.let { uploadImg("messages", id, it) }
+        imgUri?.let {
+            val imgUrl = uploadImg("messages", id, it)
+            ref.document(id).update("imgUrl", imgUrl)
+        }
     }
 
     suspend fun getMessagesList(idGroup: String): List<Message> {
@@ -33,7 +37,12 @@ class ChatRepository : BaseRepository() {
             .map { it.toObject<Message>()!!.apply { id = it.id } }
     }
 
-    suspend fun getMessageImageUrl(idMessage: String): String? {
-        return getImageUrl("messages", idMessage)
+    suspend fun deleteMessage(idGroup: String, idMessage: String) {
+        database.collection("groups")
+            .document(idGroup)
+            .collection("messages")
+            .document(idMessage)
+            .delete()
+            .await()
     }
 }

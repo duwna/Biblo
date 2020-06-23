@@ -6,9 +6,10 @@ import java.util.*
 
 @IgnoreExtraProperties
 data class Message(
-    val from: String ="",
-    val text: String ="",
+    val from: String = "",
+    val text: String = "",
     val timestamp: Date = Date(),
+    val imgUrl: String? = null,
     @get:Exclude
     var id: String = ""
 )

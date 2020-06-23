@@ -24,21 +24,22 @@ class AuthRepository : BaseRepository() {
         auth.createUserWithEmailAndPassword(email, password)
             .await()
 
-        val user = User(firebaseUserId, name, email, avatarUri)
+        val user = User(firebaseUserId, name, email, null, avatarUri)
         insertUser(user)
+    }
 
-        avatarUri?.let { uploadImg("users", firebaseUserId, it) }
+    private suspend fun insertUser(user: User) {
+
+        val avatarUrl = user.avatarUri?.let { uploadImg("users", firebaseUserId, it) }
+
+        database.collection("users")
+            .document(firebaseUserId)
+            .set(user.copy(avatarUrl = avatarUrl))
+            .await()
     }
 
     suspend fun signInWithEmail(email: String, password: String) {
         auth.signInWithEmailAndPassword(email, password)
-            .await()
-    }
-
-    private suspend fun insertUser(user: User) {
-        database.collection("users")
-            .document(firebaseUserId)
-            .set(user)
             .await()
     }
 

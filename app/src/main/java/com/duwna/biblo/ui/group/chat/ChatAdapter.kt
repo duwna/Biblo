@@ -8,13 +8,19 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.request.RequestOptions
 import com.duwna.biblo.R
 import com.duwna.biblo.entities.items.MessageItem
+import com.duwna.biblo.utils.dpToIntPx
 import com.duwna.biblo.utils.toInitials
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_message.view.*
 
-class ChatAdapter : ListAdapter<MessageItem, MessageViewHolder>(MessagesDiffCallback()) {
+class ChatAdapter(
+    private val onItemLongClicked: (MessageItem) -> Unit
+) : ListAdapter<MessageItem, MessageViewHolder>(MessagesDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
         val containerView =
@@ -23,7 +29,7 @@ class ChatAdapter : ListAdapter<MessageItem, MessageViewHolder>(MessagesDiffCall
     }
 
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(getItem(position), onItemLongClicked)
     }
 }
 
@@ -41,7 +47,8 @@ class MessageViewHolder(
     override val containerView: View
 ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
     fun bind(
-        item: MessageItem
+        item: MessageItem,
+        onItemLongClicked: (MessageItem) -> Unit
     ) = itemView.run {
 
         tv_text.text = item.text
@@ -60,9 +67,18 @@ class MessageViewHolder(
 
         if (item.imgUrl != null) {
             iv_image.isVisible = true
-            Glide.with(this).load(item.imgUrl).into(iv_image)
+            Glide.with(this).load(item.imgUrl)
+                .apply(RequestOptions().transform(RoundedCorners(context.dpToIntPx(8))))
+                .into(iv_image)
         } else {
             iv_image.isVisible = false
+        }
+
+        setOnLongClickListener {
+            Snackbar.make(this, "Удаление сообщения", Snackbar.LENGTH_SHORT)
+                .setAction("Удалить") { onItemLongClicked(item) }
+                .show()
+            true
         }
     }
 }
