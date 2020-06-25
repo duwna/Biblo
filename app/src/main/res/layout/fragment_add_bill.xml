@@ -70,6 +70,24 @@
                     android:hint="@string/description" />
             </com.google.android.material.textfield.TextInputLayout>
 
+
+            <TextView
+                android:id="@+id/tv_date"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:text="14.20"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:textColor="?attr/colorOnSurface"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toBottomOf="@+id/switch_date"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toEndOf="@+id/switch_date"
+                app:layout_constraintTop_toTopOf="@+id/switch_date" />
+
             <Switch
                 android:id="@+id/switch_date"
                 android:layout_width="wrap_content"

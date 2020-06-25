@@ -23,7 +23,7 @@ class AddBillViewModel(private val groupItem: GroupItem) : BaseViewModel<AddBill
     )
 ) {
 
-    private val repository = BillsRepository()
+    private val repository = BillsRepository(groupItem.id)
 
     fun setPayerSum(index: Int, value: Double) {
         updateState {
@@ -80,7 +80,7 @@ class AddBillViewModel(private val groupItem: GroupItem) : BaseViewModel<AddBill
         }
     }
 
-    fun createBill(title: String, description: String, timestamp: Date) {
+    fun createBill(title: String, description: String) {
 
         if (!isSumValid()) {
             notify(Notify.TextMessage("Сумма долга должна соответствовать сумме оплаты"))
@@ -104,11 +104,11 @@ class AddBillViewModel(private val groupItem: GroupItem) : BaseViewModel<AddBill
             }
         }
 
-        val bill = Bill(title, description, timestamp, payers, debtors)
+        val bill = Bill(title, description, currentState.date, payers, debtors)
         updateState { copy(isLoading = true) }
         viewModelScope.launch(IO) {
             try {
-                repository.insertBill(groupItem.id, bill)
+                repository.insertBill(bill)
                 postUpdateState { copy(isLoading = false, ready = Unit) }
             } catch (t: Throwable) {
                 t.printStackTrace()
@@ -121,6 +121,10 @@ class AddBillViewModel(private val groupItem: GroupItem) : BaseViewModel<AddBill
     private fun isSumValid(): Boolean = currentState.sum.equalsDelta(
         currentState.debtorList.sumByDouble { if (it.isChecked) it.sum else 0.0 }
     )
+
+    fun setDate(date: Date) {
+        updateState { copy(date = date) }
+    }
 }
 
 data class AddBillState(
@@ -128,7 +132,8 @@ data class AddBillState(
     val debtorList: List<AddBillMemberItem>,
     val sum: Double = 0.0,
     val isLoading: Boolean = false,
-    val ready: Unit? = null
+    val ready: Unit? = null,
+    val date: Date = Date()
 ) : IViewModelState
 
 

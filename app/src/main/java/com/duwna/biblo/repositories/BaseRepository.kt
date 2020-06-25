@@ -1,15 +1,17 @@
 package com.duwna.biblo.repositories
 
+import android.graphics.Bitmap
 import android.net.Uri
-import com.duwna.biblo.utils.randomID
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import kotlinx.coroutines.tasks.await
 
-open class BaseRepository {
+
+abstract class BaseRepository {
 
     fun userExists() = auth.currentUser != null
 
@@ -24,28 +26,18 @@ open class BaseRepository {
             .build()
     }
 
+    abstract val reference: CollectionReference
+
     private val storage = Firebase.storage.reference
 
-    protected suspend fun uploadImg(path: String, name: String, avatarUri: Uri): String {
+    protected suspend fun uploadImg(path: String, name: String, imgUri: Uri): String {
         val ref = storage.child(path)
             .child(name)
-
-        ref.putFile(avatarUri).await()
+        
+        ref.putFile(imgUri).await()
 
         return ref.downloadUrl.await().toString()
     }
-
-    protected suspend fun getImageUrl(path: String, name: String): String? = try {
-        storage.child(path)
-            .child(name)
-            .downloadUrl
-            .await()
-            .toString()
-    } catch (t: Throwable) {
-        null
-    }
-
-
 }
 
 

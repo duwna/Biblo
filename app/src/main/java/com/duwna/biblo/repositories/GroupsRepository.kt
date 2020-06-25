@@ -15,10 +15,12 @@ import java.util.*
 
 class GroupsRepository : BaseRepository() {
 
+    override val reference = database.collection("groups")
+
     suspend fun loadGroupItems(): List<GroupItem> {
 
 
-        val groups = database.collection("groups")
+        val groups = reference
             .orderBy("lastUpdate", Query.Direction.ASCENDING)
             .whereArrayContains("usersIds", firebaseUserId)
             .get()
@@ -81,8 +83,7 @@ class GroupsRepository : BaseRepository() {
             .documents
             .also { if (it.isEmpty()) return null }
             .get(0)
-            .toObject<User>() ?: return null
-
+            .run { toObject<User>()?.apply { idUser = id } } ?: return null
 
         return AddMemberItem(user.name, tryOrNull { Uri.parse(user.avatarUrl) }, user.idUser)
     }
@@ -94,15 +95,16 @@ class GroupsRepository : BaseRepository() {
         users: List<User>
     ) {
 
+        require(users[0].idUser == firebaseUserId)
         val userIds = mutableListOf<String>().apply {
             users.forEachIndexed { index, user ->
                 when {
+                    // current user
+                    index == 0 -> add(firebaseUserId)
                     //found user
                     user.idUser != null -> add(user.idUser!!)
                     //new user
-                    index != 0 -> add(createUser(user))
-                    // current user
-                    index == 0 -> add(firebaseUserId)
+                    else -> add(createUser(user))
                 }
             }
         }
@@ -116,7 +118,7 @@ class GroupsRepository : BaseRepository() {
 
         avatarUri?.let {
             val avatarUrl = uploadImg("groups", idGroup, it)
-            database.collection("groups").document(idGroup).update("avatarUrl", avatarUrl)
+            reference.document(idGroup).update("avatarUrl", avatarUrl)
         }
     }
 
@@ -140,8 +142,7 @@ class GroupsRepository : BaseRepository() {
     }
 
     suspend fun deleteGroup(id: String) {
-        database.collection("groups")
-            .document(id)
+        reference.document(id)
             .delete()
             .await()
     }

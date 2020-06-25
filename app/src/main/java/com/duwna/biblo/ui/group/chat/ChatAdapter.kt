@@ -74,7 +74,7 @@ class MessageViewHolder(
             iv_image.isVisible = false
         }
 
-        setOnLongClickListener {
+        message_container.setOnLongClickListener {
             Snackbar.make(this, "Удаление сообщения", Snackbar.LENGTH_SHORT)
                 .setAction("Удалить") { onItemLongClicked(item) }
                 .show()

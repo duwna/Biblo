@@ -44,6 +44,8 @@
         android:layout_gravity="center"
         android:text="@string/label_no_groups"
         android:textAlignment="center"
+        android:alpha="0"
+        tools:alpha="1"
         android:textColor="?attr/colorOnSurface"
         android:textSize="18sp" />
 

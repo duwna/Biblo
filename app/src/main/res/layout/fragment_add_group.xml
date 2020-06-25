@@ -109,7 +109,6 @@
         android:layout_height="100dp"
         android:layout_marginTop="16dp"
         app:aiv_borderColor="?attr/colorOnSurface"
-        app:aiv_initials="AA"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"

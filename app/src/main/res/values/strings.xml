@@ -102,5 +102,9 @@
     <string name="btn_split_text">Разделить поровну</string>
     <string name="btn_create_bill">Создать чек</string>
     <string name="message">Сообщение</string>
+    <string name="btn_sign_out">Выйти из аккаунта</string>
+    <string name="btn_save">Сохранить</string>
+    <string name="dark_mode">Темная тема</string>
+    <string name="label_edit_profile">Редактирование профиля</string>
 
 </resources>

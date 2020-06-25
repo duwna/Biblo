@@ -19,7 +19,7 @@ import kotlin.system.measureTimeMillis
 
 class BillsViewModel(private val groupItem: GroupItem) : BaseViewModel<BillsState>(BillsState()) {
 
-    private val repository = BillsRepository()
+    private val repository = BillsRepository(groupItem.id)
 
     init {
         updateState { copy(isLoading = true) }
@@ -32,7 +32,7 @@ class BillsViewModel(private val groupItem: GroupItem) : BaseViewModel<BillsStat
                 var billsViewItems = emptyList<BillsViewItem>()
                 //delay to avoid interrupting animation between fragments
                 val mills = measureTimeMillis {
-                    val bills = repository.loadBills(groupItem.id)
+                    val bills = repository.loadBills()
                     if (bills.isNotEmpty()) billsViewItems = bills.toBillViewItemList()
                 }
                 // 300 - animation length mills
@@ -131,7 +131,7 @@ class BillsViewModel(private val groupItem: GroupItem) : BaseViewModel<BillsStat
     fun deleteBill(idBill: String) {
         viewModelScope.launch(IO) {
             try {
-                repository.deleteBill(groupItem.id, idBill)
+                repository.deleteBill(idBill)
                 loadBills()
             } catch (t: Throwable) {
                 notify(Notify.Error())

@@ -17,7 +17,9 @@ import com.duwna.biblo.utils.PICK_IMAGE_CODE
 import com.duwna.biblo.utils.circularHide
 import com.duwna.biblo.utils.pickImageFromGallery
 import kotlinx.android.synthetic.main.fragment_chat.*
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 
+@ExperimentalCoroutinesApi
 class ChatFragment : BaseFragment<ChatViewModel>() {
 
     private lateinit var groupItem: GroupItem
@@ -62,12 +64,6 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
 
     override fun bindState(state: IViewModelState) {
         state as ChatState
-
-        when {
-            state.isLoading -> wave_view.isVisible = true
-            wave_view.isVisible && ViewCompat.isAttachedToWindow(wave_view) -> wave_view.circularHide()
-            else -> wave_view.isVisible = false
-        }
 
         state.imgUri?.let { Glide.with(this).load(it).into(iv_add_img) }
             ?: run { iv_add_img.setImageResource(R.drawable.ic_baseline_add_photo_alternate_24) }

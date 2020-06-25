@@ -19,6 +19,11 @@ class GroupsFragment : BaseFragment<GroupsViewModel>() {
     override val viewModel: GroupsViewModel by viewModels()
     override val layout: Int = R.layout.fragment_groups
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.initialize()
+    }
+
     private val groupsAdapter = GroupsAdapter(
         onItemClicked = { groupItem ->
             val action = GroupsFragmentDirections.actionGroupsToGroup(groupItem)
@@ -53,9 +58,11 @@ class GroupsFragment : BaseFragment<GroupsViewModel>() {
         }
 
         if (!state.isLoading && state.groups.isEmpty()) {
+            tv_no_groups.isVisible = true
+            tv_no_groups.alpha = 0f
             tv_no_groups.animate().alpha(1f).duration = 500
         } else {
-            tv_no_groups.alpha = 0f
+            tv_no_groups.isVisible = false
         }
 
         groupsAdapter.submitList(state.groups)
@@ -68,13 +75,11 @@ class GroupsFragment : BaseFragment<GroupsViewModel>() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_sign_out -> {
-                viewModel.signOut()
+            R.id.action_profile -> {
+                findNavController().navigate(R.id.action_groups_to_profile)
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
-
-
 }

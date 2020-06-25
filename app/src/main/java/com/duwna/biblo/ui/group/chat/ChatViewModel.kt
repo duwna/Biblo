@@ -12,40 +12,39 @@ import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.ui.base.Notify
 import com.duwna.biblo.utils.format
 import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
+@ExperimentalCoroutinesApi
 class ChatViewModel(private val groupItem: GroupItem) : BaseViewModel<ChatState>(ChatState()) {
 
-    private val repository = ChatRepository()
+    private val repository = ChatRepository(groupItem.id)
 
     init {
-        loadMessages()
-    }
-
-    private fun loadMessages() {
         viewModelScope.launch(IO) {
             try {
-                getMessageList()
+                repository.subscribeOnMessages().collect { messages ->
+                    val messageItems = messages.map { message ->
+                        val member = groupItem.members.find { it.id == message.from }!!
+                        MessageItem(
+                            message.id,
+                            member.name,
+                            member.avatarUrl,
+                            message.text,
+                            message.timestamp.format(),
+                            message.imgUrl
+                        )
+                    }
+                    postUpdateState {
+                        copy(isLoading = false, messages = messageItems, imgUri = null)
+                    }
+                }
             } catch (t: Throwable) {
                 postUpdateState { copy(isLoading = false) }
                 notify(Notify.Error())
             }
         }
-    }
-
-    private suspend fun getMessageList() {
-        val messageItems = repository.getMessagesList(groupItem.id).map { message ->
-            val member = groupItem.members.find { it.id == message.from }!!
-            MessageItem(
-                message.id,
-                member.name,
-                member.avatarUrl,
-                message.text,
-                message.timestamp.format(),
-                message.imgUrl
-            )
-        }
-        postUpdateState { copy(isLoading = false, messages = messageItems, imgUri = null) }
     }
 
     fun setImageUri(uri: Uri?) {
@@ -56,8 +55,7 @@ class ChatViewModel(private val groupItem: GroupItem) : BaseViewModel<ChatState>
         if (currentState.imgUri == null && text.isBlank()) return
         viewModelScope.launch(IO) {
             try {
-                repository.insertMessage(groupItem.id, text, currentState.imgUri)
-                getMessageList()
+                repository.insertMessage(text, currentState.imgUri)
             } catch (t: Throwable) {
                 notify(Notify.Error())
             }
@@ -67,8 +65,7 @@ class ChatViewModel(private val groupItem: GroupItem) : BaseViewModel<ChatState>
     fun deleteMessage(idMessage: String) {
         viewModelScope.launch(IO) {
             try {
-                repository.deleteMessage(groupItem.id, idMessage)
-                getMessageList()
+                repository.deleteMessage(idMessage)
             } catch (t: Throwable) {
                 notify(Notify.Error())
             }

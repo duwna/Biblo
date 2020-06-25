@@ -4,9 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:clickable="true"
-    android:focusable="true"
-    android:foreground="?android:attr/selectableItemBackground"
     android:paddingTop="8dp"
     android:paddingBottom="8dp">
 
@@ -14,7 +11,11 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:id="@+id/message_container"
+        android:foreground="?android:attr/selectableItemBackground"
         android:layout_marginStart="8dp"
+        android:clickable="true"
+        android:focusable="true"
         android:layout_marginEnd="8dp"
         android:background="@drawable/background_message"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -28,7 +29,6 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
             android:textColor="?attr/colorOnPrimary"
@@ -45,10 +45,13 @@
             android:layout_marginStart="8dp"
 
             android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             android:textColor="?attr/colorOnPrimary"
             android:textSize="12sp"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0"
             tools:text="TextView" />
 
         <TextView
@@ -65,12 +68,12 @@
 
         <ImageView
             android:id="@+id/iv_image"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
+            android:layout_width="0dp"
+            android:layout_height="300dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="16dp"
             app:layout_constraintBottom_toTopOf="@+id/tv_text"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

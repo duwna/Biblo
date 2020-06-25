@@ -1,5 +1,6 @@
 package com.duwna.biblo.ui.group.bills.add
 
+import android.app.DatePickerDialog
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -60,9 +61,17 @@ class AddBillFragment : BaseFragment<AddBillViewModel>() {
         btn_create_bill.setOnClickListener {
             viewModel.createBill(
                 et_title.text.toString(),
-                et_description.text.toString(),
-                Date()
+                et_description.text.toString()
             )
+        }
+
+        tv_date.setOnClickListener {
+            showDateDialog()
+        }
+
+        switch_date.setOnCheckedChangeListener { _, isChecked ->
+            tv_date.isVisible = !isChecked
+            if (!isChecked) viewModel.setDate(Date())
         }
     }
 
@@ -75,6 +84,8 @@ class AddBillFragment : BaseFragment<AddBillViewModel>() {
         ticker_sum.text = state.sum.format()
         payersAdapter.submitList(state.payerList)
         debtorsAdapter.submitList(state.debtorList)
+
+        tv_date.text = state.date.format("dd.MM")
 
         state.ready?.run { findNavController().popBackStack() }
     }
@@ -90,4 +101,26 @@ class AddBillFragment : BaseFragment<AddBillViewModel>() {
         container.isVisible = !isLoading
         wave_view.isVisible = isLoading
     }
+
+    private fun showDateDialog() {
+        val calendar = Calendar.getInstance()
+        val listener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+            calendar.apply {
+                set(Calendar.YEAR, year)
+                set(Calendar.MONTH, month)
+                set(Calendar.DAY_OF_MONTH, dayOfMonth)
+                set(Calendar.HOUR_OF_DAY, 0)
+                set(Calendar.MINUTE, 0)
+            }
+            viewModel.setDate(calendar.time)
+        }
+        DatePickerDialog(
+            root,
+            listener,
+            calendar.get(Calendar.YEAR),
+            calendar.get(Calendar.MONTH),
+            calendar.get(Calendar.DAY_OF_MONTH)
+        ).show()
+    }
+
 }
