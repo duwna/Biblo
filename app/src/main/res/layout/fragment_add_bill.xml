@@ -67,7 +67,7 @@
                     android:id="@+id/et_description"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/description" />
+                    android:hint="@string/label_description" />
             </com.google.android.material.textfield.TextInputLayout>
 
 
@@ -77,7 +77,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:text="14.20"
+                tools:text="14.20"
                 android:visibility="gone"
                 tools:visibility="visible"
                 android:textColor="?attr/colorOnSurface"
@@ -95,7 +95,7 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
                 android:checked="true"
-                android:text="@string/switch_current_date"
+                android:text="@string/label_current_date"
                 android:textColor="?attr/colorOnSurface"
                 android:textSize="18sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -157,7 +157,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="16dp"
-                android:text="@string/title_enter_sum_for_payers"
+                android:text="@string/label_enter_sum_for_payers"
                 android:textColor="?attr/colorOnSurface"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"
@@ -178,7 +178,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:text="@string/title_enter_sum_for_debtors"
+                android:text="@string/label_enter_sum_for_debtors"
                 android:textColor="?attr/colorOnSurface"
                 android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="parent"

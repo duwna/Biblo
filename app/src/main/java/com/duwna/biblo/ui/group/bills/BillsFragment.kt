@@ -14,10 +14,12 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.duwna.biblo.R
+import com.duwna.biblo.entities.items.BillsViewItem
 import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.ui.base.BaseFragment
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.utils.circularHide
+import com.duwna.biblo.utils.format
 import kotlinx.android.synthetic.main.fragment_bills.*
 
 
@@ -32,7 +34,7 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
     }
 
     private val billsAdapter = BillsAdapter(
-        onItemClicked = { billItem -> viewModel.deleteBill(billItem.id)}
+        onItemClicked = { billItem -> viewModel.deleteBill(billItem.id) }
     )
 
     override fun onResume() {
@@ -107,8 +109,44 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
             )
         )
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Biblo statistics")
-        emailIntent.putExtra(Intent.EXTRA_TEXT, viewModel.generateEmailMessage())
-        startActivity(Intent.createChooser(emailIntent, "Отправка по электронной почте"))
+        emailIntent.putExtra(Intent.EXTRA_TEXT, generateEmailMessage())
+        startActivity(Intent.createChooser(emailIntent, getString(R.string.label_send_by_email)))
+    }
+
+    private fun generateEmailMessage() = buildString {
+        viewModel.currentState.bills.forEach { billItem ->
+            when (billItem) {
+                is BillsViewItem.Header -> {
+                    append(
+                        "${getString(R.string.label_group)}: ${billItem.name}\n${getString(R.string.label_currency)}: ${billItem.currency}\n${getString(
+                            R.string.label_statistics
+                        )}\n${getString(R.string.label_who_payed)}:"
+                    )
+                    billItem.members.filter { it.sum > 0 }.forEach { member ->
+                        append("\n${member.name}: ${member.sum.format()}")
+                    }
+                    append("\n${getString(R.string.label_for_whom)}:")
+                    billItem.members.filter { it.sum < 0 }.forEach { member ->
+                        append("\n${member.name}: ${member.sum.format()}")
+                    }
+                    append("\n\n${getString(R.string.label_all_bills)}")
+                }
+                is BillsViewItem.Bill -> {
+                    append(
+                        "\n\n${billItem.title}\n${billItem.description}\n${billItem.timestamp}\n${getString(
+                            R.string.label_who_payed
+                        )}:"
+                    )
+                    billItem.payers.forEach { member ->
+                        append("\n${member.name}: ${member.sum.format()}")
+                    }
+                    append("\n${getString(R.string.label_for_whom)}")
+                    billItem.debtors.forEach { member ->
+                        append("\n${member.name}: ${member.sum.format()}")
+                    }
+                }
+            }
+        }
     }
 
     companion object {

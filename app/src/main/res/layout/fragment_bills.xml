@@ -32,7 +32,7 @@
         android:layout_marginEnd="@dimen/fab_margin_end"
         android:layout_marginBottom="@dimen/fab_margin_bottom"
         android:backgroundTint="@color/color_accent"
-        android:text="@string/text_on_fab_bills"
+        android:text="@string/btn_new_bill"
         android:textAllCaps="false"
         app:icon="@drawable/ic_bill"
         app:layout_behavior=".ui.custom.FabBehavior" />

@@ -3,6 +3,7 @@ package com.duwna.biblo.ui.group.bills.add
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.duwna.biblo.R
 import com.duwna.biblo.entities.database.Bill
 import com.duwna.biblo.entities.items.AddBillMemberItem
 import com.duwna.biblo.entities.items.GroupItem
@@ -13,7 +14,6 @@ import com.duwna.biblo.ui.base.Notify
 import com.duwna.biblo.utils.equalsDelta
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
-import java.sql.Timestamp
 import java.util.*
 
 class AddBillViewModel(private val groupItem: GroupItem) : BaseViewModel<AddBillState>(
@@ -83,12 +83,12 @@ class AddBillViewModel(private val groupItem: GroupItem) : BaseViewModel<AddBill
     fun createBill(title: String, description: String) {
 
         if (!isSumValid()) {
-            notify(Notify.TextMessage("Сумма долга должна соответствовать сумме оплаты"))
+            notify(Notify.MessageFromRes(R.string.message_debt_pay_sum))
             return
         }
 
         if (title.isBlank()) {
-            notify(Notify.TextMessage("Добавьте заголовок"))
+            notify(Notify.MessageFromRes(R.string.message_add_title))
             return
         }
 
@@ -113,7 +113,7 @@ class AddBillViewModel(private val groupItem: GroupItem) : BaseViewModel<AddBill
             } catch (t: Throwable) {
                 t.printStackTrace()
                 postUpdateState { copy(isLoading = false) }
-                notify(Notify.Error())
+                notify(Notify.DataError)
             }
         }
     }

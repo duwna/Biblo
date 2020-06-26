@@ -7,7 +7,7 @@
     <fragment
         android:id="@+id/navigation_groups"
         android:name="com.duwna.biblo.ui.groups.GroupsFragment"
-        android:label="@string/title_all_groups"
+        android:label="@string/label_all_groups"
         tools:layout="@layout/fragment_groups">
         <action
             android:id="@+id/action_groups_to_add_group"
@@ -52,6 +52,10 @@
             app:exitAnim="@anim/slide_from_center_to_left"
             app:popEnterAnim="@anim/slide_from_left_to_center"
             app:popExitAnim="@anim/slide_from_center_to_right" />
+        <argument
+            android:name="group_item"
+            app:argType="com.duwna.biblo.entities.items.GroupItem"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/navigation_add_members"
@@ -78,11 +82,15 @@
             app:popExitAnim="@anim/slide_from_center_to_right"
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
+        <argument
+            android:name="groupItem"
+            app:argType="com.duwna.biblo.entities.items.GroupItem"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/navigation_auth"
         android:name="com.duwna.biblo.ui.auth.AuthFragment"
-        android:label="@string/title_auth"
+        android:label="@string/label_auth"
         tools:layout="@layout/fragment_auth">
         <action
             android:id="@+id/action_auth_to_groups"
@@ -104,7 +112,7 @@
     <fragment
         android:id="@+id/navigation_registration"
         android:name="com.duwna.biblo.ui.auth.registration.RegistrationFragment"
-        android:label="@string/title_registration"
+        android:label="@string/label_registration"
         tools:layout="@layout/fragment_registration">
         <action
             android:id="@+id/action_registration_to_groups"
@@ -119,7 +127,7 @@
     <fragment
         android:id="@+id/navigation_bills"
         android:name="com.duwna.biblo.ui.group.bills.BillsFragment"
-        android:label="@string/title_all_bills"
+        android:label="@string/label_all_bills"
         tools:layout="@layout/fragment_bills">
         <action
             android:id="@+id/action_bills_to_add_bill"

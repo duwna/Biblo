@@ -102,45 +102,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view">
 
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="8dp"-->
-<!--                android:background="@drawable/background_member_view"-->
-<!--                android:padding="8dp"-->
-<!--                android:text="dsgsfdgreg"-->
-<!--                android:textColor="?attr/colorOnSurface"-->
-<!--                android:textSize="16sp" />-->
-
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="8dp"-->
-<!--                android:background="@drawable/background_member_view"-->
-<!--                android:padding="8dp"-->
-<!--                android:text="dsgsfdgreg"-->
-<!--                android:textColor="?attr/colorOnSurface"-->
-<!--                android:textSize="16sp" />-->
-
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="8dp"-->
-<!--                android:background="@drawable/background_member_view"-->
-<!--                android:padding="8dp"-->
-<!--                android:text="dsgsfdgreg"-->
-<!--                android:textColor="?attr/colorOnSurface"-->
-<!--                android:textSize="16sp" />-->
-
-<!--            <TextView-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:layout_margin="8dp"-->
-<!--                android:background="@drawable/background_member_view"-->
-<!--                android:padding="8dp"-->
-<!--                android:text="dsgsfdgreg"-->
-<!--                android:textColor="?attr/colorOnSurface"-->
-<!--                android:textSize="16sp" />-->
         </com.google.android.flexbox.FlexboxLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

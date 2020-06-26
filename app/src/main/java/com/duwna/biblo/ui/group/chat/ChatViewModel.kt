@@ -42,7 +42,7 @@ class ChatViewModel(private val groupItem: GroupItem) : BaseViewModel<ChatState>
                 }
             } catch (t: Throwable) {
                 postUpdateState { copy(isLoading = false) }
-                notify(Notify.Error())
+                notify(Notify.DataError)
             }
         }
     }
@@ -57,7 +57,7 @@ class ChatViewModel(private val groupItem: GroupItem) : BaseViewModel<ChatState>
             try {
                 repository.insertMessage(text, currentState.imgUri)
             } catch (t: Throwable) {
-                notify(Notify.Error())
+                notify(Notify.DataError)
             }
         }
     }
@@ -67,7 +67,7 @@ class ChatViewModel(private val groupItem: GroupItem) : BaseViewModel<ChatState>
             try {
                 repository.deleteMessage(idMessage)
             } catch (t: Throwable) {
-                notify(Notify.Error())
+                notify(Notify.DataError)
             }
         }
     }

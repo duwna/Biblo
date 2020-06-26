@@ -5,6 +5,6 @@
     <item
         android:id="@+id/action_send_email"
         android:orderInCategory="100"
-        android:title="Отправить статистику"
+        android:title="@string/label_send_statistics"
         app:showAsAction="never" />
 </menu>

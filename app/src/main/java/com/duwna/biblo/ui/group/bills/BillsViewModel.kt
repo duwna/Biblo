@@ -42,41 +42,7 @@ class BillsViewModel(private val groupItem: GroupItem) : BaseViewModel<BillsStat
             } catch (t: Throwable) {
                 postUpdateState { copy(isLoading = false) }
                 t.printStackTrace()
-                notify(Notify.Error())
-            }
-        }
-    }
-
-    fun collectBills() {
-
-    }
-
-    fun generateEmailMessage() = buildString {
-        currentState.bills.forEach { billItem ->
-            when (billItem) {
-                is BillsViewItem.Header -> {
-                    append(
-                        "Группа: ${billItem.name}\nВалюта: ${billItem.currency}\nCтатистика\nКто платил:"
-                    )
-                    billItem.members.filter { it.sum > 0 }.forEach { member ->
-                        append("\n${member.name}: ${member.sum.format()}")
-                    }
-                    append("\nЗа кого:")
-                    billItem.members.filter { it.sum < 0 }.forEach { member ->
-                        append("\n${member.name}: ${member.sum.format()}")
-                    }
-                    append("\n\nЧеки")
-                }
-                is BillsViewItem.Bill -> {
-                    append("\n\n${billItem.title}\n${billItem.description}\n${billItem.timestamp}\nКто платил:")
-                    billItem.payers.forEach { member ->
-                        append("\n${member.name}: ${member.sum.format()}")
-                    }
-                    append("\nЗа кого:")
-                    billItem.debtors.forEach { member ->
-                        append("\n${member.name}: ${member.sum.format()}")
-                    }
-                }
+                notify(Notify.DataError)
             }
         }
     }
@@ -134,7 +100,7 @@ class BillsViewModel(private val groupItem: GroupItem) : BaseViewModel<BillsStat
                 repository.deleteBill(idBill)
                 loadBills()
             } catch (t: Throwable) {
-                notify(Notify.Error())
+                notify(Notify.DataError)
             }
         }
     }

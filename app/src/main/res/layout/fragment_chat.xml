@@ -33,7 +33,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="16dp"
             android:background="@android:color/transparent"
-            android:hint="@string/message"
+            android:hint="@string/label_message"
             android:textColor="?attr/colorOnPrimary"
             android:textColorHint="?attr/colorOnPrimary"
             app:layout_constraintBottom_toBottomOf="parent"

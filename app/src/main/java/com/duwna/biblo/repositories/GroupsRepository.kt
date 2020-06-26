@@ -19,9 +19,8 @@ class GroupsRepository : BaseRepository() {
 
     suspend fun loadGroupItems(): List<GroupItem> {
 
-
         val groups = reference
-            .orderBy("lastUpdate", Query.Direction.ASCENDING)
+            .orderBy("lastUpdate", Query.Direction.DESCENDING)
             .whereArrayContains("usersIds", firebaseUserId)
             .get()
             .await()
@@ -92,7 +91,8 @@ class GroupsRepository : BaseRepository() {
         name: String,
         currency: String,
         avatarUri: Uri?,
-        users: List<User>
+        users: List<User>,
+        groupItem: GroupItem?
     ) {
 
         require(users[0].idUser == firebaseUserId)
@@ -109,12 +109,18 @@ class GroupsRepository : BaseRepository() {
             }
         }
 
-        val group = Group(name, currency, userIds, Date())
+        val group = Group(name, currency, userIds, Date(), groupItem?.avatarUrl)
 
-        val idGroup = database.collection("groups")
-            .add(group)
-            .await()
-            .id
+        val idGroup = if (groupItem == null) {
+            reference.add(group)
+                .await()
+                .id
+        } else {
+            reference.document(groupItem.id)
+                .set(group)
+                .await()
+            groupItem.id
+        }
 
         avatarUri?.let {
             val avatarUrl = uploadImg("groups", idGroup, it)
@@ -135,10 +141,6 @@ class GroupsRepository : BaseRepository() {
         }
 
         return idUser
-    }
-
-    fun signOut() {
-        auth.signOut()
     }
 
     suspend fun deleteGroup(id: String) {

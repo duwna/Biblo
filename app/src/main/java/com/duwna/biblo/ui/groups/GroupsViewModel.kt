@@ -31,7 +31,7 @@ class GroupsViewModel : BaseViewModel<GroupsViewModelState>(
             } catch (t: Throwable) {
                 postUpdateState { copy(isLoading = false) }
                 t.printStackTrace()
-                notify(Notify.Error())
+                notify(Notify.DataError)
             }
         }
     }
@@ -42,7 +42,7 @@ class GroupsViewModel : BaseViewModel<GroupsViewModelState>(
                 repository.deleteGroup(id)
                 loadGroups()
             } catch (t: Throwable) {
-                notify(Notify.Error())
+                notify(Notify.DataError)
             }
         }
     }

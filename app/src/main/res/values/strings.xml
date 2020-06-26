@@ -1,50 +1,81 @@
 <resources>
     <string name="app_name">Biblo</string>
-    <string name="action_sign_out">Выйти</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
-    <string name="text_on_fab_groups">Новая группа</string>
-    <string name="loading">Loading…</string>
-    <string name="et_add_group_name">Название</string>
-    <string name="tv_choose_currency">Выберите валюту:</string>
-    <string name="label_currency">Валюта</string>
-    <string name="switch_your_currency">Своя валюта</string>
-    <string name="tv_choose_avatar">Выберите аватар:</string>
-    <string name="tv_add_members">Добавьте участников:</string>
-    <string name="btn_create_group">Создать группу</string>
-    <string name="btn_search">Поиск</string>
-    <string name="vtn_create">Создать</string>
-    <string name="name">Имя</string>
-    <string name="label_avatar">Аватар</string>
-    <string name="title_all_groups">Все группы</string>
-    <string name="title_add_group">Создание группы</string>
-    <string name="title_add_members">Добавление участников</string>
-    <string name="btn_add">Добавить</string>
-    <string name="btn_add_members">Добавить участников</string>
-    <string name="tv_group_avatar">Аватар группы</string>
-    <string name="tv_enter">Войти</string>
-    <string name="tv_registration">Регистрация</string>
-    <string name="tv_email">E-mail</string>
-    <string name="tv_password">Пароль</string>
-    <string name="btn_registration">Зарегистрироваться</string>
-    <string name="label_no_groups">Нет ни одной группы…\nСоздайте новую</string>
-    <string name="title_auth">Авторизация</string>
-    <string name="title_registration">Регистрация</string>
-    <string name="title_all_bills">Все чеки</string>
-    <string name="text_on_fab_bills">Новый чек</string>
-    <string name="label_no_bills">Нет ни одного чека…\nСоздайте новый</string>
-    <string name="title_bills">Чеки</string>
-    <string name="title_chat">Чат</string>
-    <string name="btn_make_search">Найти</string>
-    <string name="btn_cancel">Отмена</string>
+    <string name="btn_new_group">New group</string>
+    <string name="btn_create_group">Create group</string>
+    <string name="btn_registration">Registration</string>
+    <string name="btn_new_bill">New bill</string>
+    <string name="btn_search">Search</string>
+    <string name="btn_add">Add</string>
+    <string name="btn_split_text">Split equally</string>
+    <string name="btn_create_bill">Create bill</string>
+    <string name="btn_add_members">Add members</string>
+    <string name="btn_create">Create</string>
+    <string name="btn_make_search">Search</string>
+    <string name="btn_cancel">Cancel</string>
+    <string name="btn_sign_out">Sign out</string>
+    <string name="btn_save">Save</string>
 
+    <string name="title_add_group">Group creation</string>
+    <string name="title_add_members">Add members</string>
+    <string name="title_bills">Bills</string>
+    <string name="title_add_bill">Bill creation</string>
+    <string name="title_chat">Chat</string>
 
+    <string name="label_group_name">Name</string>
+    <string name="label_choose_currency">Choose currency:</string>
+    <string name="label_currency">Currency</string>
+    <string name="label_my_currency">Own currency</string>
+    <string name="label_choose_avatar">Choose avatar:</string>
+    <string name="label_add_members">Add members:</string>
+    <string name="label_name">Name</string>
+    <string name="label_avatar">Avatar</string>
+    <string name="label_all_groups">All groups</string>
+    <string name="label_group_avatar">Group avatar</string>
+    <string name="label_enter">Enter</string>
+    <string name="label_registration">Registration</string>
+    <string name="label_email">Email</string>
+    <string name="label_password">Password</string>
+    <string name="label_no_groups">There are no groups…\nCreate a new</string>
+    <string name="label_auth">Authorization</string>
+    <string name="label_all_bills">All bills</string>
+    <string name="label_no_bills">There are no bills…\nCreate a new</string>
+    <string name="label_who_payed">Who paid:</string>
+    <string name="label_for_whom">For whom:</string>
+    <string name="label_title">Title</string>
+    <string name="label_current_date">Current date</string>
+    <string name="label_description">Description</string>
+    <string name="label_sum">Sum</string>
+    <string name="label_enter_sum_for_payers">Enter sum for those who paid:</string>
+    <string name="label_enter_sum_for_debtors">Enter sum for those who debt:</string>
+    <string name="label_message">Message</string>
+    <string name="label_dark_mode">Dark mode</string>
+    <string name="label_edit_profile">Profile editing</string>
+    <string name="label_delete_bill">Deleting bill</string>
+    <string name="label_delete_message">Deleting message</string>
+    <string name="label_delete">Delete</string>
+    <string name="label_send_by_email">Sending by Email</string>
+    <string name="label_group">Group</string>
+    <string name="label_statistics">Statistics</string>
+    <string name="label_edit_group">Group editing</string>
+    <string name="label_send">Send</string>
+
+    <string name="message_internet_error">No internet connection…</string>
+    <string name="message_data_error">Error loading data…</string>
+    <string name="message_debt_pay_sum">The amount of debt must match the amount of payment</string>
+    <string name="message_add_title">Add title</string>
+    <string name="message_add_name">"Add name"</string>
+    <string name="message_add_currency">"Add currency"</string>
+    <string name="message_data_saved">Data saved!</string>
+    <string name="message_registration_error">Registration error occurred…</string>
+    <string name="message_auth_error">Authorization error occurred…</string>
+    <string name="message_enter_email">Please enter Email</string>
+    <string name="message_send_password_link">Link has been sent!</string>
+    <string name="message_password_link_sent">Send a password recovery link to</string>
+    <string name="message_no_user_found">No user with this address found…</string>
+    <string name="label_forgot_password">Forgot password?</string>
+    <string name="label_send_statistics">Send statistics</string>
+    <string name="label_profile">Profile</string>
 
     <string-array name="currency">
         <item>₽</item>
@@ -88,23 +119,4 @@
         <item>₹</item>
         <item>₺</item>
     </string-array>
-
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_who_payed">Кто платил:</string>
-    <string name="title_for_whom">За кого:</string>
-    <string name="label_title">Заголовок</string>
-    <string name="switch_current_date">Текущая дата</string>
-    <string name="description">Описание</string>
-    <string name="label_sum">Сумма</string>
-    <string name="title_add_bill">Создание чека</string>
-    <string name="title_enter_sum_for_payers">Введите сумму для тех, кто платил:</string>
-    <string name="title_enter_sum_for_debtors">Введите сумму для тех, кто должен:</string>
-    <string name="btn_split_text">Разделить поровну</string>
-    <string name="btn_create_bill">Создать чек</string>
-    <string name="message">Сообщение</string>
-    <string name="btn_sign_out">Выйти из аккаунта</string>
-    <string name="btn_save">Сохранить</string>
-    <string name="dark_mode">Темная тема</string>
-    <string name="label_edit_profile">Редактирование профиля</string>
-
 </resources>

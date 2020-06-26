@@ -1,8 +1,8 @@
 package com.duwna.biblo.ui.auth.profile
 
-import android.graphics.Bitmap
 import android.net.Uri
 import androidx.lifecycle.viewModelScope
+import com.duwna.biblo.R
 import com.duwna.biblo.entities.database.User
 import com.duwna.biblo.repositories.AuthRepository
 import com.duwna.biblo.ui.base.BaseViewModel
@@ -25,7 +25,7 @@ class ProfileViewModel : BaseViewModel<ProfileState>(ProfileState()) {
                 val user = repository.getUser()
                 postUpdateState { copy(user = user, isLoading = false) }
             } catch (t: Throwable) {
-                notify(Notify.Error())
+                notify(Notify.DataError)
             }
         }
     }
@@ -43,9 +43,9 @@ class ProfileViewModel : BaseViewModel<ProfileState>(ProfileState()) {
             try {
                 repository.insertUser(user)
                 postUpdateState { copy(isLoading = false) }
-                notify(Notify.TextMessage("Данные сохранены!"))
+                notify(Notify.MessageFromRes(R.string.message_data_saved))
             } catch (t: Throwable) {
-                notify(Notify.Error())
+                notify(Notify.DataError)
             }
         }
     }

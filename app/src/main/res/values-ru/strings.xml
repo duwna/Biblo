@@ -1,0 +1,123 @@
+<resources>
+    <string name="app_name">Biblo</string>
+
+    <string name="btn_new_group">Новая группа</string>
+    <string name="btn_create_group">Создать группу</string>
+    <string name="btn_registration">Зарегистрироваться</string>
+    <string name="btn_new_bill">Новый чек</string>
+    <string name="btn_search">Поиск</string>
+    <string name="btn_add">Добавить</string>
+    <string name="btn_split_text">Разделить поровну</string>
+    <string name="btn_create_bill">Создать чек</string>
+    <string name="btn_add_members">Добавить участников</string>
+    <string name="btn_create">Создать</string>
+    <string name="btn_make_search">Найти</string>
+    <string name="btn_cancel">Отмена</string>
+    <string name="btn_sign_out">Выйти из аккаунта</string>
+    <string name="btn_save">Сохранить</string>
+
+    <string name="title_add_group">Создание группы</string>
+    <string name="title_add_members">Добавление участников</string>
+    <string name="title_bills">Чеки</string>
+    <string name="title_add_bill">Создание чека</string>
+    <string name="title_chat">Чат</string>
+
+    <string name="label_group_name">Название</string>
+    <string name="label_choose_currency">Выберите валюту:</string>
+    <string name="label_currency">Валюта</string>
+    <string name="label_my_currency">Своя валюта</string>
+    <string name="label_choose_avatar">Выберите аватар:</string>
+    <string name="label_add_members">Добавьте участников:</string>
+    <string name="label_name">Имя</string>
+    <string name="label_avatar">Аватар</string>
+    <string name="label_all_groups">Все группы</string>
+    <string name="label_group_avatar">Аватар группы</string>
+    <string name="label_enter">Войти</string>
+    <string name="label_registration">Регистрация</string>
+    <string name="label_email">E-mail</string>
+    <string name="label_password">Пароль</string>
+    <string name="label_no_groups">Нет ни одной группы…\nСоздайте новую</string>
+    <string name="label_auth">Авторизация</string>
+    <string name="label_all_bills">Все чеки</string>
+    <string name="label_no_bills">Нет ни одного чека…\nСоздайте новый</string>
+    <string name="label_who_payed">Кто платил:</string>
+    <string name="label_for_whom">За кого:</string>
+    <string name="label_title">Заголовок</string>
+    <string name="label_current_date">Текущая дата</string>
+    <string name="label_description">Описание</string>
+    <string name="label_sum">Сумма</string>
+    <string name="label_enter_sum_for_payers">Введите сумму для тех, кто платил:</string>
+    <string name="label_enter_sum_for_debtors">Введите сумму для тех, кто должен:</string>
+    <string name="label_message">Сообщение</string>
+    <string name="label_dark_mode">Темная тема</string>
+    <string name="label_edit_profile">Редактирование профиля</string>
+    <string name="label_delete_bill">Удаление чека</string>
+    <string name="label_delete_message">Удаление сообщения</string>
+    <string name="label_delete">Удалить</string>
+    <string name="label_send_by_email">Отправка по электронной почте</string>
+    <string name="label_group">Группа</string>
+    <string name="label_statistics">Статистика</string>
+    <string name="label_edit_group">Редактирование группы</string>
+    <string name="label_send">Отправить</string>
+
+    <string name="message_internet_error">Отсутствует подключение к интернету…</string>
+    <string name="message_data_error">Произошла ошибка загрузки данных…</string>
+    <string name="message_debt_pay_sum">Сумма долга должна соответствовать сумме оплаты</string>
+    <string name="message_add_title">Добавьте заголовок</string>
+    <string name="message_add_name">"Добавьте имя"</string>
+    <string name="message_add_currency">"Добавьте вылюту"</string>
+    <string name="message_data_saved">Данные сохранены!</string>
+    <string name="message_registration_error">Возникла ошибка регистрации…</string>
+    <string name="message_auth_error">Возникла ошибка авторизации…</string>
+    <string name="message_enter_email">Пожалуйста, введите E-mail</string>
+    <string name="message_send_password_link">Ссылка отправлена!</string>
+    <string name="message_password_link_sent">Отправить ссылку для восстановления пароля на адрес</string>
+    <string name="message_no_user_found">Пользователя с таким адресом не найдено…</string>
+    <string name="label_forgot_password">Забыли пароль?</string>
+    <string name="label_send_statistics">Отправить статистику</string>
+    <string name="label_profile">Профиль</string>
+
+
+    <string-array name="currency">
+        <item>₽</item>
+        <item>$</item>
+        <item>¢</item>
+        <item>£</item>
+        <item>¤</item>
+        <item>¥</item>
+        <item>֏</item>
+        <item>৲</item>
+        <item>৳</item>
+        <item>৻</item>
+        <item>૱</item>
+        <item>௹</item>
+        <item>฿</item>
+        <item>៛</item>
+        <item>₠</item>
+        <item>₡</item>
+        <item>₢</item>
+        <item>₣</item>
+        <item>₤</item>
+        <item>₥</item>
+        <item>₦</item>
+        <item>₧</item>
+        <item>₨</item>
+        <item>₩</item>
+        <item>₪</item>
+        <item>₫</item>
+        <item>€</item>
+        <item>₭</item>
+        <item>₮</item>
+        <item>₯</item>
+        <item>₰</item>
+        <item>₲</item>
+        <item>₳</item>
+        <item>₴</item>
+        <item>₵</item>
+        <item>₶</item>
+        <item>₷</item>
+        <item>₸</item>
+        <item>₹</item>
+        <item>₺</item>
+    </string-array>
+</resources>

@@ -76,9 +76,7 @@ class GroupViewHolder(
         setOnClickListener { onItemClicked(item) }
 
         setOnLongClickListener {
-            Snackbar.make(this, "Удаление группы \"${item.name}\"", Snackbar.LENGTH_SHORT)
-                .setAction("Удалить") { onItemLongClicked(item) }
-                .show()
+            onItemLongClicked(item)
             true
         }
 

@@ -30,7 +30,8 @@ class GroupsFragment : BaseFragment<GroupsViewModel>() {
             findNavController().navigate(action)
         },
         onItemLongClicked = { groupItem ->
-            viewModel.deleteGroup(groupItem.id)
+            val action = GroupsFragmentDirections.actionGroupsToAddGroup(groupItem)
+            findNavController().navigate(action)
         }
     )
 
@@ -42,7 +43,8 @@ class GroupsFragment : BaseFragment<GroupsViewModel>() {
         }
 
         fab.setOnClickListener {
-            findNavController().navigate(R.id.action_groups_to_add_group)
+            val action = GroupsFragmentDirections.actionGroupsToAddGroup(null)
+            findNavController().navigate(action)
         }
     }
 

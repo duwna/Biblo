@@ -85,8 +85,8 @@ class BillViewHolder(
         }
 
         setOnLongClickListener {
-            Snackbar.make(this, "Удаление чека \"${item.title}\"", Snackbar.LENGTH_SHORT)
-                .setAction("Удалить") { onItemClicked(item) }
+            Snackbar.make(this, "${context.getString(R.string.label_delete_bill)} \"${item.title}\"", Snackbar.LENGTH_SHORT)
+                .setAction(context.getString(R.string.label_delete)) { onItemClicked(item) }
                 .show()
             true
         }

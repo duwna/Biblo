@@ -6,6 +6,7 @@ import android.view.ViewGroup
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.view.*
+import com.google.android.material.snackbar.Snackbar
 
 fun View.circularShow() {
     ViewAnimationUtils.createCircularReveal(
@@ -51,4 +52,8 @@ fun View.setPaddingOptionally(
     bottom: Int = paddingBottom
 ) {
     setPadding(left, top, right, bottom)
+}
+
+fun View.showSnackBar(message: String, length: Int = Snackbar.LENGTH_SHORT) {
+    Snackbar.make(this, message, length).show()
 }

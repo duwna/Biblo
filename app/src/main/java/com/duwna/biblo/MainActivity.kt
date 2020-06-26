@@ -1,16 +1,13 @@
 package com.duwna.biblo
 
 import android.os.Bundle
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.setupWithNavController
 import com.duwna.biblo.ui.base.Notify
-import com.duwna.biblo.ui.group.chat.ChatViewModel
-import com.google.android.material.snackbar.Snackbar
-
+import com.duwna.biblo.utils.showSnackBar
 import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity() {
@@ -33,16 +30,11 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun renderNotification(notify: Notify) {
-        val snackbar = Snackbar.make(container, notify.message, Snackbar.LENGTH_LONG)
         when (notify) {
-            is Notify.InternetError -> snackbar.duration = Snackbar.LENGTH_SHORT
-            is Notify.ActionMessage ->
-                snackbar.setAction(notify.actionLabel) { notify.actionHandler.invoke() }
+            is Notify.InternetError -> container.showSnackBar(getString(R.string.message_internet_error))
+            is Notify.DataError -> container.showSnackBar(getString(R.string.message_data_error))
+            is Notify.MessageFromRes -> container.showSnackBar(getString(notify.resId))
+            is Notify.TextMessage -> container.showSnackBar(notify.message)
         }
-        snackbar.show()
     }
-//
-//    override fun onSupportNavigateUp(): Boolean {
-//        return navController.navigateUp()
-//    }
 }

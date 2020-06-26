@@ -36,16 +36,21 @@ class AuthFragment : BaseFragment<AuthViewModel>() {
 
         tv_forgot_password.setOnClickListener {
             if (et_email.text.toString().isBlank()) {
-                Snackbar.make(container, "Пожалуйста, введите E-mail", Snackbar.LENGTH_SHORT).show()
+                Snackbar.make(
+                    container,
+                    getString(R.string.message_enter_email),
+                    Snackbar.LENGTH_SHORT
+                ).show()
                 return@setOnClickListener
             }
             Snackbar.make(
                 container,
-                "Отправить ссылку для восстановления пароля на адрес ${et_email.text}?",
+                "${getString(R.string.message_send_password_link)} ${et_email.text}?",
                 Snackbar.LENGTH_LONG
             ).apply {
-                setAction("Отправить") { viewModel.resetPassword(et_email.text.toString()) }
-                view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)?.maxLines = 5
+                setAction(getString(R.string.label_send)) { viewModel.resetPassword(et_email.text.toString()) }
+                view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)?.maxLines =
+                    5
                 show()
             }
         }

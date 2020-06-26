@@ -48,7 +48,7 @@
                     android:id="@+id/et_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/name"
+                    android:hint="@string/label_name"
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
 
@@ -70,7 +70,7 @@
                     android:id="@+id/et_email"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/tv_email"
+                    android:hint="@string/label_email"
                     android:inputType="textEmailAddress"
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>
@@ -93,7 +93,7 @@
                     android:id="@+id/et_sum"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/tv_password"
+                    android:hint="@string/label_password"
                     android:inputType="textPassword"
                     android:maxLines="1" />
             </com.google.android.material.textfield.TextInputLayout>

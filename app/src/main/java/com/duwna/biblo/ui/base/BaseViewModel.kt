@@ -1,5 +1,6 @@
 package com.duwna.biblo.ui.base
 
+import androidx.annotation.StringRes
 import androidx.lifecycle.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
@@ -37,7 +38,7 @@ abstract class BaseViewModel<T : IViewModelState>(
                 block()
             } catch (t: Throwable) {
                 t.printStackTrace()
-                notify(Notify.Error())
+                notify(Notify.DataError)
             }
         }
     }
@@ -73,21 +74,8 @@ class EventObserver<E>(private val onEventUnhandledContent: (E) -> Unit) : Obser
 }
 
 sealed class Notify {
-    abstract val message: String
-
-    data class TextMessage(override val message: String) : Notify()
-
-    data class InternetError(
-        override val message: String = "Отсутствует подключение к интернету"
-    ) : Notify()
-
-    data class Error(
-        override val message: String = "Возникла ошибка загрузки данных"
-    ) : Notify()
-
-    data class ActionMessage(
-        override val message: String,
-        val actionLabel: String,
-        val actionHandler: (() -> Unit)
-    ) : Notify()
+    data class TextMessage(val message: String) : Notify()
+    data class MessageFromRes(@StringRes val resId: Int) : Notify()
+    object DataError : Notify()
+    object InternetError : Notify()
 }

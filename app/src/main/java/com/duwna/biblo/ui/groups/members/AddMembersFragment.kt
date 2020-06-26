@@ -24,13 +24,17 @@ class AddMembersFragment : BaseFragment<AddMembersViewModel>() {
     override val layout: Int = R.layout.fragment_add_members
 
     private val args: AddMembersFragmentArgs by navArgs()
-    override val viewModel: AddMembersViewModel by viewModels()
+    override val viewModel: AddMembersViewModel by viewModels() {
+        AddMembersViewModelFactory(args.groupItem)
+    }
 
     private val addMemberAdapter = AddMemberAdapter(
         onRemoveClicked = { position -> viewModel.removeMember(position) }
     )
 
     override fun setupViews() {
+
+        args.groupItem?.let { btn_create_group.text = "Сохранить" }
 
         rv_members.apply {
             layoutManager = LinearLayoutManager(context)
@@ -117,7 +121,7 @@ class AddMembersFragment : BaseFragment<AddMembersViewModel>() {
             if (isSearch) R.string.btn_cancel else R.string.btn_search
         )
         til_member_name.hint = requireContext().getString(
-            if (isSearch) R.string.tv_email else R.string.name
+            if (isSearch) R.string.label_email else R.string.label_name
         )
         et_member_name.inputType = if (isSearch)
             InputType.TYPE_TEXT_VARIATION_EMAIL_ADDRESS

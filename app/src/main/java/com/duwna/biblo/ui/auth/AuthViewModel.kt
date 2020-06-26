@@ -1,6 +1,7 @@
 package com.duwna.biblo.ui.auth
 
 import androidx.lifecycle.viewModelScope
+import com.duwna.biblo.R
 import com.duwna.biblo.repositories.AuthRepository
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.IViewModelState
@@ -19,7 +20,7 @@ class AuthViewModel : BaseViewModel<AuthState>(AuthState()) {
                 repository.authWithGoogle(idToken)
                 postUpdateState { copy(ready = Unit) }
             } catch (t: Throwable) {
-                notify(Notify.TextMessage("Возникла ошибка авторизации"))
+                notify(Notify.MessageFromRes(R.string.message_auth_error))
                 postUpdateState { copy(isLoading = false) }
             }
         }
@@ -32,7 +33,7 @@ class AuthViewModel : BaseViewModel<AuthState>(AuthState()) {
                 repository.signInWithEmail(email, password)
                 postUpdateState { copy(ready = Unit) }
             } catch (t: Throwable) {
-                notify(Notify.TextMessage("Возникла ошибка авторизации"))
+                notify(Notify.MessageFromRes(R.string.message_auth_error))
                 postUpdateState { copy(isLoading = false) }
             }
         }
@@ -42,9 +43,9 @@ class AuthViewModel : BaseViewModel<AuthState>(AuthState()) {
         viewModelScope.launch(IO) {
             try {
                 repository.resetPassword(email)
-                notify(Notify.TextMessage("Ссылка отправлена!"))
+                notify(Notify.MessageFromRes(R.string.message_password_link_sent))
             } catch (t: Throwable) {
-                notify(Notify.TextMessage("Пользователя с таким адресом не найдено..."))
+                notify(Notify.MessageFromRes(R.string.message_no_user_found))
             }
         }
     }
