@@ -60,6 +60,7 @@ class ProfileFragment : BaseFragment<ProfileViewModel>() {
         til_email.isVisible = state.user?.email != null
         wave_view.isVisible = state.isLoading
 
+
         when {
             state.tmpAvatarUri != null -> {
                 iv_avatar.isAvatarMode = true

@@ -1,6 +1,5 @@
 package com.duwna.biblo.repositories
 
-import android.graphics.Bitmap
 import android.net.Uri
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
@@ -37,6 +36,10 @@ abstract class BaseRepository {
         ref.putFile(imgUri).await()
 
         return ref.downloadUrl.await().toString()
+    }
+
+    protected suspend fun deleteImg(path: String, name: String) {
+        storage.child(path).child(name).delete().await()
     }
 }
 

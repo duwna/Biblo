@@ -137,7 +137,6 @@
     <fragment
         android:id="@+id/navigation_group"
         android:name="com.duwna.biblo.ui.group.GroupFragment"
-        android:label="fragment_group"
         tools:layout="@layout/fragment_group">
         <action
             android:id="@+id/action_navigation_group_to_navigation_bills"
@@ -152,7 +151,6 @@
     <fragment
         android:id="@+id/navigation_chat"
         android:name="com.duwna.biblo.ui.group.chat.ChatFragment"
-        android:label="fragment_chat"
         tools:layout="@layout/fragment_chat" />
     <fragment
         android:id="@+id/navigation_add_bill"

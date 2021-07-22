@@ -7,7 +7,6 @@ import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.duwna.biblo.R
 import com.duwna.biblo.entities.items.GroupItem
@@ -16,7 +15,9 @@ import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.utils.PICK_IMAGE_CODE
 import com.duwna.biblo.utils.circularHide
 import com.duwna.biblo.utils.pickImageFromGallery
+import kotlinx.android.synthetic.main.fragment_bills.*
 import kotlinx.android.synthetic.main.fragment_chat.*
+import kotlinx.android.synthetic.main.fragment_chat.wave_view
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
@@ -30,24 +31,16 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
     }
 
     private val chatAdapter = ChatAdapter(
-        onItemLongClicked = { messageItem -> viewModel.deleteMessage(messageItem.id) }
-    ).apply {
-        registerAdapterDataObserver(object : RecyclerView.AdapterDataObserver() {
-            override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                super.onItemRangeInserted(positionStart, itemCount)
-                if (!viewModel.currentState.hasScrolled && viewModel.currentState.messages.isNotEmpty()) {
-                    rv_messages.scrollToPosition(itemCount)
-                    viewModel.disableScroll()
-                }
-            }
-        })
-    }
+        onItemLongClicked = { messageItem -> viewModel.deleteMessage(messageItem) }
+    )
 
     override fun setupViews() {
         groupItem = arguments?.getSerializable("groupItem") as GroupItem
 
         rv_messages.apply {
-            layoutManager = LinearLayoutManager(context)
+            layoutManager = LinearLayoutManager(context).apply {
+                stackFromEnd = true
+            }
             adapter = chatAdapter
         }
 
@@ -60,17 +53,25 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
             viewModel.sendMessage(et_message.text.toString())
             et_message.setText("")
         }
+
+        viewModel.observeMessageSentEvent(viewLifecycleOwner) {
+            rv_messages.smoothScrollToPosition(chatAdapter.itemCount)
+        }
     }
 
     override fun bindState(state: IViewModelState) {
         state as ChatState
 
+        when {
+            state.isLoading -> wave_view.isVisible = true
+            wave_view.isVisible && ViewCompat.isAttachedToWindow(wave_view) -> wave_view.circularHide()
+            else -> wave_view.isVisible = false
+        }
+
         state.imgUri?.let { Glide.with(this).load(it).into(iv_add_img) }
             ?: run { iv_add_img.setImageResource(R.drawable.ic_baseline_add_photo_alternate_24) }
 
         chatAdapter.submitList(state.messages)
-        if (state.messages.isNotEmpty() && !state.isLoading)
-            rv_messages.smoothScrollToPosition(state.messages.size)
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

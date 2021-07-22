@@ -29,8 +29,6 @@ class GroupFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        (activity as MainActivity).toolbar.title = args.groupItem.name
-
         val pagerAdapter = PagerAdapter(this, args.groupItem)
         view_pager.adapter = pagerAdapter
 
@@ -40,9 +38,13 @@ class GroupFragment : Fragment() {
                 else -> getString(R.string.title_chat)
             }
         }.attach()
-
     }
 
+    override fun onResume() {
+        super.onResume()
+        (activity as MainActivity).toolbar.title = args.groupItem.name
+
+    }
 }
 
 class PagerAdapter(

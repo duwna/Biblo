@@ -8,6 +8,7 @@ import com.duwna.biblo.repositories.AuthRepository
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.ui.base.Notify
+import com.duwna.biblo.utils.log
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.launch
 
@@ -23,6 +24,7 @@ class ProfileViewModel : BaseViewModel<ProfileState>(ProfileState()) {
         viewModelScope.launch(IO) {
             try {
                 val user = repository.getUser()
+                log(user.avatarUrl)
                 postUpdateState { copy(user = user, isLoading = false) }
             } catch (t: Throwable) {
                 notify(Notify.DataError)
@@ -38,7 +40,7 @@ class ProfileViewModel : BaseViewModel<ProfileState>(ProfileState()) {
         val user = currentState.user?.copy(
             name = name, avatarUri = currentState.tmpAvatarUri
         ) ?: return
-        updateState { copy(isLoading = true) }
+        updateState { copy(isLoading = true, user = user) }
         viewModelScope.launch(IO) {
             try {
                 repository.insertUser(user)

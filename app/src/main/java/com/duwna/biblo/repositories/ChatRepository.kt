@@ -2,6 +2,7 @@ package com.duwna.biblo.repositories
 
 import android.net.Uri
 import com.duwna.biblo.entities.database.Message
+import com.duwna.biblo.entities.items.MessageItem
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -30,10 +31,12 @@ class ChatRepository(idGroup: String) : BaseRepository() {
         }
     }
 
-    suspend fun deleteMessage(idMessage: String) {
-        reference.document(idMessage)
+    suspend fun deleteMessage(messageItem: MessageItem) {
+        reference.document(messageItem.id)
             .delete()
             .await()
+
+        messageItem.imgUrl?.let { deleteImg("messages", messageItem.id) }
     }
 
     @ExperimentalCoroutinesApi
@@ -48,6 +51,8 @@ class ChatRepository(idGroup: String) : BaseRepository() {
                 offer(list)
             }
 
-        awaitClose { subscription.remove() }
+        awaitClose {
+            subscription.remove()
+        }
     }
 }

@@ -10,6 +10,7 @@
     <string name="btn_split_text">Split equally</string>
     <string name="btn_create_bill">Create bill</string>
     <string name="btn_add_members">Add members</string>
+    <string name="btn_delete_group">Delete group</string>
     <string name="btn_create">Create</string>
     <string name="btn_make_search">Search</string>
     <string name="btn_cancel">Cancel</string>
@@ -48,10 +49,11 @@
     <string name="label_sum">Sum</string>
     <string name="label_enter_sum_for_payers">Enter sum for those who paid:</string>
     <string name="label_enter_sum_for_debtors">Enter sum for those who debt:</string>
-    <string name="label_message">Message</string>
+    <string name="label_message">Message…</string>
     <string name="label_dark_mode">Dark mode</string>
     <string name="label_edit_profile">Profile editing</string>
     <string name="label_delete_bill">Deleting bill</string>
+    <string name="label_delete_group">Deleting group</string>
     <string name="label_delete_message">Deleting message</string>
     <string name="label_delete">Delete</string>
     <string name="label_send_by_email">Sending by Email</string>
@@ -59,6 +61,9 @@
     <string name="label_statistics">Statistics</string>
     <string name="label_edit_group">Group editing</string>
     <string name="label_send">Send</string>
+    <string name="label_forgot_password">Forgot password?</string>
+    <string name="label_send_statistics">Send statistics</string>
+    <string name="label_profile">Profile</string>
 
     <string name="message_internet_error">No internet connection…</string>
     <string name="message_data_error">Error loading data…</string>
@@ -73,9 +78,11 @@
     <string name="message_send_password_link">Link has been sent!</string>
     <string name="message_password_link_sent">Send a password recovery link to</string>
     <string name="message_no_user_found">No user with this address found…</string>
-    <string name="label_forgot_password">Forgot password?</string>
-    <string name="label_send_statistics">Send statistics</string>
-    <string name="label_profile">Profile</string>
+    <string name="message_member_contains">A member with this name and avatar is already contained</string>
+    <string name="message_cant_delete_yourself">Unable to remove yourself from group</string>
+    <string name="message_cant_delete_user">Unable to remove previously added user from group</string>
+    <string name="message_group_contain_two_members">A group can have at least two members</string>
+
 
     <string-array name="currency">
         <item>₽</item>

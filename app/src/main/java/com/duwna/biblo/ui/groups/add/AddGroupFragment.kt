@@ -16,9 +16,9 @@ import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.utils.PICK_IMAGE_CODE
 import com.duwna.biblo.utils.pickImageFromGallery
 import com.duwna.biblo.utils.toInitials
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_add_group.*
-import kotlinx.android.synthetic.main.fragment_add_group.iv_avatar
 
 
 class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
@@ -52,6 +52,16 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
             root.toolbar.title = getString(R.string.label_edit_group)
             et_group_name.setText(groupItem.name)
             setupCurrency(groupItem)
+            btn_delete_group.isVisible = true
+            btn_delete_group.setOnClickListener {
+                Snackbar.make(
+                    root.container,
+                    getString(R.string.label_delete_group),
+                    Snackbar.LENGTH_SHORT
+                ).setAction(getString(R.string.label_delete)) {
+                        viewModel.deleteGroup(groupItem.id)
+                    }.show()
+            }
         }
     }
 
@@ -72,6 +82,8 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
                 iv_avatar.isAvatarMode = false
             }
         }
+
+        state.deleted?.let { findNavController().popBackStack() }
     }
 
     private fun navigateToMembersScreen() {

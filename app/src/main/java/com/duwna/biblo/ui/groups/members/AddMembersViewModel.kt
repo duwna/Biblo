@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.duwna.biblo.R
 import com.duwna.biblo.entities.database.User
 import com.duwna.biblo.entities.items.AddMemberItem
 import com.duwna.biblo.entities.items.GroupItem
@@ -21,8 +22,8 @@ class AddMembersViewModel(private val groupItem: GroupItem?) :
     private val repository = GroupsRepository()
 
     init {
-
-        groupItem?.let {
+        // Edit group mode -> add all users
+        if (groupItem != null) {
             updateList {
                 addAll(groupItem.members.map {
                     AddMemberItem(
@@ -32,7 +33,8 @@ class AddMembersViewModel(private val groupItem: GroupItem?) :
                     )
                 })
             }
-        } ?: run {
+        // Create group mode -> add only yourself
+        } else {
             doAsync {
                 val info = repository.getUserInfo()
                 postUpdateList { add(info) }
@@ -41,13 +43,14 @@ class AddMembersViewModel(private val groupItem: GroupItem?) :
 
     }
 
+
     fun insertMember(name: String) {
         when {
             name.trim().isBlank() -> {
-                notify(Notify.TextMessage("Имя не может быть пустым")); return
+                notify(Notify.MessageFromRes(R.string.message_add_name)); return
             }
             checkMemberContains(name) -> {
-                notify(Notify.TextMessage("Участник с таким именем и аватаром уже содержится")); return
+                notify(Notify.MessageFromRes(R.string.message_member_contains)); return
             }
         }
 
@@ -56,7 +59,7 @@ class AddMembersViewModel(private val groupItem: GroupItem?) :
                 try {
                     val memberItem = repository.searchMember(name)
                     if (memberItem != null) postUpdateList { add(memberItem) }
-                    else notify(Notify.TextMessage("Пользователя с таким адресом не найдено"))
+                    else notify(Notify.MessageFromRes(R.string.message_no_user_found))
                 } catch (t: Throwable) {
                     t.printStackTrace()
                     notify(Notify.DataError)
@@ -70,9 +73,9 @@ class AddMembersViewModel(private val groupItem: GroupItem?) :
 
     fun removeMember(position: Int) {
         when {
-            position == 0 -> notify(Notify.TextMessage("Невозможно удалить себя из группы"))
+            position == 0 -> notify(Notify.MessageFromRes(R.string.message_cant_delete_yourself))
             groupItem?.members?.find { it.id == currentState.members[position].id } != null ->
-                notify(Notify.TextMessage("Невозможно удалить ранее добавленного пользователя из группы"))
+                notify(Notify.MessageFromRes(R.string.message_cant_delete_user))
             else -> updateList { removeAt(position) }
         }
     }
@@ -84,7 +87,7 @@ class AddMembersViewModel(private val groupItem: GroupItem?) :
     fun createGroup(groupName: String, groupCurrency: String, groupAvatarUri: Uri?) {
 
         if (currentState.members.size < 2) {
-            notify(Notify.TextMessage("В группе может быть не меньше двух участников"))
+            notify(Notify.MessageFromRes(R.string.message_group_contain_two_members))
             return
         }
 

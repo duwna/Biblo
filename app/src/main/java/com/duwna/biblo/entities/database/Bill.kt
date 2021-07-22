@@ -9,7 +9,7 @@ data class Bill(
     val title: String = "",
     val description: String = "",
     val timestamp: Date = Date(),
-    val payers: Map<String, Double> = mapOf(),
+    val payers: Map<String, Double> = mapOf(),    // { userId, sum }
     val debtors: Map<String, Double> = mapOf(),
     @get:Exclude
     var idBill: String = ""

@@ -53,11 +53,9 @@ class GroupsFragment : BaseFragment<GroupsViewModel>() {
 
         if (!state.isAuth) findNavController().navigate(R.id.action_groups_to_auth)
 
-        when {
-            state.isLoading -> wave_view.isVisible = true
-            wave_view.isVisible && ViewCompat.isAttachedToWindow(wave_view) -> wave_view.circularHide()
-            else -> wave_view.isVisible = false
-        }
+        if (state.isLoading) biblo_loading_view.show()
+        else biblo_loading_view.hide()
+
 
         if (!state.isLoading && state.groups.isEmpty()) {
             tv_no_groups.isVisible = true

@@ -34,7 +34,7 @@ class AddMembersFragment : BaseFragment<AddMembersViewModel>() {
 
     override fun setupViews() {
 
-        args.groupItem?.let { btn_create_group.text = "Сохранить" }
+        args.groupItem?.let { btn_create_group.text = context?.getString(R.string.btn_save) }
 
         rv_members.apply {
             layoutManager = LinearLayoutManager(context)
