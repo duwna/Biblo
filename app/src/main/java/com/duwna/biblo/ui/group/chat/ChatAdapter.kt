@@ -75,9 +75,7 @@ class MessageViewHolder(
         }
 
         message_container.setOnLongClickListener {
-            Snackbar.make(this, context.getString(R.string.label_delete_message), Snackbar.LENGTH_SHORT)
-                .setAction(context.getString(R.string.label_delete)) { onItemLongClicked(item) }
-                .show()
+            onItemLongClicked(item)
             true
         }
     }

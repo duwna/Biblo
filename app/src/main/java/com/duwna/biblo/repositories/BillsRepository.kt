@@ -33,15 +33,6 @@ class BillsRepository(private val idGroup: String) : BaseRepository() {
             .await()
     }
 
-    suspend fun loadBills(): List<Bill> {
-        return reference.orderBy("timestamp", Query.Direction.DESCENDING)
-            .get()
-            .await()
-            .documents
-            .map { it.toObject<Bill>()!!.apply { idBill = it.id } }
-    }
-
-    @ExperimentalCoroutinesApi
     fun subscribeOnBills(): Flow<List<Bill>> = callbackFlow {
 
         val subscription = reference

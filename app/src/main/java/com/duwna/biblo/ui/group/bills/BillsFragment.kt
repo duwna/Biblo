@@ -7,8 +7,6 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.core.os.bundleOf
-import androidx.core.view.ViewCompat
-import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
@@ -18,8 +16,8 @@ import com.duwna.biblo.entities.items.BillsViewItem
 import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.ui.base.BaseFragment
 import com.duwna.biblo.ui.base.IViewModelState
-import com.duwna.biblo.utils.circularHide
 import com.duwna.biblo.utils.format
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_bills.*
 
 
@@ -34,8 +32,21 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
     }
 
     private val billsAdapter = BillsAdapter(
-        onItemClicked = { billItem -> viewModel.deleteBill(billItem.id) }
+        onItemClicked = { billItem -> showDeleteBillSnackbar(billItem) }
     )
+
+    private fun showDeleteBillSnackbar(billItem: BillsViewItem.Bill) {
+        Snackbar.make(
+            requireView(),
+            "${requireContext().getString(R.string.label_delete_bill)} \"${billItem.title}\"?",
+            Snackbar.LENGTH_SHORT
+        ).apply {
+            setAction(requireContext().getString(R.string.label_delete)) {
+                viewModel.deleteBill(billItem.id)
+            }
+            show()
+        }
+    }
 
     override fun onResume() {
         super.onResume()
@@ -69,19 +80,16 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
     override fun bindState(state: IViewModelState) {
         state as BillsState
 
-        when {
-            state.isLoading -> wave_view.isVisible = true
-            wave_view.isVisible && ViewCompat.isAttachedToWindow(wave_view) -> wave_view.circularHide()
-            else -> wave_view.isVisible = false
-        }
+//        if (state.isLoading) biblo_loading_view.show()
+//        else biblo_loading_view.hide()
 
-        if (!state.isLoading && state.bills.isEmpty()) {
-            tv_no_bills.isVisible = true
-            tv_no_bills.animate().alpha(1f).duration = 500
-        } else {
-            tv_no_bills.isVisible = false
-            tv_no_bills.alpha = 0f
-        }
+//        if (!state.isLoading && state.bills.isEmpty()) {
+//            tv_no_bills.isVisible = true
+//            tv_no_bills.animate().alpha(1f).duration = 500
+//        } else {
+//            tv_no_bills.isVisible = false
+//            tv_no_bills.alpha = 0f
+//        }
 
         billsAdapter.submitList(state.bills)
     }
@@ -118,9 +126,11 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
             when (billItem) {
                 is BillsViewItem.Header -> {
                     append(
-                        "${getString(R.string.label_group)}: ${billItem.name}\n${getString(R.string.label_currency)}: ${billItem.currency}\n${getString(
-                            R.string.label_statistics
-                        )}\n${getString(R.string.label_who_payed)}:"
+                        "${getString(R.string.label_group)}: ${billItem.name}\n${getString(R.string.label_currency)}: ${billItem.currency}\n${
+                            getString(
+                                R.string.label_statistics
+                            )
+                        }\n${getString(R.string.label_who_payed)}:"
                     )
                     billItem.members.filter { it.sum > 0 }.forEach { member ->
                         append("\n${member.name}: ${member.sum.format()}")
@@ -133,9 +143,11 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
                 }
                 is BillsViewItem.Bill -> {
                     append(
-                        "\n\n${billItem.title}\n${billItem.description}\n${billItem.timestamp}\n${getString(
-                            R.string.label_who_payed
-                        )}:"
+                        "\n\n${billItem.title}\n${billItem.description}\n${billItem.timestamp}\n${
+                            getString(
+                                R.string.label_who_payed
+                            )
+                        }:"
                     )
                     billItem.payers.forEach { member ->
                         append("\n${member.name}: ${member.sum.format()}")

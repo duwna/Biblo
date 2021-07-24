@@ -33,7 +33,7 @@ class AddBillViewModel(private val groupItem: GroupItem) : BaseViewModel<AddBill
                 }
             )
         }
-        updateState { copy(sum = payerList.sumByDouble { it.sum }) }
+        updateState { copy(sum = payerList.sumOf { it.sum }) }
     }
 
     fun setPayerChecked(index: Int) {

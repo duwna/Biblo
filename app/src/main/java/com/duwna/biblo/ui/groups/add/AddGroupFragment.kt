@@ -113,17 +113,13 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
     }
 
     private fun setupCurrency(groupItem: GroupItem) {
-        var found = false
         for (i in 0 until spinner.adapter.count) {
             if (spinner.adapter.getItem(i) == groupItem.currency) {
                 spinner.setSelection(i)
-                found = true
+                switch_currency.isChecked = true
+                et_group_currency.setText(groupItem.currency)
                 break
             }
-        }
-        if (!found) {
-            switch_currency.isChecked = true
-            et_group_currency.setText(groupItem.currency)
         }
     }
 }

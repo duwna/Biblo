@@ -21,8 +21,8 @@
 
         <com.duwna.biblo.ui.custom.AvatarImageView
             android:id="@+id/iv_avatar"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
             tools:aiv_initials="CV"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
@@ -35,44 +35,29 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
+            android:layout_marginEnd="16dp"
             android:textColor="?attr/colorOnSurface"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toStartOf="@+id/tv_timestamp"
+            android:textSize="18sp"
+            app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintLeft_toRightOf="@id/iv_avatar"
             app:layout_constraintStart_toEndOf="@+id/iv_avatar"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/iv_avatar"
             tools:text="@tools:sample/full_names" />
 
         <TextView
             android:id="@+id/tv_currency"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="16dp"
             android:textColor="?attr/colorOnSurface"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/iv_avatar"
-            app:layout_constraintTop_toBottomOf="@+id/tv_title"
-            app:layout_constraintVertical_bias="0.0"
-            tools:text="Жопа" />
-
-        <TextView
-            android:id="@+id/tv_timestamp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="16sp"
+            android:textSize="12sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:text="12:21\n04.06" />
+            tools:text="Жопа" />
+
+
 
         <View
             android:id="@+id/view"

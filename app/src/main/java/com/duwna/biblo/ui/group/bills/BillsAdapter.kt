@@ -14,7 +14,6 @@ import com.duwna.biblo.entities.items.BillsViewItem.Header
 import com.duwna.biblo.ui.custom.MemberView
 import com.duwna.biblo.utils.format
 import com.duwna.biblo.utils.toInitials
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_bill.view.*
 import kotlinx.android.synthetic.main.item_bill_header.view.*
@@ -85,9 +84,7 @@ class BillViewHolder(
         }
 
         setOnLongClickListener {
-            Snackbar.make(this, "${context.getString(R.string.label_delete_bill)} \"${item.title}\"", Snackbar.LENGTH_SHORT)
-                .setAction(context.getString(R.string.label_delete)) { onItemClicked(item) }
-                .show()
+            onItemClicked(item)
             true
         }
     }

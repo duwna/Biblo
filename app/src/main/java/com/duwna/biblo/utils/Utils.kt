@@ -10,7 +10,7 @@ import androidx.fragment.app.Fragment
 import java.text.SimpleDateFormat
 import java.util.*
 
-fun Date.format(pattern: String = "HH:mm dd.MM"): String {
+fun Date.format(pattern: String = "HH:mm, dd.MM"): String {
     val dateFormat = SimpleDateFormat(pattern, Locale("ru"))
     return dateFormat.format(this)
 }

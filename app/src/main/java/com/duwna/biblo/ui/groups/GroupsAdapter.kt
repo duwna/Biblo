@@ -54,7 +54,6 @@ class GroupViewHolder(
     ) = itemView.run {
 
         tv_title.text = item.name
-        tv_timestamp.text = item.lastUpdate
         tv_currency.text = item.currency
 
         if (item.avatarUrl == null) {

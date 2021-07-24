@@ -10,14 +10,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.duwna.biblo.R
 import com.duwna.biblo.entities.items.GroupItem
+import com.duwna.biblo.entities.items.MessageItem
 import com.duwna.biblo.ui.base.BaseFragment
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.utils.PICK_IMAGE_CODE
 import com.duwna.biblo.utils.circularHide
 import com.duwna.biblo.utils.pickImageFromGallery
-import kotlinx.android.synthetic.main.fragment_bills.*
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_chat.*
-import kotlinx.android.synthetic.main.fragment_chat.wave_view
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
 @ExperimentalCoroutinesApi
@@ -31,7 +31,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
     }
 
     private val chatAdapter = ChatAdapter(
-        onItemLongClicked = { messageItem -> viewModel.deleteMessage(messageItem) }
+        onItemLongClicked = { showDeleteMessageSnackbar(it) }
     )
 
     override fun setupViews() {
@@ -78,6 +78,21 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         super.onActivityResult(requestCode, resultCode, data)
         if (resultCode == Activity.RESULT_OK && requestCode == PICK_IMAGE_CODE) {
             viewModel.setImageUri(data?.data)
+        }
+    }
+
+    private fun showDeleteMessageSnackbar(messageItem: MessageItem) {
+        Snackbar.make(
+            requireView(), requireContext().getString(R.string.label_delete_message),
+            Snackbar.LENGTH_SHORT
+        ).apply {
+
+            setAction(requireContext().getString(R.string.label_delete)) {
+                viewModel.deleteMessage(messageItem)
+            }
+
+            anchorView = bottom_container
+            show()
         }
     }
 

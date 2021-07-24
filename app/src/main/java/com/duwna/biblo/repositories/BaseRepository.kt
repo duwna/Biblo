@@ -1,6 +1,7 @@
 package com.duwna.biblo.repositories
 
 import android.net.Uri
+import androidx.annotation.VisibleForTesting
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.CollectionReference
 import com.google.firebase.firestore.FirebaseFirestoreSettings
@@ -16,7 +17,7 @@ abstract class BaseRepository {
 
     protected val auth = FirebaseAuth.getInstance()
 
-    protected val firebaseUserId
+     val firebaseUserId
         get() = auth.currentUser!!.uid
 
     protected val database = Firebase.firestore.apply {

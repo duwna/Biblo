@@ -54,7 +54,7 @@
     <string name="label_edit_profile">Profile editing</string>
     <string name="label_delete_bill">Deleting bill</string>
     <string name="label_delete_group">Deleting group</string>
-    <string name="label_delete_message">Deleting message</string>
+    <string name="label_delete_message">Delete message?</string>
     <string name="label_delete">Delete</string>
     <string name="label_send_by_email">Sending by Email</string>
     <string name="label_group">Group</string>

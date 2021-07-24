@@ -1,5 +1,6 @@
 package com.duwna.biblo.ui.group.bills
 
+import android.annotation.SuppressLint
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
@@ -13,34 +14,20 @@ import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.ui.base.Notify
 import com.duwna.biblo.utils.format
 import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import kotlin.system.measureTimeMillis
 
-@ExperimentalCoroutinesApi
 class BillsViewModel(private val groupItem: GroupItem) : BaseViewModel<BillsState>(BillsState()) {
 
     private val repository = BillsRepository(groupItem.id)
 
     init {
-//        updateState { copy(isLoading = true) }
-//        loadBills()
         doAsync { subscribeOnBillsList() }
     }
 
-    @ExperimentalCoroutinesApi
     private suspend fun subscribeOnBillsList() {
         repository.subscribeOnBills().collect { bills ->
-            var billsViewItems = emptyList<BillsViewItem>()
-            //delay to avoid interrupting animation between fragments
-            val mills = measureTimeMillis {
-                if (bills.isNotEmpty()) billsViewItems = bills.toBillViewItemList()
-            }
-            // 300 - animation length mills
-            val delay = 300L - mills
-            if (delay > 0) delay(delay)
+            val billsViewItems = bills.toBillViewItemList()
             postUpdateState { copy(bills = billsViewItems, isLoading = false) }
         }
     }
@@ -125,8 +112,9 @@ class BillsViewModel(private val groupItem: GroupItem) : BaseViewModel<BillsStat
     }
 }
 
+
 data class BillsState(
-    val isLoading: Boolean = true,
+    val isLoading: Boolean = false,
     val bills: List<BillsViewItem> = emptyList()
 ) : IViewModelState
 

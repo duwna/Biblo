@@ -1,12 +1,16 @@
 package com.duwna.biblo
 
-import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
-
+import androidx.test.platform.app.InstrumentationRegistry
+import com.duwna.biblo.entities.database.User
+import com.duwna.biblo.repositories.GroupsRepository
+import com.duwna.biblo.utils.log
+import kotlinx.coroutines.Dispatchers.IO
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import org.junit.Assert
 import org.junit.Test
 import org.junit.runner.RunWith
-
-import org.junit.Assert.*
 
 /**
  * Instrumented test, which will execute on an Android device.
@@ -15,10 +19,123 @@ import org.junit.Assert.*
  */
 @RunWith(AndroidJUnit4::class)
 class ExampleInstrumentedTest {
+
+    val appContext = InstrumentationRegistry.getInstrumentation().targetContext
+
     @Test
-    fun useAppContext() {
-        // Context of the app under test.
-        val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.duwna.biblo", appContext.packageName)
+    fun insertManyGroups() {
+
+        val groupsRepository = GroupsRepository()
+
+
+        val users = MutableList((2..7).random()) {
+            if (it == 0) User(idUser = groupsRepository.firebaseUserId)
+            else User(name = words.random())
+        }
+
+
+        GlobalScope.launch(IO) {
+
+            val groupsCount = groupsRepository.loadGroupItems().size
+            val newGroups = 100
+
+            println(groupsCount)
+
+            repeat(newGroups) {
+                groupsRepository.insertGroup(
+                    name = words.random(),
+                    currency = currency.random(),
+                    avatarUri = null,
+                    users = users,
+                    groupItem = null
+                )
+            }
+
+            Assert.assertEquals(
+                groupsRepository.loadGroupItems().size.also { println(it) },
+                groupsCount.plus(newGroups)
+            )
+
+        }
+
     }
+
+
+
+    private fun randomString(length: Int = 10) = buildString {
+        repeat(length) {
+            append(('a'..'z').random())
+        }
+    }
+
+    private val currency = listOf(
+        "₽",
+        "$",
+        "¢",
+        "£",
+        "¤",
+        "¥",
+        "֏",
+        "৲",
+        "৳",
+        "৻",
+        "૱",
+        "௹",
+        "฿",
+        "៛",
+        "₠",
+        "₡",
+        "₢",
+        "₣",
+        "₤",
+        "₥",
+        "₦",
+        "₧",
+        "₨",
+        "₩",
+        "₪",
+        "₫",
+        "€",
+        "₭",
+        "₮",
+        "₯",
+        "₰",
+        "₲",
+        "₳",
+        "₴",
+        "₵",
+        "₶",
+        "₷",
+        "₸",
+        "₹",
+        "₺"
+    )
+
+    private val words = listOf(
+        "world",
+        "any",
+        "content",
+        "believe",
+        "strange",
+        "same",
+        "habit",
+        "behavior",
+        "coal",
+        "curious",
+        "absolute",
+        "former",
+        "camera",
+        "stiffen",
+        "enemy",
+        "salt",
+        "camp",
+        "bridge",
+        "accept",
+        "polite",
+        "plant",
+        "wood",
+        "ill",
+        "wood",
+        "drive"
+    )
 }

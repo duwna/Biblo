@@ -12,15 +12,11 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:id="@+id/message_container"
-        android:foreground="?android:attr/selectableItemBackground"
         android:layout_marginStart="8dp"
-        android:clickable="true"
-        android:focusable="true"
         android:layout_marginEnd="8dp"
         android:background="@drawable/background_message"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/iv_avatar">
 
 
@@ -31,6 +27,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="8dp"
+            android:textSize="16sp"
             android:textColor="?attr/colorOnPrimary"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -43,15 +40,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-
             android:layout_marginTop="8dp"
-            android:layout_marginBottom="8dp"
             android:textColor="?attr/colorOnPrimary"
             android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.0"
             tools:text="TextView" />
 
         <TextView
@@ -87,9 +80,6 @@
         android:layout_width="40dp"
         android:layout_height="40dp"
         android:layout_marginStart="8dp"
-        android:clickable="true"
-        android:focusable="true"
-        android:foreground="?android:attr/selectableItemBackground"
         app:aiv_borderColor="?attr/colorOnSurface"
         app:aiv_borderWidth="1dp"
         app:layout_constraintBottom_toBottomOf="parent"

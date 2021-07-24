@@ -11,18 +11,11 @@
         android:layout_height="match_parent"
         tools:listitem="@layout/item_bill" />
 
-    <me.itangqi.waveloadingview.WaveLoadingView
-        android:id="@+id/wave_view"
+    <com.duwna.biblo.ui.custom.BibloLoadingView
+        android:id="@+id/biblo_loading_view"
         android:layout_width="100dp"
-        android:layout_height="150dp"
-        android:layout_gravity="center"
-        android:visibility="gone"
-        android:elevation="8dp"
-        app:wlv_borderColor="@color/color_accent"
-        app:wlv_borderWidth="4dp"
-        app:wlv_shapeType="circle"
-        app:wlv_waveColor="@color/color_primary_dark"
-        tools:visibility="visible" />
+        android:layout_height="100dp"
+        android:layout_gravity="center"/>
 
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fab"

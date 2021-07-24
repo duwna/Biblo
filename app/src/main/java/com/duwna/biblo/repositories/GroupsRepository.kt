@@ -7,15 +7,41 @@ import com.duwna.biblo.entities.items.AddMemberItem
 import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.entities.items.GroupMemberItem
 import com.duwna.biblo.utils.format
+import com.duwna.biblo.utils.log
 import com.duwna.biblo.utils.tryOrNull
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import java.util.*
 
 class GroupsRepository : BaseRepository() {
 
     override val reference = database.collection("groups")
+
+    private suspend fun subscribeOnGroups(): Flow<List<Group>> = callbackFlow {
+        val subscription = reference
+            .orderBy("lastUpdate", Query.Direction.DESCENDING)
+            .whereArrayContains("usersIds", firebaseUserId)
+            .addSnapshotListener { querySnapshot, _ ->
+                val groups = querySnapshot?.documents?.map {
+                    it!!.toObject<Group>()!!.apply { idGroup = it.id }
+                }!!
+                offer(groups)
+            }
+        awaitClose(subscription::remove)
+    }
+
+    fun findMembersInfo(userIds: List<String>): List<GroupMemberItem> {
+        // TODO query room db
+        return emptyList()
+    }
+
+    fun updateMembersInfo() {
+
+    }
 
     suspend fun loadGroupItems(): List<GroupItem> {
 
@@ -29,7 +55,7 @@ class GroupsRepository : BaseRepository() {
 
         if (groups.isEmpty()) return emptyList()
 
-        val userIds = groups.flatMap { it.usersIds }.toSet()
+        val userIds = groups.flatMap { it.usersIds }.distinct()
 
         val memberItems = userIds.map {
             loadMemberItem(it)
@@ -53,15 +79,9 @@ class GroupsRepository : BaseRepository() {
             .get()
             .await()
 
-        val user = result.toObject<User>()!!
+        val user = result.toObject<User>()!!.also { log(it) }
 
-        val url = when {
-            user.avatarUrl != null -> user.avatarUrl
-            firebaseUserId == result.id -> auth.currentUser?.photoUrl?.toString()
-            else -> null
-        }
-
-        return GroupMemberItem(result.id, user.name, url)
+        return GroupMemberItem(result.id, user.name, user.avatarUrl)
     }
 
     suspend fun getUserInfo(): AddMemberItem {

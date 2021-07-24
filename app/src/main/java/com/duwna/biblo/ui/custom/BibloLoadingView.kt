@@ -25,6 +25,7 @@ class BibloLoadingView @JvmOverloads constructor(
             interpolator = AccelerateDecelerateInterpolator()
             start()
         }
+
     }
 
     fun hide() {

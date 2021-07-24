@@ -53,9 +53,9 @@
     <string name="label_message">Сообщение…</string>
     <string name="label_dark_mode">Темная тема</string>
     <string name="label_edit_profile">Редактирование профиля</string>
-    <string name="label_delete_bill">Удаление чека</string>
-    <string name="label_delete_message">Удаление сообщения</string>
-    <string name="label_delete_group">Удаление группы</string>
+    <string name="label_delete_bill">Удалить чек</string>
+    <string name="label_delete_message">Удалить сообщение?</string>
+    <string name="label_delete_group">Удалить группу</string>
     <string name="label_delete">Удалить</string>
     <string name="label_send_by_email">Отправка по электронной почте</string>
     <string name="label_group">Группа</string>
