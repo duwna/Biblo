@@ -4,6 +4,7 @@ import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.repositories.GroupsRepository
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.IViewModelState
+import kotlinx.coroutines.delay
 
 class GroupsViewModel : BaseViewModel<GroupsViewModelState>(
     GroupsViewModelState()

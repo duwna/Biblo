@@ -20,8 +20,8 @@ fun Any.log(msg: Any?, tag: String = this::class.java.simpleName) {
 }
 
 fun String.toInitials(): String = when {
-    length >= 2 -> substring(0, 2).toUpperCase(Locale.US)
-    isNotBlank() -> substring(0, 1).toUpperCase(Locale.US)
+    length >= 2 -> substring(0, 2).uppercase(Locale.US)
+    isNotBlank() -> substring(0, 1).uppercase(Locale.US)
     else -> ""
 }
 
