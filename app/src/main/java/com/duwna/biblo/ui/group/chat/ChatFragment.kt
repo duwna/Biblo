@@ -3,7 +3,6 @@ package com.duwna.biblo.ui.group.chat
 import android.app.Activity
 import android.content.Intent
 import androidx.core.os.bundleOf
-import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -14,7 +13,7 @@ import com.duwna.biblo.entities.items.MessageItem
 import com.duwna.biblo.ui.base.BaseFragment
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.utils.PICK_IMAGE_CODE
-import com.duwna.biblo.utils.circularHide
+import com.duwna.biblo.utils.log
 import com.duwna.biblo.utils.pickImageFromGallery
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_chat.*
@@ -51,25 +50,27 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
 
         iv_send.setOnClickListener {
             viewModel.sendMessage(et_message.text.toString())
-            et_message.setText("")
-        }
-
-        viewModel.observeMessageSentEvent(viewLifecycleOwner) {
-            rv_messages.smoothScrollToPosition(chatAdapter.itemCount)
         }
     }
 
     override fun bindState(state: IViewModelState) {
         state as ChatState
 
-        when {
-            state.isLoading -> wave_view.isVisible = true
-            wave_view.isVisible && ViewCompat.isAttachedToWindow(wave_view) -> wave_view.circularHide()
-            else -> wave_view.isVisible = false
+        if (state.showNoMessagesText) {
+            tv_no_messages.isVisible = true
+            tv_no_messages.animate().alpha(1f).duration = 500
+        } else {
+            tv_no_messages.isVisible = false
+            tv_no_messages.alpha = 0f
         }
 
         state.imgUri?.let { Glide.with(this).load(it).into(iv_add_img) }
             ?: run { iv_add_img.setImageResource(R.drawable.ic_baseline_add_photo_alternate_24) }
+
+        state.messageSentEvent?.setListener {
+            rv_messages.smoothScrollToPosition(chatAdapter.itemCount)
+            et_message.text.clear()
+        }
 
         chatAdapter.submitList(state.messages)
     }
@@ -98,9 +99,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
 
     companion object {
         fun newInstance(groupItem: GroupItem) = ChatFragment().apply {
-            arguments = bundleOf(
-                "groupItem" to groupItem
-            )
+            arguments = bundleOf("groupItem" to groupItem)
         }
     }
 }

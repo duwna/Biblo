@@ -58,7 +58,7 @@ class AuthFragment : BaseFragment<AuthViewModel>() {
 
     override fun bindState(state: IViewModelState) {
         state as AuthState
-        showViews(state.isLoading)
+        container.isVisible = !state.isLoading
 
         state.ready?.let { findNavController().navigate(R.id.action_auth_to_groups) }
     }
@@ -88,10 +88,4 @@ class AuthFragment : BaseFragment<AuthViewModel>() {
     companion object {
         private const val RC_SIGN_IN = 100
     }
-
-    private fun showViews(isLoading: Boolean) {
-        container.isVisible = !isLoading
-        wave_view.isVisible = isLoading
-    }
-
 }

@@ -56,7 +56,6 @@ class RegistrationFragment : BaseFragment<RegistrationViewModel>() {
 
     private fun showViews(isLoading: Boolean) {
         container.isVisible = !isLoading
-        wave_view.isVisible = isLoading
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -33,6 +33,7 @@ abstract class BaseFragment<T : BaseViewModel<out IViewModelState>> : Fragment()
         setupViews()
         viewModel.observeState(viewLifecycleOwner) { state -> bindState(state) }
         viewModel.observeNotifications(viewLifecycleOwner) { root.renderNotification(it) }
+        viewModel.observeLoading(viewLifecycleOwner) { root.renderLoading(it)}
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {

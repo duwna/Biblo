@@ -120,7 +120,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
             app:layout_constraintStart_toEndOf="@+id/iv_avatar" />
 
-        <Switch
+        <com.google.android.material.switchmaterial.SwitchMaterial
             android:id="@+id/switch_theme"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -132,26 +132,6 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_sign_out" />
 
-
-        <me.itangqi.waveloadingview.WaveLoadingView
-            android:id="@+id/wave_view"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_gravity="center"
-            android:layout_marginTop="32dp"
-            android:layout_marginBottom="32dp"
-            android:elevation="8dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/switch_theme"
-            app:wlv_borderColor="@color/color_accent"
-            app:wlv_borderWidth="2dp"
-            app:wlv_shapeType="circle"
-            app:wlv_waveColor="@color/color_primary_dark"
-            tools:visibility="visible" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

@@ -58,7 +58,6 @@ class ProfileFragment : BaseFragment<ProfileViewModel>() {
         et_name.setText(state.user?.name)
         et_email.setText(state.user?.email)
         til_email.isVisible = state.user?.email != null
-        wave_view.isVisible = state.isLoading
 
 
         when {

@@ -21,13 +21,12 @@ class ChatViewModel(private val groupItem: GroupItem) : BaseViewModel<ChatState>
 
     private val repository = ChatRepository(groupItem.id)
 
-    private val messageSentEvent = MutableLiveData<Event<Unit>>()
-
     init {
-        doAsync { subscribeOnMessagesList() }
+        launchSafety { subscribeOnMessagesList() }
     }
 
     private suspend fun subscribeOnMessagesList() {
+        showLoading()
         repository.subscribeOnMessages().collect { messages ->
             val messageItems = messages.map { message ->
                 val member = groupItem.members.find { it.id == message.from }!!
@@ -40,12 +39,10 @@ class ChatViewModel(private val groupItem: GroupItem) : BaseViewModel<ChatState>
                     message.imgUrl
                 )
             }
-            postUpdateState { copy(isLoading = false, messages = messageItems) }
+            if (messageItems.isEmpty()) postUpdateState { copy(showNoMessagesText = true) }
+            else postUpdateState { copy(messages = messageItems, showNoMessagesText = false) }
+            hideLoading()
         }
-    }
-
-    fun observeMessageSentEvent(lifecycleOwner: LifecycleOwner, onChanged: () -> Unit) {
-        messageSentEvent.observe(lifecycleOwner, EventObserver { onChanged() })
     }
 
     fun setImageUri(uri: Uri?) {
@@ -54,22 +51,22 @@ class ChatViewModel(private val groupItem: GroupItem) : BaseViewModel<ChatState>
 
     fun sendMessage(text: String) {
         if (currentState.imgUri == null && text.isBlank()) return
-        doAsync {
+        launchSafety {
             repository.insertMessage(text, currentState.imgUri)
-            messageSentEvent.postValue(Event(Unit))
-            if (currentState.imgUri != null) postUpdateState { copy(imgUri = null) }
+            postUpdateState { copy(imgUri = null, messageSentEvent = Event(Unit)) }
         }
     }
 
     fun deleteMessage(messageItem: MessageItem) {
-        doAsync { repository.deleteMessage(messageItem) }
+        launchSafety { repository.deleteMessage(messageItem) }
     }
 }
 
 data class ChatState(
-    val isLoading: Boolean = true,
     val messages: List<MessageItem> = emptyList(),
     val imgUri: Uri? = null,
+    val messageSentEvent: Event<Unit>? = null,
+    val showNoMessagesText: Boolean = false
 ) : IViewModelState
 
 class ChatViewModelFactory(private val groupItem: GroupItem) : ViewModelProvider.Factory {

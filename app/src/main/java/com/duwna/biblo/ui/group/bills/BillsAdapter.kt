@@ -79,7 +79,7 @@ class BillViewHolder(
         }
 
         item.debtors.forEach {
-            val memberView = MemberView(context, "${it.name}  |  ${it.sum.format()}", it.avatarUrl)
+            val memberView = MemberView(context, "${it.name}  |  -${it.sum.format()}", it.avatarUrl)
             flexbox_debtors.addView(memberView)
         }
 

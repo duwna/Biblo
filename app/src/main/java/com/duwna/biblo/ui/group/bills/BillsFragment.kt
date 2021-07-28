@@ -7,6 +7,7 @@ import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
 import androidx.core.os.bundleOf
+import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.navOptions
@@ -48,11 +49,6 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.loadBills()
-    }
-
     override fun setupViews() {
         groupItem = arguments?.getSerializable("groupItem") as GroupItem
 
@@ -80,16 +76,13 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
     override fun bindState(state: IViewModelState) {
         state as BillsState
 
-//        if (state.isLoading) biblo_loading_view.show()
-//        else biblo_loading_view.hide()
-
-//        if (!state.isLoading && state.bills.isEmpty()) {
-//            tv_no_bills.isVisible = true
-//            tv_no_bills.animate().alpha(1f).duration = 500
-//        } else {
-//            tv_no_bills.isVisible = false
-//            tv_no_bills.alpha = 0f
-//        }
+        if (state.showNoBillsText) {
+            tv_no_bills.isVisible = true
+            tv_no_bills.animate().alpha(1f).duration = 500
+        } else {
+            tv_no_bills.isVisible = false
+            tv_no_bills.alpha = 0f
+        }
 
         billsAdapter.submitList(state.bills)
     }

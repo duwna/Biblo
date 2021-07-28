@@ -79,7 +79,7 @@ class AddBillFragment : BaseFragment<AddBillViewModel>() {
     override fun bindState(state: IViewModelState) {
         state as AddBillState
 
-        showViews(state.isLoading)
+        container.isVisible = state.showViews
 
         ticker_sum.text = state.sum.format()
         payersAdapter.submitList(state.payerList)
@@ -87,7 +87,7 @@ class AddBillFragment : BaseFragment<AddBillViewModel>() {
 
         tv_date.text = state.date.format("dd.MM")
 
-        state.ready?.run { findNavController().popBackStack() }
+        state.billAddEvent?.setListener { findNavController().popBackStack() }
     }
 
     private fun showSplitSum() {
@@ -95,11 +95,6 @@ class AddBillFragment : BaseFragment<AddBillViewModel>() {
             val holder = rv_debtors.findViewHolderForAdapterPosition(index) as? AddBillViewHolder
             holder?.containerView?.et_sum?.setText(addBillMemberItem.sum.format())
         }
-    }
-
-    private fun showViews(isLoading: Boolean) {
-        container.isVisible = !isLoading
-        wave_view.isVisible = isLoading
     }
 
     private fun showDateDialog() {

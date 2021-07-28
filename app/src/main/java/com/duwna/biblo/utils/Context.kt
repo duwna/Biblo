@@ -32,7 +32,7 @@ fun Context.attrValue(@AttrRes res: Int): Int {
 }
 
 fun Context.hideKeyBoard(view: View) {
-    val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+    val imm = view.context.getSystemService(InputMethodManager::class.java)
     imm.hideSoftInputFromWindow(view.windowToken, 0)
 }
 

@@ -11,12 +11,6 @@
         android:layout_height="match_parent"
         tools:listitem="@layout/item_group" />
 
-    <com.duwna.biblo.ui.custom.BibloLoadingView
-        android:id="@+id/biblo_loading_view"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_gravity="center"/>
-
     <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
         android:id="@+id/fab"
         android:layout_width="wrap_content"

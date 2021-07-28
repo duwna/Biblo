@@ -1,16 +1,12 @@
 package com.duwna.biblo.ui.auth.profile
 
 import android.net.Uri
-import androidx.lifecycle.viewModelScope
 import com.duwna.biblo.R
 import com.duwna.biblo.entities.database.User
 import com.duwna.biblo.repositories.AuthRepository
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.ui.base.Notify
-import com.duwna.biblo.utils.log
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.launch
 
 class ProfileViewModel : BaseViewModel<ProfileState>(ProfileState()) {
 
@@ -21,14 +17,11 @@ class ProfileViewModel : BaseViewModel<ProfileState>(ProfileState()) {
     }
 
     private fun loadUser() {
-        viewModelScope.launch(IO) {
-            try {
-                val user = repository.getUser()
-                log(user.avatarUrl)
-                postUpdateState { copy(user = user, isLoading = false) }
-            } catch (t: Throwable) {
-                notify(Notify.DataError)
-            }
+        launchSafety {
+            showLoading()
+            val user = repository.getUser()
+            postUpdateState { copy(user = user) }
+            hideLoading()
         }
     }
 
@@ -37,18 +30,17 @@ class ProfileViewModel : BaseViewModel<ProfileState>(ProfileState()) {
     }
 
     fun saveUser(name: String) {
+
         val user = currentState.user?.copy(
             name = name, avatarUri = currentState.tmpAvatarUri
         ) ?: return
-        updateState { copy(isLoading = true, user = user) }
-        viewModelScope.launch(IO) {
-            try {
-                repository.insertUser(user)
-                postUpdateState { copy(isLoading = false) }
-                notify(Notify.MessageFromRes(R.string.message_data_saved))
-            } catch (t: Throwable) {
-                notify(Notify.DataError)
-            }
+
+        launchSafety {
+            showLoading()
+            repository.insertUser(user)
+            postUpdateState { copy(user = user) }
+            hideLoading()
+            notify(Notify.MessageFromRes(R.string.message_data_saved))
         }
     }
 
@@ -58,5 +50,4 @@ class ProfileViewModel : BaseViewModel<ProfileState>(ProfileState()) {
 data class ProfileState(
     val user: User? = null,
     val tmpAvatarUri: Uri? = null,
-    val isLoading: Boolean = true
 ) : IViewModelState

@@ -39,6 +39,7 @@
     <string name="label_email">E-mail</string>
     <string name="label_password">Пароль</string>
     <string name="label_no_groups">Нет ни одной группы…\nСоздайте новую</string>
+    <string name="label_no_messages">Нет ни одного сообщения…\nОтправьте новое</string>
     <string name="label_auth">Авторизация</string>
     <string name="label_all_bills">Все чеки</string>
     <string name="label_no_bills">Нет ни одного чека…\nСоздайте новый</string>

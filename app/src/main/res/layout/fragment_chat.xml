@@ -6,6 +6,21 @@
     android:layout_height="match_parent"
     tools:context=".ui.group.chat.ChatFragment">
 
+    <TextView
+        android:id="@+id/tv_no_messages"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0"
+        android:text="@string/label_no_messages"
+        android:textAlignment="center"
+        android:textColor="?attr/colorOnSurface"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:alpha="1" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_messages"
         android:layout_width="match_parent"
@@ -15,25 +30,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
-
-    <me.itangqi.waveloadingview.WaveLoadingView
-        android:id="@+id/wave_view"
-        android:layout_width="100dp"
-        android:layout_height="150dp"
-        android:layout_gravity="center"
-        android:elevation="8dp"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/bottom_container"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/rv_messages"
-        app:wlv_borderColor="@color/color_accent"
-        app:wlv_borderWidth="4dp"
-        app:wlv_shapeType="circle"
-        app:wlv_waveColor="@color/color_primary_dark"
-        tools:visibility="visible" />
-
 
 
     <androidx.constraintlayout.widget.ConstraintLayout

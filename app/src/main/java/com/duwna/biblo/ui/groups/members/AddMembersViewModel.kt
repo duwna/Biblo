@@ -35,7 +35,7 @@ class AddMembersViewModel(private val groupItem: GroupItem?) :
             }
         // Create group mode -> add only yourself
         } else {
-            doAsync {
+            launchSafety {
                 val info = repository.getUserInfo()
                 postUpdateList { add(info) }
             }

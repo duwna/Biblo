@@ -2,6 +2,7 @@ package com.duwna.biblo
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -36,5 +37,9 @@ class MainActivity : AppCompatActivity() {
             is Notify.MessageFromRes -> container.showSnackBar(getString(notify.resId))
             is Notify.TextMessage -> container.showSnackBar(notify.message)
         }
+    }
+
+    fun renderLoading(isLoading: Boolean) {
+        progress_circular.isVisible = isLoading
     }
 }

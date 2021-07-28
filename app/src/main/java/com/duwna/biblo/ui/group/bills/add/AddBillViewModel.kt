@@ -2,27 +2,24 @@ package com.duwna.biblo.ui.group.bills.add
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.viewModelScope
 import com.duwna.biblo.R
 import com.duwna.biblo.entities.database.Bill
 import com.duwna.biblo.entities.items.AddBillMemberItem
 import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.repositories.BillsRepository
 import com.duwna.biblo.ui.base.BaseViewModel
+import com.duwna.biblo.ui.base.Event
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.ui.base.Notify
 import com.duwna.biblo.utils.equalsDelta
-import kotlinx.coroutines.Dispatchers.IO
-import kotlinx.coroutines.launch
 import java.util.*
 
-class AddBillViewModel(private val groupItem: GroupItem) : BaseViewModel<AddBillState>(
+class AddBillViewModel(groupItem: GroupItem) : BaseViewModel<AddBillState>(
     AddBillState(
         payerList = groupItem.members.map { AddBillMemberItem(it.id, it.name, it.avatarUrl) },
         debtorList = groupItem.members.map { AddBillMemberItem(it.id, it.name, it.avatarUrl) }
     )
 ) {
-
     private val repository = BillsRepository(groupItem.id)
 
     fun setPayerSum(index: Int, value: Double) {
@@ -86,40 +83,35 @@ class AddBillViewModel(private val groupItem: GroupItem) : BaseViewModel<AddBill
             notify(Notify.MessageFromRes(R.string.message_debt_pay_sum))
             return
         }
-
         if (title.isBlank()) {
             notify(Notify.MessageFromRes(R.string.message_add_title))
             return
         }
 
-        val payers = mutableMapOf<String, Double>().apply {
-            currentState.payerList.forEach {
-                if (it.isChecked && it.sum != 0.0) put(it.id, it.sum)
-            }
-        }
+        updateState { copy(showViews = false) }
 
-        val debtors = mutableMapOf<String, Double>().apply {
-            currentState.debtorList.forEach {
-                if (it.isChecked && it.sum != 0.0) put(it.id, it.sum)
-            }
-        }
+        launchSafety(onError = { postUpdateState { copy(showViews = true) } }) {
+            showLoading()
 
-        val bill = Bill(title, description, currentState.date, payers, debtors)
-        updateState { copy(isLoading = true) }
-        viewModelScope.launch(IO) {
-            try {
-                repository.insertBill(bill)
-                postUpdateState { copy(isLoading = false, ready = Unit) }
-            } catch (t: Throwable) {
-                t.printStackTrace()
-                postUpdateState { copy(isLoading = false) }
-                notify(Notify.DataError)
+            val payers = mutableMapOf<String, Double>().apply {
+                currentState.payerList.forEach {
+                    if (it.isChecked && it.sum != 0.0) put(it.id, it.sum)
+                }
             }
+            val debtors = mutableMapOf<String, Double>().apply {
+                currentState.debtorList.forEach {
+                    if (it.isChecked && it.sum != 0.0) put(it.id, it.sum)
+                }
+            }
+            val bill = Bill(title, description, currentState.date, payers, debtors)
+
+            repository.insertBill(bill)
+            postUpdateState { copy(billAddEvent = Event(Unit)) }
         }
     }
 
     private fun isSumValid(): Boolean = currentState.sum.equalsDelta(
-        currentState.debtorList.sumByDouble { if (it.isChecked) it.sum else 0.0 }
+        currentState.debtorList.sumOf { if (it.isChecked) it.sum else 0.0 }
     )
 
     fun setDate(date: Date) {
@@ -131,9 +123,9 @@ data class AddBillState(
     val payerList: List<AddBillMemberItem>,
     val debtorList: List<AddBillMemberItem>,
     val sum: Double = 0.0,
-    val isLoading: Boolean = false,
-    val ready: Unit? = null,
-    val date: Date = Date()
+    val showViews: Boolean = true,
+    val date: Date = Date(),
+    val billAddEvent: Event<Unit>? = null
 ) : IViewModelState
 
 

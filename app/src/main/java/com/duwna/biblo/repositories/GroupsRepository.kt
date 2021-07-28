@@ -9,7 +9,9 @@ import com.duwna.biblo.entities.items.GroupMemberItem
 import com.duwna.biblo.utils.format
 import com.duwna.biblo.utils.log
 import com.duwna.biblo.utils.tryOrNull
+import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.Query
+import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.channels.awaitClose
 import kotlinx.coroutines.flow.Flow
@@ -34,15 +36,6 @@ class GroupsRepository : BaseRepository() {
         awaitClose(subscription::remove)
     }
 
-    fun findMembersInfo(userIds: List<String>): List<GroupMemberItem> {
-        // TODO query room db
-        return emptyList()
-    }
-
-    fun updateMembersInfo() {
-
-    }
-
     suspend fun loadGroupItems(): List<GroupItem> {
 
         val groups = reference
@@ -57,9 +50,13 @@ class GroupsRepository : BaseRepository() {
 
         val userIds = groups.flatMap { it.usersIds }.distinct()
 
-        val memberItems = userIds.map {
-            loadMemberItem(it)
-        }
+
+
+//        val memberItems = userIds.map {
+//            loadMemberItem(it)
+//        }
+
+        val memberItems = loadMemberItems(userIds)
 
         return groups.map { group ->
             GroupItem(
@@ -76,12 +73,35 @@ class GroupsRepository : BaseRepository() {
     private suspend fun loadMemberItem(idUser: String): GroupMemberItem {
         val result = database.collection("users")
             .document(idUser)
-            .get()
+            .get(Source.CACHE)
             .await()
 
-        val user = result.toObject<User>()!!.also { log(it) }
+        val user = result.toObject<User>()!!
 
         return GroupMemberItem(result.id, user.name, user.avatarUrl)
+    }
+
+    private suspend fun loadMemberItems(userIds: List<String>): List<GroupMemberItem> {
+
+        val users = mutableListOf<GroupMemberItem>()
+
+        // only ten ids can be in one query
+        for (i in userIds.indices step 10) {
+
+            val userIdsPart = userIds.drop(i).take(10)
+
+            val loadUsers = database.collection("users")
+                .whereIn(FieldPath.documentId(), userIdsPart)
+                .get()
+                .await()
+                .map {
+                    val user = it.toObject<User>().apply { idUser = it.id }
+                    GroupMemberItem(user.idUser!!, user.name, user.avatarUrl)
+                }
+
+            users.addAll(loadUsers)
+        }
+        return users
     }
 
     suspend fun getUserInfo(): AddMemberItem {
@@ -128,6 +148,8 @@ class GroupsRepository : BaseRepository() {
                 }
             }
         }
+
+
 
         val group = Group(name, currency, userIds, Date(), groupItem?.avatarUrl)
 

@@ -53,16 +53,12 @@ class GroupsFragment : BaseFragment<GroupsViewModel>() {
 
         if (!state.isAuth) findNavController().navigate(R.id.action_groups_to_auth)
 
-        if (state.isLoading) biblo_loading_view.show()
-        else biblo_loading_view.hide()
-
-
-        if (!state.isLoading && state.groups.isEmpty()) {
+        if (state.showNoGroupsText) {
             tv_no_groups.isVisible = true
-            tv_no_groups.alpha = 0f
             tv_no_groups.animate().alpha(1f).duration = 500
         } else {
             tv_no_groups.isVisible = false
+            tv_no_groups.alpha = 0f
         }
 
         groupsAdapter.submitList(state.groups)

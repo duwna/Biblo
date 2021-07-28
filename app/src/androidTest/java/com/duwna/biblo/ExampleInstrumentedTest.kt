@@ -58,6 +58,23 @@ class ExampleInstrumentedTest {
 
         }
 
+        //                groupItems.forEach { groupItem ->
+//                    val repo = BillsRepository(groupItem.id)
+//                    repeat((5..30).random()) {
+//                        val bill = Bill(
+//                            title = words.random(),
+//                            description = buildString { repeat(5) { append(words.random()) } },
+//                            payers = mutableMapOf<String, Double>().apply {
+//                                groupItem.members.forEach { put(it.id, (0..10000).random().toDouble()) }
+//                            },
+//                            debtors = mutableMapOf<String, Double>().apply {
+//                                groupItem.members.forEach { put(it.id, (0..10000).random().toDouble()) }
+//                            }
+//                        )
+//                        repo.insertBill(bill)
+//                    }
+//                }
+
     }
 
 

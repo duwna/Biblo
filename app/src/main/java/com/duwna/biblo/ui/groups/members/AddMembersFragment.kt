@@ -72,12 +72,6 @@ class AddMembersFragment : BaseFragment<AddMembersViewModel>() {
     override fun bindState(state: IViewModelState) {
         state as AddMembersState
 
-        when {
-            !state.isLoading -> wave_view.isVisible = false
-            !wave_view.isVisible && ViewCompat.isAttachedToWindow(wave_view) -> wave_view.circularShow()
-            else -> wave_view.isVisible = true
-        }
-
         showSearch(state.isSearch)
         showViews(state.isLoading)
         showAvatar(!state.isSearch && !state.isLoading)

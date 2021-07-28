@@ -10,8 +10,9 @@ abstract class BaseViewModel<T : IViewModelState>(
 ) : ViewModel() {
 
     private val notifications = MutableLiveData<Event<Notify>>()
+    private val isLoading = MutableLiveData(false)
 
-    val state: MutableLiveData<T> = MutableLiveData<T>().apply {
+    protected val state: MutableLiveData<T> = MutableLiveData<T>().apply {
         value = initState
     }
 
@@ -32,14 +33,27 @@ abstract class BaseViewModel<T : IViewModelState>(
         notifications.postValue(Event(content))
     }
 
-    protected fun doAsync(block: suspend () -> Unit) {
+    protected fun showLoading() {
+        isLoading.postValue(true)
+    }
+
+    protected fun hideLoading() {
+        isLoading.postValue(false)
+    }
+
+    protected fun launchSafety(
+        onError: ((Throwable) -> Unit)? = null,
+        block: suspend () -> Unit
+    ) {
         viewModelScope.launch(IO) {
             try {
                 block()
             } catch (t: Throwable) {
                 t.printStackTrace()
-                notify(Notify.DataError)
+                onError?.invoke(t)
+                notify(Notify.TextMessage(t.message.toString()))
             }
+            if(isLoading.value == true) hideLoading()
         }
     }
 
@@ -52,15 +66,26 @@ abstract class BaseViewModel<T : IViewModelState>(
             EventObserver { onNotify(it) })
     }
 
+    fun observeLoading(owner: LifecycleOwner, onChanged: (newState: Boolean) -> Unit) {
+        isLoading.observe(owner, Observer { onChanged(it!!) })
+    }
 }
 
 class Event<out E>(private val content: E) {
     var hasBeenHandled = false
+
     fun getContentIfNotHandled(): E? {
         return if (hasBeenHandled) null
         else {
             hasBeenHandled = true
             content
+        }
+    }
+
+    fun setListener(eventListener: (E) -> Unit) {
+        if (!hasBeenHandled) {
+            eventListener.invoke(content)
+            hasBeenHandled = true
         }
     }
 }

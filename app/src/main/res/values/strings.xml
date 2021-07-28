@@ -38,6 +38,7 @@
     <string name="label_email">Email</string>
     <string name="label_password">Password</string>
     <string name="label_no_groups">There are no groups…\nCreate a new</string>
+    <string name="label_no_messages">There are no messages…\nSend a new</string>
     <string name="label_auth">Authorization</string>
     <string name="label_all_bills">All bills</string>
     <string name="label_no_bills">There are no bills…\nCreate a new</string>
