@@ -1,7 +1,5 @@
 package com.duwna.biblo.ui.groups.members
 
-import android.app.Activity
-import android.content.Intent
 import android.text.InputType
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
@@ -14,7 +12,8 @@ import com.bumptech.glide.Glide
 import com.duwna.biblo.R
 import com.duwna.biblo.ui.base.BaseFragment
 import com.duwna.biblo.ui.base.IViewModelState
-import com.duwna.biblo.utils.*
+import com.duwna.biblo.utils.hideKeyBoard
+import com.duwna.biblo.utils.toInitials
 import kotlinx.android.synthetic.main.fragment_add_members.*
 
 
@@ -60,7 +59,6 @@ class AddMembersFragment : BaseFragment<AddMembersViewModel>() {
         }
 
         iv_avatar.setOnClickListener {
-            pickImageFromGallery()
         }
 
         btn_handle_mode.setOnClickListener {
@@ -83,13 +81,6 @@ class AddMembersFragment : BaseFragment<AddMembersViewModel>() {
         }
         addMemberAdapter.submitList(state.members)
         state.ready?.let { findNavController().navigate(R.id.action_add_members_to_groups) }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == PICK_IMAGE_CODE) {
-            viewModel.setImageUri(data?.data)
-        }
     }
 
     private fun showAvatar(show: Boolean) {

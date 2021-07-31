@@ -1,12 +1,8 @@
 package com.duwna.biblo.ui.groups.add
 
 import android.Manifest
-import android.app.AlertDialog
-import android.content.Intent
 import android.net.Uri
-import android.provider.Settings
 import android.view.inputmethod.EditorInfo
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
@@ -31,36 +27,21 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
     override val layout: Int = R.layout.fragment_add_group
     private val args: AddGroupFragmentArgs by navArgs()
 
-    private val groupAvatarPermissionResult =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            when {
-                isGranted -> groupAvatarGalleryResult.launch("image/*")
-                !shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE) -> {
-                    openSettings()
-                }
-            }
-        }
+    private val groupAvatarPermissionResult = registerPermissionResult {
+        groupAvatarPickResult.launch("image/*")
+    }
 
-    private val memberAvatarPermissionResult =
-        registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-            when {
-                isGranted -> memberAvatarGalleryResult.launch("image/*")
-                !shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE) -> {
-                    openSettings()
-                }
-            }
-        }
+    private val memberAvatarPermissionResult = registerPermissionResult {
+        memberAvatarPickResult.launch("image/*")
+    }
 
-    private val groupAvatarGalleryResult =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-            uri ?: return@registerForActivityResult
-            viewModel.setGroupImageUri(uri)
-        }
+    private val groupAvatarPickResult = registerImagePickResult { uri ->
+        viewModel.setGroupImageUri(uri)
+    }
 
-    private val memberAvatarGalleryResult =
-        registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
-            viewModel.setMemberImageUri(uri)
-        }
+    private val memberAvatarPickResult = registerImagePickResult { uri ->
+        viewModel.setMemberImageUri(uri)
+    }
 
     override fun setupViews() {
 
@@ -102,16 +83,6 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
         }
     }
 
-    private fun createGroup() {
-        val currency = if (switch_currency.isChecked) et_group_currency.text.toString()
-        else spinner.selectedItem as String
-
-        val name = et_group_name.text.toString()
-        if (!viewModel.validateInput(name, currency)) return
-
-        viewModel.createGroup(name, currency)
-    }
-
     override fun bindState(state: IViewModelState) {
         state as AddGroupState
 
@@ -122,6 +93,16 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
         state.groupAddedEvent?.setListener {
             findNavController().popBackStack()
         }
+    }
+
+    private fun createGroup() {
+        val currency = if (switch_currency.isChecked) et_group_currency.text.toString()
+        else spinner.selectedItem as String
+
+        val name = et_group_name.text.toString()
+        if (!viewModel.validateInput(name, currency)) return
+
+        viewModel.createGroup(name, currency)
     }
 
     private fun setupAvatars(groupAvatarUri: Uri?, memberAvatarUri: Uri?) {
@@ -180,19 +161,6 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
             }
             flexbox_members.addView(memberView)
         }
-    }
-
-    private fun openSettings() {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Требуется разрешение")
-            .setMessage("Необходимо предоставить разрешение на доступ к изображениям в настройках")
-            .setPositiveButton("Открыть настройки") { _, _ ->
-                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                    data = Uri.parse("package:com.duwna.biblo")
-                }
-                startActivity(intent)
-            }
-            .show()
     }
 
     private fun setupCurrency(groupItem: GroupItem) {

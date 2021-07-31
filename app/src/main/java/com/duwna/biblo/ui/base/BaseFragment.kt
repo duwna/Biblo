@@ -1,12 +1,20 @@
 package com.duwna.biblo.ui.base
 
+import android.Manifest
+import android.app.AlertDialog
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.provider.Settings
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.Fragment
 import com.duwna.biblo.MainActivity
+import com.duwna.biblo.R
 
 abstract class BaseFragment<T : BaseViewModel<out IViewModelState>> : Fragment() {
 
@@ -44,5 +52,36 @@ abstract class BaseFragment<T : BaseViewModel<out IViewModelState>> : Fragment()
             }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    protected fun registerImagePickResult(onPicked: (Uri) -> Unit): ActivityResultLauncher<String> {
+        return registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+            uri ?: return@registerForActivityResult
+            onPicked(uri)
+        }
+    }
+
+    protected fun registerPermissionResult(onGranted: () -> Unit): ActivityResultLauncher<String> {
+        return registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+            when {
+                isGranted -> onGranted()
+                !shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE) -> {
+                    openSettings()
+                }
+            }
+        }
+    }
+
+    private fun openSettings() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.label_permission_required))
+            .setMessage(getString(R.string.message_need_open_settings))
+            .setPositiveButton(getString(R.string.label_open_settings)) { _, _ ->
+                val intent = Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
+                    data = Uri.parse("package:com.duwna.biblo")
+                }
+                startActivity(intent)
+            }
+            .show()
     }
 }

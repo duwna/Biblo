@@ -1,7 +1,6 @@
 package com.duwna.biblo.ui.auth.registration
 
-import android.app.Activity
-import android.content.Intent
+import android.Manifest
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
@@ -10,15 +9,21 @@ import com.bumptech.glide.Glide
 import com.duwna.biblo.R
 import com.duwna.biblo.ui.base.BaseFragment
 import com.duwna.biblo.ui.base.IViewModelState
-import com.duwna.biblo.utils.PICK_IMAGE_CODE
 import com.duwna.biblo.utils.hideKeyBoard
-import com.duwna.biblo.utils.pickImageFromGallery
 import com.duwna.biblo.utils.toInitials
 import kotlinx.android.synthetic.main.fragment_registration.*
 
 class RegistrationFragment : BaseFragment<RegistrationViewModel>() {
     override val viewModel: RegistrationViewModel by viewModels()
     override val layout: Int = R.layout.fragment_registration
+
+    private val permissionResult = registerPermissionResult {
+        imagePickResult.launch("image/*")
+    }
+
+    private val imagePickResult = registerImagePickResult { uri ->
+        viewModel.setImageUri(uri)
+    }
 
     override fun setupViews() {
         btn_registration.setOnClickListener {
@@ -31,7 +36,7 @@ class RegistrationFragment : BaseFragment<RegistrationViewModel>() {
         }
 
         iv_avatar.setOnClickListener {
-            pickImageFromGallery()
+            permissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
         }
 
         et_name.doOnTextChanged { text, _, _, _ ->
@@ -57,12 +62,4 @@ class RegistrationFragment : BaseFragment<RegistrationViewModel>() {
     private fun showViews(isLoading: Boolean) {
         container.isVisible = !isLoading
     }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == PICK_IMAGE_CODE) {
-            viewModel.setImageUri(data?.data)
-        }
-    }
-
 }

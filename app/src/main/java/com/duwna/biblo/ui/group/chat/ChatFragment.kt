@@ -1,7 +1,6 @@
 package com.duwna.biblo.ui.group.chat
 
-import android.app.Activity
-import android.content.Intent
+import android.Manifest
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -12,9 +11,6 @@ import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.entities.items.MessageItem
 import com.duwna.biblo.ui.base.BaseFragment
 import com.duwna.biblo.ui.base.IViewModelState
-import com.duwna.biblo.utils.PICK_IMAGE_CODE
-import com.duwna.biblo.utils.log
-import com.duwna.biblo.utils.pickImageFromGallery
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_chat.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -24,6 +20,14 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
 
     private lateinit var groupItem: GroupItem
     override val layout: Int = R.layout.fragment_chat
+
+    private val permissionResult = registerPermissionResult {
+        imagePickResult.launch("image/*")
+    }
+
+    private val imagePickResult = registerImagePickResult { uri ->
+        viewModel.setImageUri(uri)
+    }
 
     override val viewModel: ChatViewModel by viewModels {
         ChatViewModelFactory(groupItem)
@@ -45,7 +49,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
 
         iv_add_img.setOnClickListener {
             if (viewModel.currentState.imgUri != null) viewModel.setImageUri(null)
-            else pickImageFromGallery()
+            else permissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
         }
 
         iv_send.setOnClickListener {
@@ -73,13 +77,6 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         }
 
         chatAdapter.submitList(state.messages)
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK && requestCode == PICK_IMAGE_CODE) {
-            viewModel.setImageUri(data?.data)
-        }
     }
 
     private fun showDeleteMessageSnackbar(messageItem: MessageItem) {
