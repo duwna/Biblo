@@ -3,16 +3,17 @@ package com.duwna.biblo.ui.groups
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
-import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
+import androidx.datastore.preferences.preferencesDataStoreFile
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.duwna.biblo.App
 import com.duwna.biblo.R
 import com.duwna.biblo.ui.base.BaseFragment
 import com.duwna.biblo.ui.base.IViewModelState
-import com.duwna.biblo.utils.circularHide
 import kotlinx.android.synthetic.main.fragment_groups.*
+import kotlinx.coroutines.runInterruptible
 
 class GroupsFragment : BaseFragment<GroupsViewModel>() {
 
@@ -36,7 +37,7 @@ class GroupsFragment : BaseFragment<GroupsViewModel>() {
     )
 
     override fun setupViews() {
-
+        
         rv_groups.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = groupsAdapter

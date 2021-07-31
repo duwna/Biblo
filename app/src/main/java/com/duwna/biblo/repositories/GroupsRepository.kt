@@ -13,28 +13,12 @@ import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.Source
 import com.google.firebase.firestore.ktx.toObject
-import kotlinx.coroutines.channels.awaitClose
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.tasks.await
 import java.util.*
 
 class GroupsRepository : BaseRepository() {
 
     override val reference = database.collection("groups")
-
-    private suspend fun subscribeOnGroups(): Flow<List<Group>> = callbackFlow {
-        val subscription = reference
-            .orderBy("lastUpdate", Query.Direction.DESCENDING)
-            .whereArrayContains("usersIds", firebaseUserId)
-            .addSnapshotListener { querySnapshot, _ ->
-                val groups = querySnapshot?.documents?.map {
-                    it!!.toObject<Group>()!!.apply { idGroup = it.id }
-                }!!
-                offer(groups)
-            }
-        awaitClose(subscription::remove)
-    }
 
     suspend fun loadGroupItems(): List<GroupItem> {
 
@@ -49,12 +33,6 @@ class GroupsRepository : BaseRepository() {
         if (groups.isEmpty()) return emptyList()
 
         val userIds = groups.flatMap { it.usersIds }.distinct()
-
-
-
-//        val memberItems = userIds.map {
-//            loadMemberItem(it)
-//        }
 
         val memberItems = loadMemberItems(userIds)
 
@@ -104,16 +82,6 @@ class GroupsRepository : BaseRepository() {
         return users
     }
 
-    suspend fun getUserInfo(): AddMemberItem {
-        val user = loadMemberItem(firebaseUserId)
-
-        return AddMemberItem(
-            user.name,
-            tryOrNull { Uri.parse(user.avatarUrl) } ?: auth.currentUser?.photoUrl,
-            firebaseUserId
-        )
-    }
-
     suspend fun searchMember(email: String): AddMemberItem? {
         val user = database.collection("users")
             .whereEqualTo("email", email)
@@ -135,6 +103,12 @@ class GroupsRepository : BaseRepository() {
         groupItem: GroupItem?
     ) {
 
+        val text = """
+            users[0].idUser = ${users[0].idUser}
+            firebaseUserId = $firebaseUserId
+        """.trimIndent()
+        log(text)
+
         require(users[0].idUser == firebaseUserId)
         val userIds = mutableListOf<String>().apply {
             users.forEachIndexed { index, user ->
@@ -148,8 +122,6 @@ class GroupsRepository : BaseRepository() {
                 }
             }
         }
-
-
 
         val group = Group(name, currency, userIds, Date(), groupItem?.avatarUrl)
 
@@ -165,7 +137,7 @@ class GroupsRepository : BaseRepository() {
         }
 
         avatarUri?.let {
-            val avatarUrl = uploadImg("groups", idGroup, it)
+            val avatarUrl = uploadImage("groups", idGroup, it)
             reference.document(idGroup).update("avatarUrl", avatarUrl)
         }
     }
@@ -178,7 +150,7 @@ class GroupsRepository : BaseRepository() {
             .id
 
         user.avatarUri?.let {
-            val avatarUrl = uploadImg("users", idUser, it)
+            val avatarUrl = uploadImage("users", idUser, it)
             database.collection("users").document(idUser).update("avatarUrl", avatarUrl)
         }
 

@@ -79,10 +79,11 @@
     <string name="message_send_password_link">Link has been sent!</string>
     <string name="message_password_link_sent">Send a password recovery link to</string>
     <string name="message_no_user_found">No user with this address found…</string>
-    <string name="message_member_contains">A member with this name and avatar is already contained</string>
+    <string name="message_member_contains">This member is already contained in the group</string>
     <string name="message_cant_delete_yourself">Unable to remove yourself from group</string>
     <string name="message_cant_delete_user">Unable to remove previously added user from group</string>
     <string name="message_group_contain_two_members">A group can have at least two members</string>
+    <string name="message_user_added">User has been added!</string>
 
 
     <string-array name="currency">

@@ -4,7 +4,7 @@
     <color name="color_primary_dark">#0E0E0E</color>
     <color name="color_accent">#FFAE00</color>
     <color name="color_surface">#272727</color>
-    <color name="color_on_surface">#FFFFFF</color>
+    <color name="color_on_surface">#D3D3D3</color>
     <color name="color_on_primary">#C8C8C8</color>
     <color name="color_gray_light">#1E000000</color>
     <color name="color_toolbar">#1e1e1e</color>

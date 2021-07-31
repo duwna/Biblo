@@ -3,7 +3,6 @@ package com.duwna.biblo.ui.groups
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.navigation.findNavController
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -12,7 +11,6 @@ import com.duwna.biblo.R
 import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.ui.custom.MemberView
 import com.duwna.biblo.utils.toInitials
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_group.view.*
 

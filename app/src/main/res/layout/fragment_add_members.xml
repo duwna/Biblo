@@ -30,7 +30,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/btn_search_member"
+        android:id="@+id/btn_handle_mode"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -70,7 +70,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:text="@string/btn_add"
-        app:layout_constraintEnd_toStartOf="@+id/btn_search_member"
+        app:layout_constraintEnd_toStartOf="@+id/btn_handle_mode"
         app:layout_constraintHorizontal_bias="0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/til_member_name" />

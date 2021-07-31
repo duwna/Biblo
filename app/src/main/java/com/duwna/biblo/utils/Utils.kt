@@ -25,6 +25,11 @@ fun String.toInitials(): String = when {
     else -> ""
 }
 
+fun Fragment.readStoragePermissionGranted() = ContextCompat.checkSelfPermission(
+    requireContext(),
+    Manifest.permission.READ_EXTERNAL_STORAGE
+) != PackageManager.PERMISSION_GRANTED
+
 fun Fragment.pickImageFromGallery() {
     if (ContextCompat.checkSelfPermission(
             requireContext(),

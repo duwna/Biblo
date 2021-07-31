@@ -1,9 +1,12 @@
 package com.duwna.biblo
 
+import android.content.Context
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.isVisible
+import androidx.datastore.core.DataStore
+import androidx.datastore.core.DataStoreFactory
 import androidx.navigation.NavController
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -11,6 +14,7 @@ import androidx.navigation.ui.setupWithNavController
 import com.duwna.biblo.ui.base.Notify
 import com.duwna.biblo.utils.showSnackBar
 import kotlinx.android.synthetic.main.activity_main.*
+import androidx.datastore.preferences.preferencesDataStore
 
 class MainActivity : AppCompatActivity() {
 

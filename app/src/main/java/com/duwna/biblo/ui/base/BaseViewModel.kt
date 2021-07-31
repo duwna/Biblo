@@ -51,9 +51,10 @@ abstract class BaseViewModel<T : IViewModelState>(
             } catch (t: Throwable) {
                 t.printStackTrace()
                 onError?.invoke(t)
-                notify(Notify.TextMessage(t.message.toString()))
+                val msg = t.localizedMessage
+                notify(if (msg != null) Notify.TextMessage(msg) else Notify.DataError)
             }
-            if(isLoading.value == true) hideLoading()
+            if (isLoading.value == true) hideLoading()
         }
     }
 

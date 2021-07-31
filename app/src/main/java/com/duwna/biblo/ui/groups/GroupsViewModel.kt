@@ -9,7 +9,6 @@ import kotlinx.coroutines.delay
 class GroupsViewModel : BaseViewModel<GroupsViewModelState>(
     GroupsViewModelState()
 ) {
-
     private val repository = GroupsRepository()
 
     fun initialize() {
@@ -26,7 +25,6 @@ class GroupsViewModel : BaseViewModel<GroupsViewModelState>(
             val groupItems = repository.loadGroupItems()
             if (groupItems.isEmpty()) postUpdateState { copy(showNoGroupsText = true) }
             else postUpdateState { copy(groups = groupItems, showNoGroupsText = false) }
-            hideLoading()
         }
     }
 

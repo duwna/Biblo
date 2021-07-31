@@ -26,7 +26,7 @@ class ChatRepository(idGroup: String) : BaseRepository() {
             .id
 
         imgUri?.let {
-            val imgUrl = uploadImg("messages", id, it)
+            val imgUrl = uploadImage("messages", id, it)
             reference.document(id).update("imgUrl", imgUrl)
         }
     }
@@ -36,7 +36,7 @@ class ChatRepository(idGroup: String) : BaseRepository() {
             .delete()
             .await()
 
-        messageItem.imgUrl?.let { deleteImg("messages", messageItem.id) }
+        messageItem.imgUrl?.let { deleteImage("messages", messageItem.id) }
     }
 
     @ExperimentalCoroutinesApi

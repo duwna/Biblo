@@ -3,7 +3,6 @@ package com.duwna.biblo.ui.groups.members
 import android.app.Activity
 import android.content.Intent
 import android.text.InputType
-import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.viewModels
@@ -64,7 +63,7 @@ class AddMembersFragment : BaseFragment<AddMembersViewModel>() {
             pickImageFromGallery()
         }
 
-        btn_search_member.setOnClickListener {
+        btn_handle_mode.setOnClickListener {
             viewModel.handleSearchMode()
         }
     }
@@ -102,7 +101,7 @@ class AddMembersFragment : BaseFragment<AddMembersViewModel>() {
         rv_members.isVisible = !isLoading
         btn_add_member.isVisible = !isLoading
         btn_create_group.isVisible = !isLoading
-        btn_search_member.isVisible = !isLoading
+        btn_handle_mode.isVisible = !isLoading
         til_member_name.isVisible = !isLoading
         iv_avatar.isVisible = !isLoading
     }
@@ -111,7 +110,7 @@ class AddMembersFragment : BaseFragment<AddMembersViewModel>() {
         btn_add_member.text = requireContext().getString(
             if (isSearch) R.string.btn_make_search else R.string.btn_add
         )
-        btn_search_member.text = requireContext().getString(
+        btn_handle_mode.text = requireContext().getString(
             if (isSearch) R.string.btn_cancel else R.string.btn_search
         )
         til_member_name.hint = requireContext().getString(

@@ -83,7 +83,6 @@ class BillsViewModel(private val groupItem: GroupItem) : BaseViewModel<BillsStat
         launchSafety {
             showLoading()
             repository.deleteBill(idBill)
-            hideLoading()
         }
     }
 }

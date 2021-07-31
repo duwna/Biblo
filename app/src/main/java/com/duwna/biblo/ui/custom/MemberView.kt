@@ -1,6 +1,7 @@
 package com.duwna.biblo.ui.custom
 
 import android.content.Context
+import android.net.Uri
 import android.util.AttributeSet
 import android.view.Gravity
 import android.widget.LinearLayout
@@ -20,17 +21,25 @@ class MemberView private constructor(
     constructor(
         context: Context,
         name: String,
-        avatarUrl: String?,
+        avatarUrl: String? = null,
+        avatarUri: Uri? = null,
+        isClickable: Boolean = false,
         attributes: AttributeSet? = null
     ) : this(context, attributes) {
 
         orientation = HORIZONTAL
         gravity = Gravity.CENTER
-        setBackgroundResource(R.drawable.background_member_view)
+
+        if (isClickable) {
+            this.isClickable = true
+            setBackgroundResource(R.drawable.background_member_view_ripple)
+        } else {
+            setBackgroundResource(R.drawable.background_member_view)
+        }
 
         val padding = context.dpToIntPx(8)
         setPadding(
-            if (avatarUrl == null) padding else 0,
+            if (avatarUrl == null && avatarUri == null) padding else 0,
             0,
             padding,
             0
@@ -45,11 +54,11 @@ class MemberView private constructor(
             }
         layoutParams = newLayoutParams
 
-        addViews(avatarUrl, context, name)
+        addViews(context, name, avatarUrl, avatarUri)
     }
 
-    private fun addViews(avatarUrl: String?, context: Context, name: String) {
-        if (avatarUrl != null) {
+    private fun addViews(context: Context, name: String, avatarUrl: String?, avatarUri: Uri?) {
+        if (avatarUrl != null || avatarUri != null) {
             val imageView = AvatarImageView(context).apply {
 
                 val size = context.dpToIntPx(40)
@@ -61,7 +70,7 @@ class MemberView private constructor(
                 setMarginOptionally(right = context.dpToIntPx(8))
 
                 isAvatarMode = true
-                Glide.with(this).load(avatarUrl).into(this)
+                Glide.with(this).load(avatarUri ?: avatarUrl).into(this)
             }
 
             addView(imageView)

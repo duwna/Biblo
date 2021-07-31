@@ -79,11 +79,12 @@
     <string name="message_enter_email">Пожалуйста, введите E-mail</string>
     <string name="message_send_password_link">Ссылка отправлена!</string>
     <string name="message_password_link_sent">Отправить ссылку для восстановления пароля на адрес</string>
-    <string name="message_no_user_found">Пользователя с таким адресом не найдено…</string>
-    <string name="message_member_contains">Участник с таким именем и аватаром уже содержится</string>
+    <string name="message_no_user_found">Пользователь с таким адресом не найден…</string>
+    <string name="message_member_contains">Этот участник уже содержится в группе</string>
     <string name="message_cant_delete_yourself">Невозможно удалить себя из группы</string>
     <string name="message_cant_delete_user">Невозможно удалить ранее добавленного пользователя из группы</string>
     <string name="message_group_contain_two_members">В группе может быть не менее двух участников</string>
+    <string name="message_user_added">Пользователь добавлен!</string>
 
 
 

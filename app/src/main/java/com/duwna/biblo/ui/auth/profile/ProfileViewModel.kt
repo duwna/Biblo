@@ -13,16 +13,7 @@ class ProfileViewModel : BaseViewModel<ProfileState>(ProfileState()) {
     private val repository = AuthRepository()
 
     init {
-        loadUser()
-    }
-
-    private fun loadUser() {
-        launchSafety {
-            showLoading()
-            val user = repository.getUser()
-            postUpdateState { copy(user = user) }
-            hideLoading()
-        }
+        launchSafety { postUpdateState { copy(user = repository.getLocalUserInfo()) } }
     }
 
     fun setImageUri(uri: Uri?) {
@@ -39,7 +30,6 @@ class ProfileViewModel : BaseViewModel<ProfileState>(ProfileState()) {
             showLoading()
             repository.insertUser(user)
             postUpdateState { copy(user = user) }
-            hideLoading()
             notify(Notify.MessageFromRes(R.string.message_data_saved))
         }
     }
