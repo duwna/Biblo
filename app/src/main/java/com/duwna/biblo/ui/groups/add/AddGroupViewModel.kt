@@ -1,38 +1,48 @@
 package com.duwna.biblo.ui.groups.add
 
 import android.net.Uri
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.duwna.biblo.R
 import com.duwna.biblo.entities.database.User
 import com.duwna.biblo.entities.items.AddMemberItem
+import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.repositories.GroupsRepository
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.Event
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.ui.base.Notify
-import com.duwna.biblo.utils.log
-import com.duwna.biblo.utils.tryOrNull
 
-class AddGroupViewModel : BaseViewModel<AddGroupState>(AddGroupState()) {
+class AddGroupViewModel(private val groupItem: GroupItem?) : BaseViewModel<AddGroupState>(
+    AddGroupState(
+        members = groupItem?.members?.map {
+            AddMemberItem(it.name, null, it.id, it.avatarUrl)
+        } ?: emptyList()
+    )
+) {
 
     private val repository = GroupsRepository()
 
     init {
-        launchSafety {
-            val currentUser = repository.getLocalUserInfo()
-            log(currentUser)
-            val memberItem = AddMemberItem(
-                name = currentUser.name,
-                avatarUrl = currentUser.avatarUrl,
-                id = currentUser.idUser
-            )
-            postUpdateList { add(memberItem) }
+        // add current user to members list
+        if (groupItem == null) {
+            launchSafety {
+                val currentUser = repository.getLocalUserInfo()
+                val memberItem = AddMemberItem(
+                    name = currentUser.name,
+                    avatarUrl = currentUser.avatarUrl,
+                    id = currentUser.idUser
+                )
+                postUpdateList { add(memberItem) }
+            }
         }
+
     }
 
     fun insertMember(name: String) {
         when {
             name.trim().isBlank() -> {
-                notify(Notify.MessageFromRes(R.string.message_add_name)); return
+                notify(Notify.MessageFromRes(R.string.message_add_member_name)); return
             }
             memberContains(name) -> {
                 notify(Notify.MessageFromRes(R.string.message_member_contains)); return
@@ -66,7 +76,9 @@ class AddGroupViewModel : BaseViewModel<AddGroupState>(AddGroupState()) {
             return
         }
 
-        launchSafety {
+        updateState { copy(showViews = false) }
+        launchSafety(onError = { updateState { copy(showViews = true) } }) {
+            showLoading()
             val users = currentState.members.map {
                 User(name = it.name, avatarUri = it.avatarUri, idUser = it.id)
             }
@@ -75,22 +87,24 @@ class AddGroupViewModel : BaseViewModel<AddGroupState>(AddGroupState()) {
                 groupCurrency,
                 currentState.groupAvatarUri,
                 users,
-                null
+                groupItem
             )
-            postUpdateState { copy(groupAddedEvent = Event(Unit)) }
+            postUpdateState { copy(onGroupAdded = Event(Unit)) }
         }
     }
 
     fun removeMember(position: Int) {
-        when (position) {
-            0 -> notify(Notify.MessageFromRes(R.string.message_cant_delete_yourself))
+        when {
+            position == 0 -> notify(Notify.MessageFromRes(R.string.message_cant_delete_yourself))
+            groupItem?.members?.find { it.id == currentState.members[position].id } != null ->
+                notify(Notify.MessageFromRes(R.string.message_cant_delete_user))
             else -> updateList { removeAt(position) }
         }
     }
 
     fun validateInput(name: String, currency: String): Boolean = when {
         name.trim().isBlank() -> {
-            notify(Notify.MessageFromRes(R.string.message_add_name))
+            notify(Notify.MessageFromRes(R.string.message_add_group_name))
             false
         }
         currency.trim().isBlank() -> {
@@ -139,5 +153,12 @@ data class AddGroupState(
     val isSearchMode: Boolean = false,
     val members: List<AddMemberItem> = emptyList(),
     val memberAvatarUri: Uri? = null,
-    val groupAddedEvent: Event<Unit>? = null
+    val onGroupAdded: Event<Unit>? = null,
+    val showViews: Boolean = true
 ) : IViewModelState
+
+class AddGroupViewModelFactory(private val groupItem: GroupItem?) : ViewModelProvider.Factory {
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
+        return AddGroupViewModel(groupItem) as T
+    }
+}

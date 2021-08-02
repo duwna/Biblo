@@ -12,9 +12,13 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.*
 import androidx.fragment.app.Fragment
 import com.duwna.biblo.MainActivity
 import com.duwna.biblo.R
+import java.io.File
+import java.text.SimpleDateFormat
+import java.util.*
 
 abstract class BaseFragment<T : BaseViewModel<out IViewModelState>> : Fragment() {
 
@@ -55,14 +59,14 @@ abstract class BaseFragment<T : BaseViewModel<out IViewModelState>> : Fragment()
     }
 
     protected fun registerImagePickResult(onPicked: (Uri) -> Unit): ActivityResultLauncher<String> {
-        return registerForActivityResult(ActivityResultContracts.GetContent()) { uri ->
+        return registerForActivityResult(GetContent()) { uri ->
             uri ?: return@registerForActivityResult
             onPicked(uri)
         }
     }
 
     protected fun registerPermissionResult(onGranted: () -> Unit): ActivityResultLauncher<String> {
-        return registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
+        return registerForActivityResult(RequestPermission()) { isGranted ->
             when {
                 isGranted -> onGranted()
                 !shouldShowRequestPermissionRationale(Manifest.permission.READ_EXTERNAL_STORAGE) -> {

@@ -10,7 +10,6 @@
     <string name="btn_split_text">Split equally</string>
     <string name="btn_create_bill">Create bill</string>
     <string name="btn_add_members">Add members</string>
-    <string name="btn_delete_group">Delete group</string>
     <string name="btn_create">Create</string>
     <string name="btn_make_search">Search</string>
     <string name="btn_cancel">Cancel</string>
@@ -23,6 +22,7 @@
     <string name="title_add_bill">Bill creation</string>
     <string name="title_chat">Chat</string>
 
+    <string name="label_delete_group">Delete group</string>
     <string name="label_group_name">Name</string>
     <string name="label_choose_currency">Choose currency:</string>
     <string name="label_currency">Currency</string>
@@ -54,13 +54,12 @@
     <string name="label_dark_mode">Dark mode</string>
     <string name="label_edit_profile">Profile editing</string>
     <string name="label_delete_bill">Deleting bill</string>
-    <string name="label_delete_group">Deleting group</string>
     <string name="label_delete_message">Delete message?</string>
     <string name="label_delete">Delete</string>
     <string name="label_send_by_email">Sending by Email</string>
     <string name="label_group">Group</string>
     <string name="label_statistics">Statistics</string>
-    <string name="label_edit_group">Group editing</string>
+    <string name="label_edit_group">Edit group</string>
     <string name="label_send">Send</string>
     <string name="label_forgot_password">Forgot password?</string>
     <string name="label_send_statistics">Send statistics</string>
@@ -72,8 +71,9 @@
     <string name="message_data_error">Error loading data…</string>
     <string name="message_debt_pay_sum">The amount of debt must match the amount of payment</string>
     <string name="message_add_title">Add title</string>
-    <string name="message_add_name">"Add name"</string>
-    <string name="message_add_currency">"Add currency"</string>
+    <string name="message_add_member_name">Add member name</string>
+    <string name="message_add_group_name">Add group name</string>
+    <string name="message_add_currency">Choose currency</string>
     <string name="message_data_saved">Data saved!</string>
     <string name="message_registration_error">Registration error occurred…</string>
     <string name="message_auth_error">Authorization error occurred…</string>
@@ -87,6 +87,7 @@
     <string name="message_group_contain_two_members">A group can have at least two members</string>
     <string name="message_user_added">User has been added!</string>
     <string name="message_need_open_settings">You need to grant permission to access images in settings</string>
+    <string name="message_delete_group">Are you sure you want to delete the group?</string>
 
 
     <string-array name="currency">

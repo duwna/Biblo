@@ -106,7 +106,7 @@ class AddBillViewModel(groupItem: GroupItem) : BaseViewModel<AddBillState>(
             val bill = Bill(title, description, currentState.date, payers, debtors)
 
             repository.insertBill(bill)
-            postUpdateState { copy(billAddEvent = Event(Unit)) }
+            postUpdateState { copy(onBillAdded = Event(Unit)) }
         }
     }
 
@@ -125,7 +125,7 @@ data class AddBillState(
     val sum: Double = 0.0,
     val showViews: Boolean = true,
     val date: Date = Date(),
-    val billAddEvent: Event<Unit>? = null
+    val onBillAdded: Event<Unit>? = null
 ) : IViewModelState
 
 

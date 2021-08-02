@@ -12,20 +12,23 @@ import androidx.navigation.fragment.navArgs
 import com.bumptech.glide.Glide
 import com.duwna.biblo.R
 import com.duwna.biblo.entities.items.AddMemberItem
-import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.ui.base.BaseFragment
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.ui.custom.MemberView
 import com.duwna.biblo.utils.hideKeyBoard
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_add_group.*
+import kotlinx.android.synthetic.main.fragment_add_group.container
 
 
 class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
 
-    override val viewModel: AddGroupViewModel by viewModels()
-    override val layout: Int = R.layout.fragment_add_group
     private val args: AddGroupFragmentArgs by navArgs()
+    override val layout: Int = R.layout.fragment_add_group
+
+    override val viewModel: AddGroupViewModel by viewModels {
+        AddGroupViewModelFactory(args.groupItem)
+    }
 
     private val groupAvatarPermissionResult = registerPermissionResult {
         groupAvatarPickResult.launch("image/*")
@@ -79,7 +82,8 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
         args.groupItem?.let { groupItem ->
             root.toolbar.title = getString(R.string.label_edit_group)
             et_group_name.setText(groupItem.name)
-            setupCurrency(groupItem)
+            setupCurrency(groupItem.currency)
+            btn_create_group.setText(R.string.btn_save)
         }
     }
 
@@ -90,7 +94,9 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
         setupMembers(state.members)
         setupAvatars(state.groupAvatarUri, state.memberAvatarUri)
 
-        state.groupAddedEvent?.setListener {
+        container.isVisible = state.showViews
+
+        state.onGroupAdded?.setListener {
             findNavController().popBackStack()
         }
     }
@@ -106,10 +112,14 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
     }
 
     private fun setupAvatars(groupAvatarUri: Uri?, memberAvatarUri: Uri?) {
-        if (groupAvatarUri != null) {
-            Glide.with(this).load(groupAvatarUri).into(iv_avatar)
-        } else {
-            iv_avatar.setImageResource(R.drawable.ic_baseline_supervised_user_circle_24)
+        when {
+            groupAvatarUri != null -> Glide.with(this)
+                .load(groupAvatarUri).into(iv_avatar)
+
+            args.groupItem?.avatarUrl != null -> Glide.with(this)
+                .load(args.groupItem?.avatarUrl).into(iv_avatar)
+
+            else -> iv_avatar.setImageResource(R.drawable.ic_baseline_supervised_user_circle_24)
         }
 
         if (memberAvatarUri != null) {
@@ -126,11 +136,11 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
             iv_member_avatar.isVisible = false
             iv_add_member_avatar.isVisible = false
             til_member_name.setHint(R.string.label_email)
-            et_member_name.imeOptions = EditorInfo.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
+            et_member_name.inputType = EditorInfo.TYPE_TEXT_VARIATION_EMAIL_ADDRESS
         } else {
             btn_add_member.setText(R.string.btn_add)
             iv_add_member_avatar.isVisible = true
-            et_member_name.imeOptions = EditorInfo.TYPE_TEXT_VARIATION_PERSON_NAME
+            et_member_name.inputType = EditorInfo.TYPE_TEXT_VARIATION_PERSON_NAME
             btn_handle_mode.setText(R.string.btn_search)
             iv_member_avatar.isVisible = true
             til_member_name.setHint(R.string.label_name)
@@ -163,14 +173,17 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
         }
     }
 
-    private fun setupCurrency(groupItem: GroupItem) {
+    private fun setupCurrency(currency: String) {
+        // currency from spinner
         for (i in 0 until spinner.adapter.count) {
-            if (spinner.adapter.getItem(i) == groupItem.currency) {
+            if (spinner.adapter.getItem(i) == currency) {
                 spinner.setSelection(i)
-                switch_currency.isChecked = true
-                et_group_currency.setText(groupItem.currency)
-                break
+                switch_currency.isChecked = false
+                return
             }
         }
+        // own currency
+        switch_currency.isChecked = true
+        et_group_currency.setText(currency)
     }
 }

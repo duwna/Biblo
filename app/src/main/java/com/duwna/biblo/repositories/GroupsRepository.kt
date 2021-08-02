@@ -7,7 +7,6 @@ import com.duwna.biblo.entities.items.AddMemberItem
 import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.entities.items.GroupMemberItem
 import com.duwna.biblo.utils.format
-import com.duwna.biblo.utils.log
 import com.duwna.biblo.utils.tryOrNull
 import com.google.firebase.firestore.FieldPath
 import com.google.firebase.firestore.Query
@@ -46,17 +45,6 @@ class GroupsRepository : BaseRepository() {
                 group.usersIds.map { idUser -> memberItems.find { it.id == idUser }!! }
             )
         }
-    }
-
-    private suspend fun loadMemberItem(idUser: String): GroupMemberItem {
-        val result = database.collection("users")
-            .document(idUser)
-            .get(Source.CACHE)
-            .await()
-
-        val user = result.toObject<User>()!!
-
-        return GroupMemberItem(result.id, user.name, user.avatarUrl)
     }
 
     private suspend fun loadMemberItems(userIds: List<String>): List<GroupMemberItem> {
@@ -102,19 +90,12 @@ class GroupsRepository : BaseRepository() {
         users: List<User>,
         groupItem: GroupItem?
     ) {
-
-        val text = """
-            users[0].idUser = ${users[0].idUser}
-            firebaseUserId = $firebaseUserId
-        """.trimIndent()
-        log(text)
-
         require(users[0].idUser == firebaseUserId)
         val userIds = mutableListOf<String>().apply {
             users.forEachIndexed { index, user ->
                 when {
-                    // current user
-                    index == 0 -> add(firebaseUserId)
+                    // current user && create new group
+                    index == 0 && groupItem == null -> add(firebaseUserId)
                     //found user
                     user.idUser != null -> add(user.idUser!!)
                     //new user
@@ -126,10 +107,12 @@ class GroupsRepository : BaseRepository() {
         val group = Group(name, currency, userIds, Date(), groupItem?.avatarUrl)
 
         val idGroup = if (groupItem == null) {
+            // if new group
             reference.add(group)
                 .await()
                 .id
         } else {
+            // if update existing group
             reference.document(groupItem.id)
                 .set(group)
                 .await()
@@ -141,6 +124,7 @@ class GroupsRepository : BaseRepository() {
             reference.document(idGroup).update("avatarUrl", avatarUrl)
         }
     }
+
 
     private suspend fun createUser(user: User): String {
 
@@ -155,12 +139,6 @@ class GroupsRepository : BaseRepository() {
         }
 
         return idUser
-    }
-
-    suspend fun deleteGroup(id: String) {
-        reference.document(id)
-            .delete()
-            .await()
     }
 }
 

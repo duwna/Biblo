@@ -71,7 +71,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         state.imgUri?.let { Glide.with(this).load(it).into(iv_add_img) }
             ?: run { iv_add_img.setImageResource(R.drawable.ic_baseline_add_photo_alternate_24) }
 
-        state.messageSentEvent?.setListener {
+        state.onMessageSent?.setListener {
             rv_messages.smoothScrollToPosition(chatAdapter.itemCount)
             et_message.text.clear()
         }

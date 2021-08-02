@@ -26,6 +26,8 @@ class RegistrationFragment : BaseFragment<RegistrationViewModel>() {
     }
 
     override fun setupViews() {
+        iv_avatar.isAvatarMode = true
+
         btn_registration.setOnClickListener {
             root.hideKeyBoard(container)
             viewModel.registerUser(
@@ -38,10 +40,6 @@ class RegistrationFragment : BaseFragment<RegistrationViewModel>() {
         iv_avatar.setOnClickListener {
             permissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
         }
-
-        et_name.doOnTextChanged { text, _, _, _ ->
-            iv_avatar.setInitials(text.toString().toInitials())
-        }
     }
 
     override fun bindState(state: IViewModelState) {
@@ -49,12 +47,8 @@ class RegistrationFragment : BaseFragment<RegistrationViewModel>() {
 
         showViews(state.isLoading)
 
-        if (state.avatarUri != null) {
-            iv_avatar.isAvatarMode = true
-            Glide.with(this).load(state.avatarUri).into(iv_avatar)
-        } else {
-            iv_avatar.isAvatarMode = false
-        }
+        if (state.avatarUri != null) Glide.with(this).load(state.avatarUri).into(iv_avatar)
+         else iv_avatar.setImageResource(R.drawable.ic_baseline_account_circle_24)
 
         state.ready?.let { findNavController().navigate(R.id.action_registration_to_groups) }
     }

@@ -8,6 +8,7 @@ import com.duwna.biblo.entities.items.BillsViewItem
 import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.repositories.BillsRepository
 import com.duwna.biblo.ui.base.BaseViewModel
+import com.duwna.biblo.ui.base.Event
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.utils.format
 import kotlinx.coroutines.delay
@@ -85,11 +86,20 @@ class BillsViewModel(private val groupItem: GroupItem) : BaseViewModel<BillsStat
             repository.deleteBill(idBill)
         }
     }
+
+    fun deleteGroup() {
+        launchSafety {
+            showLoading()
+            repository.deleteGroup(groupItem)
+            postUpdateState { copy(onGroupDeleted = Event(Unit)) }
+        }
+    }
 }
 
 data class BillsState(
     val bills: List<BillsViewItem> = emptyList(),
-    val showNoBillsText: Boolean = false
+    val showNoBillsText: Boolean = false,
+    val onGroupDeleted: Event<Unit>? = null
 ) : IViewModelState
 
 class BillsViewModelFactory(private val groupItem: GroupItem) : ViewModelProvider.Factory {

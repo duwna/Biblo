@@ -87,7 +87,7 @@ class AddBillFragment : BaseFragment<AddBillViewModel>() {
 
         tv_date.text = state.date.format("dd.MM")
 
-        state.billAddEvent?.setListener { findNavController().popBackStack() }
+        state.onBillAdded?.setListener { findNavController().popBackStack() }
     }
 
     private fun showSplitSum() {

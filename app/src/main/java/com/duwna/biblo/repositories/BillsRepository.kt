@@ -2,6 +2,8 @@ package com.duwna.biblo.repositories
 
 import com.duwna.biblo.entities.database.Bill
 import com.duwna.biblo.entities.database.Message
+import com.duwna.biblo.entities.database.User
+import com.duwna.biblo.entities.items.GroupItem
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -41,11 +43,18 @@ class BillsRepository(private val idGroup: String) : BaseRepository() {
                 val list = querySnapshot?.documents?.map {
                     it.toObject<Bill>()!!.apply { idBill = it.id }
                 }!!
-                offer(list)
+                trySend(list)
             }
 
         awaitClose {
             subscription.remove()
         }
+    }
+
+    suspend fun deleteGroup(groupItem: GroupItem) {
+        database.collection("groups")
+            .document(groupItem.id)
+            .delete()
+            .await()
     }
 }

@@ -1,6 +1,7 @@
 package com.duwna.biblo.ui.group.bills
 
 import android.annotation.SuppressLint
+import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
 import android.view.Menu
@@ -84,6 +85,8 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
             tv_no_bills.alpha = 0f
         }
 
+        state.onGroupDeleted?.setListener { findNavController().popBackStack() }
+
         billsAdapter.submitList(state.bills)
     }
 
@@ -98,8 +101,25 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
                 sendEmail()
                 true
             }
+            R.id.action_edit_group -> {
+                BillsFragmentDirections.actionBillsToAddGroup(groupItem)
+                true
+            }
+            R.id.action_delete_group -> {
+                showDeleteGroupDialog()
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
+    }
+
+    private fun showDeleteGroupDialog() {
+        AlertDialog.Builder(requireContext())
+            .setTitle(R.string.label_delete_group)
+            .setMessage(R.string.message_delete_group)
+            .setPositiveButton(R.string.label_delete) { _, _ -> viewModel.deleteGroup() }
+            .setNegativeButton(R.string.btn_cancel) { _, _ -> }
+            .show()
     }
 
     @SuppressLint("IntentReset")

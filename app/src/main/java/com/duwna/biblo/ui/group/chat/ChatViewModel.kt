@@ -1,8 +1,6 @@
 package com.duwna.biblo.ui.group.chat
 
 import android.net.Uri
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.duwna.biblo.entities.items.GroupItem
@@ -10,7 +8,6 @@ import com.duwna.biblo.entities.items.MessageItem
 import com.duwna.biblo.repositories.ChatRepository
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.Event
-import com.duwna.biblo.ui.base.EventObserver
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.utils.format
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -53,7 +50,7 @@ class ChatViewModel(private val groupItem: GroupItem) : BaseViewModel<ChatState>
         if (currentState.imgUri == null && text.isBlank()) return
         launchSafety {
             repository.insertMessage(text, currentState.imgUri)
-            postUpdateState { copy(imgUri = null, messageSentEvent = Event(Unit)) }
+            postUpdateState { copy(imgUri = null, onMessageSent = Event(Unit)) }
         }
     }
 
@@ -65,7 +62,7 @@ class ChatViewModel(private val groupItem: GroupItem) : BaseViewModel<ChatState>
 data class ChatState(
     val messages: List<MessageItem> = emptyList(),
     val imgUri: Uri? = null,
-    val messageSentEvent: Event<Unit>? = null,
+    val onMessageSent: Event<Unit>? = null,
     val showNoMessagesText: Boolean = false
 ) : IViewModelState
 

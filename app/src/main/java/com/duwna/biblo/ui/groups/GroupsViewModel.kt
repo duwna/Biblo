@@ -27,14 +27,6 @@ class GroupsViewModel : BaseViewModel<GroupsViewModelState>(
             else postUpdateState { copy(groups = groupItems, showNoGroupsText = false) }
         }
     }
-
-
-    fun deleteGroup(id: String) {
-        launchSafety {
-            repository.deleteGroup(id)
-            loadGroups()
-        }
-    }
 }
 
 

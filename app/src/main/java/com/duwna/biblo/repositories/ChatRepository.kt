@@ -48,7 +48,7 @@ class ChatRepository(idGroup: String) : BaseRepository() {
                 val list = querySnapshot?.documents?.map {
                     it.toObject<Message>()!!.apply { id = it.id }
                 }!!
-                offer(list)
+                trySend(list)
             }
 
         awaitClose {
