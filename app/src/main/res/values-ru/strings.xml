@@ -67,6 +67,8 @@
     <string name="label_profile">Профиль</string>
     <string name="label_permission_required">Требуется разрешение</string>
     <string name="label_open_settings">Открыть настройки</string>
+    <string name="label_take_from_gallery">Выбрать из галереи</string>
+    <string name="label_take_from_camera">Сделать снимок</string>
 
     <string name="message_internet_error">Отсутствует подключение к интернету…</string>
     <string name="message_data_error">Произошла ошибка загрузки данных…</string>

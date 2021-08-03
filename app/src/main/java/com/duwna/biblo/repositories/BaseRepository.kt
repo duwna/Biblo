@@ -11,6 +11,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import id.zelory.compressor.Compressor
+import id.zelory.compressor.constraint.default
+import id.zelory.compressor.constraint.resolution
 import kotlinx.coroutines.tasks.await
 
 
@@ -35,11 +37,22 @@ abstract class BaseRepository {
             .build()
     }
 
-    protected suspend fun uploadImage(path: String, name: String, imgUri: Uri): String {
+    protected suspend fun uploadImage(
+        path: String,
+        name: String,
+        imgUri: Uri,
+        resolution: Resolution = Resolution.LOW
+    ): String {
 
         val ctx = App.appContext
         val oldFile = imgUri.toFile(ctx)
-        val newFile = Compressor.compress(ctx, oldFile)
+
+        val newFile = Compressor.compress(ctx, oldFile) {
+            when (resolution) {
+                Resolution.LOW -> resolution(100, 100)
+                Resolution.DEFAULT -> default()
+            }
+        }
 
         val ref = storage
             .child(path)
@@ -53,5 +66,7 @@ abstract class BaseRepository {
     protected suspend fun deleteImage(path: String, name: String) {
         storage.child(path).child(name).delete().await()
     }
+
+    enum class Resolution { LOW, DEFAULT }
 }
 

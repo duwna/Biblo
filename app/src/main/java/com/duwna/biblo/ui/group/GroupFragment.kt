@@ -40,10 +40,9 @@ class GroupFragment : Fragment() {
         }.attach()
     }
 
-    override fun onResume() {
-        super.onResume()
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
         (activity as MainActivity).toolbar.title = args.groupItem.name
-
     }
 }
 

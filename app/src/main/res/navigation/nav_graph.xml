@@ -132,4 +132,12 @@
         android:id="@+id/navigation_profile"
         android:name="com.duwna.biblo.ui.auth.profile.ProfileFragment"
         android:label="@string/label_edit_profile" />
+    <dialog
+        tools:layout="@layout/dialog_image_action"
+        android:id="@+id/navigation_image_action_dialog"
+        android:name="com.duwna.biblo.ui.dialogs.ImageActionDialog">
+        <argument
+            android:name="has_image"
+            app:argType="boolean" />
+    </dialog>
 </navigation>

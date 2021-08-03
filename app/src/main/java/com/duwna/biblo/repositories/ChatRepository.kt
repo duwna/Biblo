@@ -26,7 +26,7 @@ class ChatRepository(idGroup: String) : BaseRepository() {
             .id
 
         imgUri?.let {
-            val imgUrl = uploadImage("messages", id, it)
+            val imgUrl = uploadImage("messages", id, it, Resolution.DEFAULT)
             reference.document(id).update("imgUrl", imgUrl)
         }
     }

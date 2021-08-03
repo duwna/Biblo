@@ -66,6 +66,8 @@
     <string name="label_profile">Profile</string>
     <string name="label_permission_required">Permission required</string>
     <string name="label_open_settings">Open settings</string>
+    <string name="label_take_from_gallery">Take from gallery</string>
+    <string name="label_take_from_camera">Take from camera</string>
 
     <string name="message_internet_error">No internet connection…</string>
     <string name="message_data_error">Error loading data…</string>

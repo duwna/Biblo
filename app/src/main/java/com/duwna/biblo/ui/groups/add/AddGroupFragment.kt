@@ -1,11 +1,12 @@
 package com.duwna.biblo.ui.groups.add
 
-import android.Manifest
 import android.net.Uri
+import android.os.Bundle
 import android.view.inputmethod.EditorInfo
 import androidx.appcompat.widget.PopupMenu
 import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -15,7 +16,10 @@ import com.duwna.biblo.entities.items.AddMemberItem
 import com.duwna.biblo.ui.base.BaseFragment
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.ui.custom.MemberView
+import com.duwna.biblo.ui.dialogs.ImageActionDialog
+import com.duwna.biblo.ui.dialogs.ImageActionDialog.Companion.showImageActionDialog
 import com.duwna.biblo.utils.hideKeyBoard
+import com.duwna.biblo.utils.tryOrNull
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_add_group.*
 import kotlinx.android.synthetic.main.fragment_add_group.container
@@ -30,20 +34,13 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
         AddGroupViewModelFactory(args.groupItem)
     }
 
-    private val groupAvatarPermissionResult = registerPermissionResult {
-        groupAvatarPickResult.launch("image/*")
-    }
-
-    private val memberAvatarPermissionResult = registerPermissionResult {
-        memberAvatarPickResult.launch("image/*")
-    }
-
-    private val groupAvatarPickResult = registerImagePickResult { uri ->
-        viewModel.setGroupImageUri(uri)
-    }
-
-    private val memberAvatarPickResult = registerImagePickResult { uri ->
-        viewModel.setMemberImageUri(uri)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setFragmentResultListener(ImageActionDialog.IMAGE_ACTIONS_KEY) { _, bundle ->
+            val result = bundle[ImageActionDialog.SELECT_ACTION_KEY] as? String
+            if (result == ImageActionDialog.DELETE_ACTION_KEY) viewModel.setImageUri(null)
+            else viewModel.setImageUri(tryOrNull { Uri.parse(result) })
+        }
     }
 
     override fun setupViews() {
@@ -62,11 +59,16 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
         }
 
         iv_avatar.setOnClickListener {
-            groupAvatarPermissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            val hasAvatar =
+                viewModel.currentState.groupAvatarUri != null || args.groupItem?.avatarUrl != null
+            viewModel.setImageAction(AddGroupState.ImageAction.GROUP_AVATAR)
+            findNavController().showImageActionDialog(hasAvatar)
         }
 
         iv_member_avatar.setOnClickListener {
-            memberAvatarPermissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            val hasAvatar = viewModel.currentState.memberAvatarUri != null
+            viewModel.setImageAction(AddGroupState.ImageAction.MEMBER_AVATAR)
+            findNavController().showImageActionDialog(hasAvatar)
         }
 
         iv_avatar.isAvatarMode = true
@@ -80,11 +82,15 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
 
         //edit group mode
         args.groupItem?.let { groupItem ->
-            root.toolbar.title = getString(R.string.label_edit_group)
             et_group_name.setText(groupItem.name)
             setupCurrency(groupItem.currency)
             btn_create_group.setText(R.string.btn_save)
         }
+    }
+
+    override fun onViewStateRestored(savedInstanceState: Bundle?) {
+        super.onViewStateRestored(savedInstanceState)
+        if (args.groupItem != null) root.toolbar.title = getString(R.string.label_edit_group)
     }
 
     override fun bindState(state: IViewModelState) {
@@ -92,7 +98,7 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
 
         setupSearchMode(state.isSearchMode)
         setupMembers(state.members)
-        setupAvatars(state.groupAvatarUri, state.memberAvatarUri)
+        setupAvatars(state.groupAvatarUri, state.memberAvatarUri, state.clearGroupAvatar)
 
         container.isVisible = state.showViews
 
@@ -111,10 +117,16 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
         viewModel.createGroup(name, currency)
     }
 
-    private fun setupAvatars(groupAvatarUri: Uri?, memberAvatarUri: Uri?) {
+    private fun setupAvatars(
+        groupAvatarUri: Uri?,
+        memberAvatarUri: Uri?,
+        clearGroupAvatar: Boolean
+    ) {
         when {
             groupAvatarUri != null -> Glide.with(this)
                 .load(groupAvatarUri).into(iv_avatar)
+
+            clearGroupAvatar -> iv_avatar.setImageResource(R.drawable.ic_baseline_supervised_user_circle_24)
 
             args.groupItem?.avatarUrl != null -> Glide.with(this)
                 .load(args.groupItem?.avatarUrl).into(iv_avatar)

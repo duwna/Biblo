@@ -65,7 +65,7 @@ class AddGroupViewModel(private val groupItem: GroupItem?) : BaseViewModel<AddGr
             }
         } else {
             updateList { add(AddMemberItem(name, currentState.memberAvatarUri)) }
-            setMemberImageUri(null)
+            updateState { copy(memberAvatarUri = null) }
         }
     }
 
@@ -77,7 +77,7 @@ class AddGroupViewModel(private val groupItem: GroupItem?) : BaseViewModel<AddGr
         }
 
         updateState { copy(showViews = false) }
-        launchSafety(onError = { updateState { copy(showViews = true) } }) {
+        launchSafety(onError = { postUpdateState { copy(showViews = true) } }) {
             showLoading()
             val users = currentState.members.map {
                 User(name = it.name, avatarUri = it.avatarUri, idUser = it.id)
@@ -87,7 +87,7 @@ class AddGroupViewModel(private val groupItem: GroupItem?) : BaseViewModel<AddGr
                 groupCurrency,
                 currentState.groupAvatarUri,
                 users,
-                groupItem
+                if (currentState.clearGroupAvatar) groupItem?.copy(avatarUrl = null) else groupItem
             )
             postUpdateState { copy(onGroupAdded = Event(Unit)) }
         }
@@ -114,16 +114,27 @@ class AddGroupViewModel(private val groupItem: GroupItem?) : BaseViewModel<AddGr
         else -> true
     }
 
-    fun setGroupImageUri(uri: Uri?) {
-        updateState { copy(groupAvatarUri = uri) }
-    }
-
-    fun setMemberImageUri(uri: Uri?) {
-        updateState { copy(memberAvatarUri = uri) }
+    fun setImageUri(uri: Uri?) {
+        when (currentState.imageAction) {
+            AddGroupState.ImageAction.GROUP_AVATAR -> {
+                updateState { copy(groupAvatarUri = uri, clearGroupAvatar = true) }
+            }
+            AddGroupState.ImageAction.MEMBER_AVATAR -> {
+                updateState { copy(memberAvatarUri = uri) }
+            }
+        }
     }
 
     fun handleSearchMode() {
         updateState { copy(isSearchMode = !currentState.isSearchMode) }
+    }
+
+    fun setImageAction(imageAction: AddGroupState.ImageAction) {
+        updateState { copy(imageAction = imageAction) }
+    }
+
+    fun clearGroupAvatar() {
+        updateState { copy(clearGroupAvatar = true) }
     }
 
     private fun updateList(block: MutableList<AddMemberItem>.() -> Unit) {
@@ -149,13 +160,18 @@ class AddGroupViewModel(private val groupItem: GroupItem?) : BaseViewModel<AddGr
 }
 
 data class AddGroupState(
-    val groupAvatarUri: Uri? = null,
-    val isSearchMode: Boolean = false,
     val members: List<AddMemberItem> = emptyList(),
+    val groupAvatarUri: Uri? = null,
     val memberAvatarUri: Uri? = null,
+    val isSearchMode: Boolean = false,
+    val showViews: Boolean = true,
     val onGroupAdded: Event<Unit>? = null,
-    val showViews: Boolean = true
-) : IViewModelState
+    val imageAction: ImageAction? = null,
+    val clearGroupAvatar: Boolean = false
+) : IViewModelState {
+    // which image to change after activity result callback
+    enum class ImageAction { GROUP_AVATAR, MEMBER_AVATAR }
+}
 
 class AddGroupViewModelFactory(private val groupItem: GroupItem?) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {

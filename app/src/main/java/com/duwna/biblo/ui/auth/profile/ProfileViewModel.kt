@@ -34,6 +34,11 @@ class ProfileViewModel : BaseViewModel<ProfileState>(ProfileState()) {
         }
     }
 
+    fun deleteAvatar() {
+        setImageUri(null)
+        updateState { copy(user = currentState.user?.copy(avatarUrl = null)) }
+    }
+
     fun signOut() = repository.signOut()
 }
 

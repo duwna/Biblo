@@ -4,10 +4,13 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
+import android.os.Environment
 import android.provider.OpenableColumns
 import android.util.Log
 import java.io.*
 import java.text.DecimalFormat
+import java.text.SimpleDateFormat
+import java.util.*
 import kotlin.math.pow
 
 
@@ -26,10 +29,8 @@ object FileUtil {
 
     fun Uri.toFile(context: Context): File {
         val inputStream= context.contentResolver.openInputStream(this)!!
-        val fileName = getFileName(context, this)
-        val splitName = splitFileName(fileName)
-        var tempFile = File.createTempFile(splitName[0], splitName[1])
-        tempFile = rename(tempFile, fileName)
+        val timestamp = SimpleDateFormat("HHmmss", Locale.US).format(Date())
+        val tempFile = File.createTempFile("JPEG_$timestamp", ".jpg")
         tempFile.deleteOnExit()
         var out: FileOutputStream? = null
         try {
@@ -78,20 +79,6 @@ object FileUtil {
         }
         return result
     }
-
-    private fun rename(file: File, newName: String?): File {
-        val newFile = File(file.parent, newName)
-        if (newFile != file) {
-            if (newFile.exists() && newFile.delete()) {
-                Log.d("FileUtil", "Delete old $newName file")
-            }
-            if (file.renameTo(newFile)) {
-                Log.d("FileUtil", "Rename file to $newName")
-            }
-        }
-        return newFile
-    }
-
 
     private fun copy(input: InputStream, output: OutputStream?): Long {
         var count: Long = 0

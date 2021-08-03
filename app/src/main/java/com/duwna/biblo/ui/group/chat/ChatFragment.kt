@@ -1,9 +1,12 @@
 package com.duwna.biblo.ui.group.chat
 
-import android.Manifest
+import android.net.Uri
+import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.duwna.biblo.R
@@ -11,6 +14,9 @@ import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.entities.items.MessageItem
 import com.duwna.biblo.ui.base.BaseFragment
 import com.duwna.biblo.ui.base.IViewModelState
+import com.duwna.biblo.ui.dialogs.ImageActionDialog
+import com.duwna.biblo.ui.dialogs.ImageActionDialog.Companion.showImageActionDialog
+import com.duwna.biblo.utils.tryOrNull
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_chat.*
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,16 +27,17 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
     private lateinit var groupItem: GroupItem
     override val layout: Int = R.layout.fragment_chat
 
-    private val permissionResult = registerPermissionResult {
-        imagePickResult.launch("image/*")
-    }
-
-    private val imagePickResult = registerImagePickResult { uri ->
-        viewModel.setImageUri(uri)
-    }
-
     override val viewModel: ChatViewModel by viewModels {
         ChatViewModelFactory(groupItem)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setFragmentResultListener(ImageActionDialog.IMAGE_ACTIONS_KEY) { _, bundle ->
+            val result = bundle[ImageActionDialog.SELECT_ACTION_KEY] as? String
+            if (result == ImageActionDialog.DELETE_ACTION_KEY) viewModel.setImageUri(null)
+            else viewModel.setImageUri(tryOrNull { Uri.parse(result) })
+        }
     }
 
     private val chatAdapter = ChatAdapter(
@@ -48,8 +55,8 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         }
 
         iv_add_img.setOnClickListener {
-            if (viewModel.currentState.imgUri != null) viewModel.setImageUri(null)
-            else permissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            val hasImage = viewModel.currentState.imageUri != null
+            findNavController().showImageActionDialog(hasImage)
         }
 
         iv_send.setOnClickListener {
@@ -68,8 +75,8 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
             tv_no_messages.alpha = 0f
         }
 
-        state.imgUri?.let { Glide.with(this).load(it).into(iv_add_img) }
-            ?: run { iv_add_img.setImageResource(R.drawable.ic_baseline_add_photo_alternate_24) }
+        if (state.imageUri != null) Glide.with(this).load(state.imageUri).into(iv_add_img)
+        else iv_add_img.setImageResource(R.drawable.ic_baseline_add_photo_alternate_24)
 
         state.onMessageSent?.setListener {
             rv_messages.smoothScrollToPosition(chatAdapter.itemCount)

@@ -9,7 +9,7 @@ import com.duwna.biblo.repositories.ChatRepository
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.Event
 import com.duwna.biblo.ui.base.IViewModelState
-import com.duwna.biblo.utils.format
+import com.duwna.biblo.utils.shortFormat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 
@@ -32,7 +32,7 @@ class ChatViewModel(private val groupItem: GroupItem) : BaseViewModel<ChatState>
                     member.name,
                     member.avatarUrl,
                     message.text,
-                    message.timestamp.format(),
+                    message.timestamp.shortFormat(),
                     message.imgUrl
                 )
             }
@@ -43,14 +43,14 @@ class ChatViewModel(private val groupItem: GroupItem) : BaseViewModel<ChatState>
     }
 
     fun setImageUri(uri: Uri?) {
-        updateState { copy(imgUri = uri) }
+        updateState { copy(imageUri = uri) }
     }
 
     fun sendMessage(text: String) {
-        if (currentState.imgUri == null && text.isBlank()) return
+        if (currentState.imageUri == null && text.isBlank()) return
         launchSafety {
-            repository.insertMessage(text, currentState.imgUri)
-            postUpdateState { copy(imgUri = null, onMessageSent = Event(Unit)) }
+            repository.insertMessage(text, currentState.imageUri)
+            postUpdateState { copy(imageUri = null, onMessageSent = Event(Unit)) }
         }
     }
 
@@ -61,7 +61,7 @@ class ChatViewModel(private val groupItem: GroupItem) : BaseViewModel<ChatState>
 
 data class ChatState(
     val messages: List<MessageItem> = emptyList(),
-    val imgUri: Uri? = null,
+    val imageUri: Uri? = null,
     val onMessageSent: Event<Unit>? = null,
     val showNoMessagesText: Boolean = false
 ) : IViewModelState

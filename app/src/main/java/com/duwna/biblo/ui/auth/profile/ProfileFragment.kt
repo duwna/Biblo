@@ -1,29 +1,36 @@
 package com.duwna.biblo.ui.auth.profile
 
-import android.Manifest
+import android.net.Uri
+import android.os.Bundle
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.isVisible
 import androidx.core.widget.doOnTextChanged
+import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.duwna.biblo.R
 import com.duwna.biblo.ui.base.BaseFragment
 import com.duwna.biblo.ui.base.IViewModelState
+import com.duwna.biblo.ui.dialogs.ImageActionDialog
+import com.duwna.biblo.ui.dialogs.ImageActionDialog.Companion.showImageActionDialog
 import com.duwna.biblo.utils.toInitials
+import com.duwna.biblo.utils.tryOrNull
 import kotlinx.android.synthetic.main.fragment_profile.*
+import java.util.*
 
 class ProfileFragment : BaseFragment<ProfileViewModel>() {
 
     override val viewModel: ProfileViewModel by viewModels()
     override val layout: Int = R.layout.fragment_profile
 
-    private val permissionResult = registerPermissionResult {
-        imagePickResult.launch("image/*")
-    }
-
-    private val imagePickResult = registerImagePickResult { uri ->
-        viewModel.setImageUri(uri)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setFragmentResultListener(ImageActionDialog.IMAGE_ACTIONS_KEY) { _, bundle ->
+            val result = bundle[ImageActionDialog.SELECT_ACTION_KEY] as? String
+            if (result == ImageActionDialog.DELETE_ACTION_KEY) viewModel.setImageUri(null)
+            else viewModel.setImageUri(tryOrNull { Uri.parse(result) })
+        }
     }
 
     override fun setupViews() {
@@ -33,7 +40,9 @@ class ProfileFragment : BaseFragment<ProfileViewModel>() {
         }
 
         iv_avatar.setOnClickListener {
-            permissionResult.launch(Manifest.permission.READ_EXTERNAL_STORAGE)
+            val hasImage =
+                viewModel.currentState.user?.avatarUrl != null || viewModel.currentState.tmpAvatarUri != null
+            findNavController().showImageActionDialog(hasImage)
         }
 
         btn_save.setOnClickListener {

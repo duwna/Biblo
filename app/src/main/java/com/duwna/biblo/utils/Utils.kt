@@ -9,6 +9,23 @@ fun Date.format(pattern: String = "HH:mm, dd.MM"): String {
     return dateFormat.format(this)
 }
 
+fun Date.shortFormat(): String {
+    val pattern  = if(this.isSameDay(Date())) "HH:mm" else "HH:mm, dd.MM"
+    val dateFormat = SimpleDateFormat(pattern,Locale.getDefault())
+    return dateFormat.format(this)
+}
+
+const val SECOND = 1000L
+const val MINUTE = 60 * SECOND
+const val HOUR = 60 * MINUTE
+const val DAY = 24 * HOUR
+
+fun Date.isSameDay(date:Date):Boolean{
+    val day1 = this.time/DAY
+    val day2 = date.time/DAY
+    return day1 == day2
+}
+
 fun Any.log(msg: Any?, tag: String = this::class.java.simpleName) {
     Log.e(tag, msg.toString())
 }
@@ -30,6 +47,3 @@ fun <T> tryOrNull(block: () -> T?): T? = try {
 } catch (t: Throwable) {
     null
 }
-
-const val PERMISSION_REQUEST_CODE = 200
-const val PICK_IMAGE_CODE = 100
