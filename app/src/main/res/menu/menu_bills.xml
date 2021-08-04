@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.duwna.biblo.MainActivity">
     <item
-        android:id="@+id/action_send_email"
+        android:id="@+id/action_send_statistics"
         android:title="@string/label_send_statistics"
         app:showAsAction="never" />
     <item

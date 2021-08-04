@@ -90,6 +90,7 @@
     <string name="message_user_added">User has been added!</string>
     <string name="message_need_open_settings">You need to grant permission to access images in settings</string>
     <string name="message_delete_group">Are you sure you want to delete the group?</string>
+    <string name="share_statistics_subject">Biblo statistics</string>
 
 
     <string-array name="currency">

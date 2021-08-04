@@ -91,6 +91,7 @@
     <string name="message_user_added">Пользователь добавлен!</string>
     <string name="message_need_open_settings">Необходимо предоставить разрешение на доступ к изображениям в настройках</string>
     <string name="message_delete_group">Вы действительно хотите удалить группу?</string>
+    <string name="share_statistics_subject">Biblo статистика</string>
 
     <string-array name="currency">
         <item>₽</item>

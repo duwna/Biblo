@@ -1,9 +1,7 @@
 package com.duwna.biblo.ui.group.bills
 
-import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
-import android.net.Uri
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -18,7 +16,6 @@ import com.duwna.biblo.entities.items.BillsViewItem
 import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.ui.base.BaseFragment
 import com.duwna.biblo.ui.base.IViewModelState
-import com.duwna.biblo.utils.format
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_bills.*
 
@@ -26,7 +23,6 @@ import kotlinx.android.synthetic.main.fragment_bills.*
 class BillsFragment : BaseFragment<BillsViewModel>() {
 
     override val layout: Int = R.layout.fragment_bills
-
     private lateinit var groupItem: GroupItem
 
     override val viewModel: BillsViewModel by viewModels {
@@ -34,25 +30,11 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
         BillsViewModelFactory(groupItem)
     }
 
-    private val billsAdapter = BillsAdapter(
-        onItemClicked = { billItem -> showDeleteBillSnackbar(billItem) }
-    )
-
-    private fun showDeleteBillSnackbar(billItem: BillsViewItem.Bill) {
-        Snackbar.make(
-            requireView(),
-            "${requireContext().getString(R.string.label_delete_bill)} \"${billItem.title}\"?",
-            Snackbar.LENGTH_SHORT
-        ).apply {
-            setAction(requireContext().getString(R.string.label_delete)) {
-                viewModel.deleteBill(billItem.id)
-            }
-            show()
-        }
+    private val billsAdapter: BillsAdapter by lazy {
+        BillsAdapter(onItemClicked = { billItem -> showDeleteBillSnackbar(billItem) })
     }
 
     override fun setupViews() {
-
         rv_bills.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = billsAdapter
@@ -83,11 +65,10 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
         inflater.inflate(R.menu.menu_bills, menu)
     }
 
-
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_send_email -> {
-                sendEmail()
+            R.id.action_send_statistics -> {
+                sendStatistics()
                 true
             }
             R.id.action_edit_group -> {
@@ -99,6 +80,19 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
                 true
             }
             else -> super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun showDeleteBillSnackbar(billItem: BillsViewItem.Bill) {
+        Snackbar.make(
+            requireView(),
+            "${requireContext().getString(R.string.label_delete_bill)} \"${billItem.title}\"?",
+            Snackbar.LENGTH_SHORT
+        ).apply {
+            setAction(requireContext().getString(R.string.label_delete)) {
+                viewModel.deleteBill(billItem.id)
+            }
+            show()
         }
     }
 
@@ -141,56 +135,21 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
         )
     }
 
-    @SuppressLint("IntentReset")
-    private fun sendEmail() {
-        val emailIntent = Intent(
-            Intent.ACTION_SENDTO, Uri.fromParts(
-                "mailto", "", null
-            )
+    private fun sendStatistics() {
+        val message = viewModel.generateStatisticsMessage(
+            labelGroup = getString(R.string.label_group),
+            labelCurrency = getString(R.string.label_currency),
+            labelStatistics = getString(R.string.label_statistics),
+            labelWhoPayed = getString(R.string.label_who_payed),
+            labelForWhom = getString(R.string.label_for_whom),
+            labelAllBills = getString(R.string.label_all_bills),
         )
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Biblo statistics")
-        emailIntent.putExtra(Intent.EXTRA_TEXT, generateEmailMessage())
-        startActivity(Intent.createChooser(emailIntent, getString(R.string.label_send_by_email)))
-    }
-
-    private fun generateEmailMessage() = buildString {
-        viewModel.currentState.bills.forEach { billItem ->
-            when (billItem) {
-                is BillsViewItem.Header -> {
-                    append(
-                        "${getString(R.string.label_group)}: ${billItem.name}\n${getString(R.string.label_currency)}: ${billItem.currency}\n${
-                            getString(
-                                R.string.label_statistics
-                            )
-                        }\n${getString(R.string.label_who_payed)}:"
-                    )
-                    billItem.members.filter { it.sum > 0 }.forEach { member ->
-                        append("\n${member.name}: ${member.sum.format()}")
-                    }
-                    append("\n${getString(R.string.label_for_whom)}:")
-                    billItem.members.filter { it.sum < 0 }.forEach { member ->
-                        append("\n${member.name}: ${member.sum.format()}")
-                    }
-                    append("\n\n${getString(R.string.label_all_bills)}")
-                }
-                is BillsViewItem.Bill -> {
-                    append(
-                        "\n\n${billItem.title}\n${billItem.description}\n${billItem.timestamp}\n${
-                            getString(
-                                R.string.label_who_payed
-                            )
-                        }:"
-                    )
-                    billItem.payers.forEach { member ->
-                        append("\n${member.name}: ${member.sum.format()}")
-                    }
-                    append("\n${getString(R.string.label_for_whom)}")
-                    billItem.debtors.forEach { member ->
-                        append("\n${member.name}: ${member.sum.format()}")
-                    }
-                }
-            }
+        val intent = Intent(Intent.ACTION_SEND).apply {
+            type = "text/plain"
+            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_statistics_subject))
+            putExtra(Intent.EXTRA_TEXT, message)
         }
+        startActivity(Intent.createChooser(intent, getString(R.string.label_send_by_email)))
     }
 
     companion object {

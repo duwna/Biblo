@@ -24,7 +24,12 @@ class BillsViewModel(private val groupItem: GroupItem) : BaseViewModel<BillsStat
     private suspend fun subscribeOnBillsList() {
         showLoading()
         repository.subscribeOnBills().collect { bills ->
-            if (bills.isEmpty()) postUpdateState { copy(bills = emptyList(), showNoBillsText = true) }
+            if (bills.isEmpty()) postUpdateState {
+                copy(
+                    bills = emptyList(),
+                    showNoBillsText = true
+                )
+            }
             else postUpdateState {
                 copy(bills = bills.toBillViewItemList(), showNoBillsText = false)
             }
@@ -93,6 +98,55 @@ class BillsViewModel(private val groupItem: GroupItem) : BaseViewModel<BillsStat
             postUpdateState { copy(onGroupDeleted = Event(Unit)) }
         }
     }
+
+    fun generateStatisticsMessage(
+        labelGroup: String,
+        labelCurrency: String,
+        labelStatistics: String,
+        labelWhoPayed: String,
+        labelForWhom: String,
+        labelAllBills: String
+    ): String = buildString {
+        currentState.bills.forEach { billItem ->
+            when (billItem) {
+                is BillsViewItem.Header -> {
+                    append(
+                        """
+                        $labelGroup: ${billItem.name}
+                        $labelCurrency: ${billItem.currency}
+                        $labelStatistics:
+                        
+                        $labelWhoPayed
+                        """.trimIndent()
+                    )
+                    billItem.members.filter { it.sum > 0 }.forEach { member ->
+                        append("\n${member.name}: ${member.sum.format()}")
+                    }
+                    append("\n\n$labelForWhom:")
+                    billItem.members.filter { it.sum < 0 }.forEach { member ->
+                        append("\n${member.name}: ${member.sum.format()}")
+                    }
+                    append("\n_____________________")
+                    append("\n$labelAllBills\n")
+                }
+                is BillsViewItem.Bill -> {
+                    append("\n${billItem.title}")
+                    if (billItem.description.isNotBlank()) append("\n${billItem.description}")
+                    append("\n${billItem.timestamp}")
+                    append("\n\n$labelWhoPayed")
+                    billItem.payers.forEach { member ->
+                        append("\n${member.name}: ${member.sum.format()}")
+                    }
+                    append("\n\n$labelForWhom")
+                    billItem.debtors.forEach { member ->
+                        append("\n${member.name}: ${member.sum.format()}")
+                    }
+                    append("\n_____________________")
+                }
+            }
+        }
+    }
+
 }
 
 data class BillsState(
