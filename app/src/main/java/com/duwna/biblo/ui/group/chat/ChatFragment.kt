@@ -1,7 +1,6 @@
 package com.duwna.biblo.ui.group.chat
 
 import android.net.Uri
-import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -14,21 +13,17 @@ import com.duwna.biblo.entities.items.MessageItem
 import com.duwna.biblo.ui.base.BaseFragment
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.ui.dialogs.ImageActionDialog.Companion.showImageActionDialog
+import com.duwna.biblo.utils.tryOrNull
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_chat.*
 
 class ChatFragment : BaseFragment<ChatViewModel>() {
 
-    private lateinit var groupItem: GroupItem
     override val layout: Int = R.layout.fragment_chat
 
     override val viewModel: ChatViewModel by viewModels {
+        val groupItem = arguments?.getSerializable("groupItem") as GroupItem
         ChatViewModelFactory(groupItem)
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        groupItem = arguments?.getSerializable("groupItem") as GroupItem
     }
 
     private val chatAdapter = ChatAdapter(
@@ -43,7 +38,6 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
             }
             adapter = chatAdapter
         }
-
         iv_add_img.setOnClickListener {
             val hasImage = viewModel.currentState.imageUri != null
             findNavController().showImageActionDialog(hasImage)
@@ -93,7 +87,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
     }
 
     fun setImageUri(uri: Uri?) {
-        viewModel.setImageUri(uri)
+        tryOrNull { viewModel.setImageUri(uri) }
     }
 
     companion object {

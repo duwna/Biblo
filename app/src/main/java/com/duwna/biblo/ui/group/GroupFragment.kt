@@ -55,6 +55,7 @@ class GroupFragment : Fragment() {
         }
     }
 
+
     override fun onViewStateRestored(savedInstanceState: Bundle?) {
         super.onViewStateRestored(savedInstanceState)
         (activity as MainActivity).toolbar.title = args.groupItem.name

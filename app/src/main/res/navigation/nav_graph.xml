@@ -120,7 +120,11 @@
     <fragment
         android:id="@+id/navigation_chat"
         android:name="com.duwna.biblo.ui.group.chat.ChatFragment"
-        tools:layout="@layout/fragment_chat" />
+        tools:layout="@layout/fragment_chat" >
+        <argument
+            android:name="group_item"
+            app:argType="com.duwna.biblo.entities.items.GroupItem" />
+    </fragment>
     <fragment
         android:id="@+id/navigation_add_bill"
         android:name="com.duwna.biblo.ui.group.bills.add.AddBillFragment"

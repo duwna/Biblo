@@ -17,7 +17,6 @@ import com.duwna.biblo.ui.dialogs.ImageActionDialog.Companion.showImageActionDia
 import com.duwna.biblo.utils.toInitials
 import com.duwna.biblo.utils.tryOrNull
 import kotlinx.android.synthetic.main.fragment_profile.*
-import java.util.*
 
 class ProfileFragment : BaseFragment<ProfileViewModel>() {
 
@@ -28,7 +27,7 @@ class ProfileFragment : BaseFragment<ProfileViewModel>() {
         super.onCreate(savedInstanceState)
         setFragmentResultListener(ImageActionDialog.IMAGE_ACTIONS_KEY) { _, bundle ->
             val result = bundle[ImageActionDialog.SELECT_ACTION_KEY] as? String
-            if (result == ImageActionDialog.DELETE_ACTION_KEY) viewModel.setImageUri(null)
+            if (result == ImageActionDialog.DELETE_ACTION_KEY) viewModel.deleteAvatar()
             else viewModel.setImageUri(tryOrNull { Uri.parse(result) })
         }
     }
