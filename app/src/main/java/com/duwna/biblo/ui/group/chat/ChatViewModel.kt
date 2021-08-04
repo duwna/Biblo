@@ -13,7 +13,6 @@ import com.duwna.biblo.utils.shortFormat
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 
-@ExperimentalCoroutinesApi
 class ChatViewModel(private val groupItem: GroupItem) : BaseViewModel<ChatState>(ChatState()) {
 
     private val repository = ChatRepository(groupItem.id)
@@ -48,8 +47,10 @@ class ChatViewModel(private val groupItem: GroupItem) : BaseViewModel<ChatState>
 
     fun sendMessage(text: String) {
         if (currentState.imageUri == null && text.isBlank()) return
+        val uri = currentState.imageUri
+        setImageUri(null)
         launchSafety {
-            repository.insertMessage(text, currentState.imageUri)
+            repository.insertMessage(text, uri)
             postUpdateState { copy(imageUri = null, onMessageSent = Event(Unit)) }
         }
     }

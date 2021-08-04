@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
+import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -50,8 +51,12 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
         }
     }
 
-    override fun setupViews() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
         groupItem = arguments?.getSerializable("groupItem") as GroupItem
+    }
+
+    override fun setupViews() {
 
         rv_bills.apply {
             layoutManager = LinearLayoutManager(context)
