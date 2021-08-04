@@ -4,7 +4,6 @@ import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.repositories.GroupsRepository
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.IViewModelState
-import kotlinx.coroutines.delay
 
 class GroupsViewModel : BaseViewModel<GroupsViewModelState>(
     GroupsViewModelState()
@@ -23,7 +22,7 @@ class GroupsViewModel : BaseViewModel<GroupsViewModelState>(
         launchSafety {
             if (currentState.groups.isEmpty()) showLoading()
             val groupItems = repository.loadGroupItems()
-            if (groupItems.isEmpty()) postUpdateState { copy(showNoGroupsText = true) }
+            if (groupItems.isEmpty()) postUpdateState { copy(groups = emptyList(), showNoGroupsText = true) }
             else postUpdateState { copy(groups = groupItems, showNoGroupsText = false) }
         }
     }

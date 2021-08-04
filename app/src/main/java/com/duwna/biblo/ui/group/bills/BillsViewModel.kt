@@ -11,7 +11,6 @@ import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.Event
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.utils.format
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.collect
 
 class BillsViewModel(private val groupItem: GroupItem) : BaseViewModel<BillsState>(BillsState()) {
@@ -25,7 +24,7 @@ class BillsViewModel(private val groupItem: GroupItem) : BaseViewModel<BillsStat
     private suspend fun subscribeOnBillsList() {
         showLoading()
         repository.subscribeOnBills().collect { bills ->
-            if (bills.isEmpty()) postUpdateState { copy(showNoBillsText = true) }
+            if (bills.isEmpty()) postUpdateState { copy(bills = emptyList(), showNoBillsText = true) }
             else postUpdateState {
                 copy(bills = bills.toBillViewItemList(), showNoBillsText = false)
             }

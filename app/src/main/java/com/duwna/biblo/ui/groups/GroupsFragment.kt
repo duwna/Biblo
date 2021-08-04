@@ -26,10 +26,6 @@ class GroupsFragment : BaseFragment<GroupsViewModel>() {
         onItemClicked = { groupItem ->
             val action = GroupsFragmentDirections.actionGroupsToGroup(groupItem)
             findNavController().navigate(action)
-        },
-        onItemLongClicked = { groupItem ->
-            val action = GroupsFragmentDirections.actionGroupsToAddGroup(groupItem)
-            findNavController().navigate(action)
         }
     )
 

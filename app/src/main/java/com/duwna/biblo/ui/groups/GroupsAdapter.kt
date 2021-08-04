@@ -16,7 +16,6 @@ import kotlinx.android.synthetic.main.item_group.view.*
 
 class GroupsAdapter(
     private val onItemClicked: (GroupItem) -> Unit,
-    private val onItemLongClicked: (GroupItem) -> Unit
 ) :
     ListAdapter<GroupItem, GroupViewHolder>(GroupsDiffCallback()) {
 
@@ -27,7 +26,7 @@ class GroupsAdapter(
     }
 
     override fun onBindViewHolder(holder: GroupViewHolder, position: Int) {
-        holder.bind(getItem(position), onItemClicked, onItemLongClicked)
+        holder.bind(getItem(position), onItemClicked)
     }
 
 }
@@ -47,8 +46,7 @@ class GroupViewHolder(
 ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
     fun bind(
         item: GroupItem,
-        onItemClicked: (GroupItem) -> Unit,
-        onItemLongClicked: (GroupItem) -> Unit
+        onItemClicked: (GroupItem) -> Unit
     ) = itemView.run {
 
         tv_title.text = item.name
@@ -71,11 +69,5 @@ class GroupViewHolder(
         }
 
         setOnClickListener { onItemClicked(item) }
-
-        setOnLongClickListener {
-            onItemLongClicked(item)
-            true
-        }
-
     }
 }

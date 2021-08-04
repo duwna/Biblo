@@ -27,7 +27,7 @@ class ProfileFragment : BaseFragment<ProfileViewModel>() {
         super.onCreate(savedInstanceState)
         setFragmentResultListener(ImageActionDialog.IMAGE_ACTIONS_KEY) { _, bundle ->
             val result = bundle[ImageActionDialog.SELECT_ACTION_KEY] as? String
-            if (result == ImageActionDialog.DELETE_ACTION_KEY) viewModel.deleteAvatar()
+            if (result == ImageActionDialog.DELETE_ACTION_KEY) viewModel.setImageUri(null)
             else viewModel.setImageUri(tryOrNull { Uri.parse(result) })
         }
     }

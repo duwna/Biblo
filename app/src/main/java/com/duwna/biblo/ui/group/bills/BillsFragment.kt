@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
-import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
 import android.view.MenuItem
@@ -31,6 +30,7 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
     private lateinit var groupItem: GroupItem
 
     override val viewModel: BillsViewModel by viewModels {
+        groupItem = arguments?.getSerializable("groupItem") as GroupItem
         BillsViewModelFactory(groupItem)
     }
 
@@ -51,11 +51,6 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
         }
     }
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        groupItem = arguments?.getSerializable("groupItem") as GroupItem
-    }
-
     override fun setupViews() {
 
         rv_bills.apply {
@@ -64,18 +59,7 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
         }
 
         fab.setOnClickListener {
-            findNavController().navigate(
-                R.id.navigation_add_bill,
-                bundleOf("groupItem" to groupItem),
-                navOptions {
-                    anim {
-                        enter = R.anim.slide_from_right_to_center
-                        exit = R.anim.slide_from_center_to_left
-                        popEnter = R.anim.slide_from_left_to_center
-                        popExit = R.anim.slide_from_center_to_right
-                    }
-                }
-            )
+            navigateToAddBillScreen()
         }
     }
 
@@ -107,7 +91,7 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
                 true
             }
             R.id.action_edit_group -> {
-                BillsFragmentDirections.actionBillsToAddGroup(groupItem)
+                navigateToEditGroupScreen()
                 true
             }
             R.id.action_delete_group -> {
@@ -125,6 +109,36 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
             .setPositiveButton(R.string.label_delete) { _, _ -> viewModel.deleteGroup() }
             .setNegativeButton(R.string.btn_cancel) { _, _ -> }
             .show()
+    }
+
+    private fun navigateToEditGroupScreen() {
+        findNavController().navigate(
+            R.id.navigation_add_group,
+            bundleOf("group_item" to groupItem),
+            navOptions {
+                anim {
+                    enter = R.anim.slide_from_right_to_center
+                    exit = R.anim.slide_from_center_to_left
+                    popEnter = R.anim.slide_from_left_to_center
+                    popExit = R.anim.slide_from_center_to_right
+                }
+            }
+        )
+    }
+
+    private fun navigateToAddBillScreen() {
+        findNavController().navigate(
+            R.id.navigation_add_bill,
+            bundleOf("groupItem" to groupItem),
+            navOptions {
+                anim {
+                    enter = R.anim.slide_from_right_to_center
+                    exit = R.anim.slide_from_center_to_left
+                    popEnter = R.anim.slide_from_left_to_center
+                    popExit = R.anim.slide_from_center_to_right
+                }
+            }
+        )
     }
 
     @SuppressLint("IntentReset")

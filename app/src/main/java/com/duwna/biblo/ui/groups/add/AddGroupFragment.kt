@@ -103,7 +103,7 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
         container.isVisible = state.showViews
 
         state.onGroupAdded?.setListener {
-            findNavController().popBackStack()
+            findNavController().popBackStack(R.id.navigation_groups, false)
         }
     }
 

@@ -54,8 +54,8 @@ class PagerAdapter(
 
     override fun createFragment(position: Int): Fragment {
         return when (position) {
-            0 -> ChatFragment.newInstance(groupItem)
-            1 -> BillsFragment.newInstance(groupItem)
+            0 -> BillsFragment.newInstance(groupItem)
+            1 -> ChatFragment.newInstance(groupItem)
             else -> throw IllegalArgumentException("No screen on position $position")
         }
     }

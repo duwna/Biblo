@@ -10,7 +10,6 @@ import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.Event
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.utils.shortFormat
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 
 class ChatViewModel(private val groupItem: GroupItem) : BaseViewModel<ChatState>(ChatState()) {
@@ -35,7 +34,7 @@ class ChatViewModel(private val groupItem: GroupItem) : BaseViewModel<ChatState>
                     message.imgUrl
                 )
             }
-            if (messageItems.isEmpty()) postUpdateState { copy(showNoMessagesText = true) }
+            if (messageItems.isEmpty()) postUpdateState { copy(messages = emptyList(), showNoMessagesText = true) }
             else postUpdateState { copy(messages = messageItems, showNoMessagesText = false) }
             hideLoading()
         }

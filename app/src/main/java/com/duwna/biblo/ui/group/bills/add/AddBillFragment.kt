@@ -1,6 +1,7 @@
 package com.duwna.biblo.ui.group.bills.add
 
 import android.app.DatePickerDialog
+import android.os.Bundle
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -18,24 +19,27 @@ import java.util.*
 class AddBillFragment : BaseFragment<AddBillViewModel>() {
 
     override val layout: Int = R.layout.fragment_add_bill
-    private lateinit var groupItem: GroupItem
 
     override val viewModel: AddBillViewModel by viewModels {
-        AddBillViewModelFactory(groupItem)
+        AddBillViewModelFactory(arguments?.getSerializable("groupItem") as GroupItem)
     }
 
-    private val payersAdapter = AddBillAdapter(
-        onCheckBoxClicked = { index -> viewModel.setPayerChecked(index) },
-        onTextChanged = { index, value -> viewModel.setPayerSum(index, value) }
-    )
+    private val payersAdapter: AddBillAdapter by lazy {
+        AddBillAdapter(
+            onCheckBoxClicked = { index -> viewModel.setPayerChecked(index) },
+            onTextChanged = { index, value -> viewModel.setPayerSum(index, value) }
+        )
+    }
 
-    private val debtorsAdapter = AddBillAdapter(
-        onCheckBoxClicked = { index -> viewModel.setDebtorChecked(index) },
-        onTextChanged = { index, value -> viewModel.setDebtorSum(index, value) }
-    )
+    private val debtorsAdapter: AddBillAdapter by lazy {
+        AddBillAdapter(
+            onCheckBoxClicked = { index -> viewModel.setDebtorChecked(index) },
+            onTextChanged = { index, value -> viewModel.setDebtorSum(index, value) }
+        )
+    }
+
 
     override fun setupViews() {
-        groupItem = arguments?.getSerializable("groupItem") as GroupItem
 
         ticker_sum.setCharacterLists(TickerUtils.provideNumberList())
 
