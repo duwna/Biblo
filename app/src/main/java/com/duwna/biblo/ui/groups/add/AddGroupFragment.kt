@@ -80,6 +80,20 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
             requireContext().hideKeyBoard(it)
         }
 
+        et_member_name.setOnEditorActionListener { view, action, _ ->
+            if (action == EditorInfo.IME_ACTION_DONE) {
+                viewModel.insertMember(et_member_name.text.toString())
+                if (!viewModel.currentState.isSearchMode) et_member_name.setText("")
+                requireContext().hideKeyBoard(view)
+            }
+            true
+        }
+
+        et_group_name.setOnEditorActionListener { view, action, _ ->
+                requireContext().hideKeyBoard(view)
+            true
+        }
+
         //edit group mode
         args.groupItem?.let { groupItem ->
             et_group_name.setText(groupItem.name)

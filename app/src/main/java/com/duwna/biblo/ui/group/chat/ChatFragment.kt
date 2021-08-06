@@ -2,12 +2,14 @@ package com.duwna.biblo.ui.group.chat
 
 import android.net.Uri
 import android.os.Bundle
+import android.util.DisplayMetrics
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.LinearSmoothScroller
 import com.bumptech.glide.Glide
 import com.duwna.biblo.R
 import com.duwna.biblo.entities.items.GroupItem
@@ -20,6 +22,7 @@ import com.duwna.biblo.utils.tryOrNull
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_chat.*
 
+
 class ChatFragment : BaseFragment<ChatViewModel>() {
 
     override val layout: Int = R.layout.fragment_chat
@@ -29,9 +32,16 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         ChatViewModelFactory(groupItem)
     }
 
-    private val chatAdapter = ChatAdapter(
-        onItemLongClicked = { showDeleteMessageSnackbar(it) }
-    )
+    private val chatAdapter: ChatAdapter by lazy {
+        ChatAdapter(onItemLongClicked = { showDeleteMessageSnackbar(it) })
+    }
+
+    private val chatLayoutManager = LinearLayoutManager(context).apply {
+        stackFromEnd = true
+    }
+
+    lateinit var linearSmoothScroller: LinearSmoothScroller
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -45,11 +55,16 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
     override fun setupViews() {
 
         rv_messages.apply {
-            layoutManager = LinearLayoutManager(context).apply {
-                stackFromEnd = true
-            }
+            layoutManager = chatLayoutManager
             adapter = chatAdapter
         }
+
+        linearSmoothScroller = object : LinearSmoothScroller(context) {
+            override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
+                return 300f / displayMetrics.densityDpi
+            }
+        }
+
         iv_add_img.setOnClickListener {
             val hasImage = viewModel.currentState.imageUri != null
             findNavController().showImageActionDialog(hasImage)
@@ -75,12 +90,20 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         else iv_add_img.setImageResource(R.drawable.ic_baseline_add_photo_alternate_24)
 
 
+        chatAdapter.submitList(state.messages)
+
         state.onMessageSent?.setListener {
-            rv_messages.smoothScrollToPosition(chatAdapter.itemCount)
+            // if list is not scrolled up -> slow scroll to end
+            // else fast scroll
+            if (chatAdapter.itemCount - chatLayoutManager.findLastVisibleItemPosition() < 5) {
+                linearSmoothScroller.targetPosition = chatAdapter.itemCount
+                chatLayoutManager.startSmoothScroll(linearSmoothScroller)
+            } else {
+                rv_messages.smoothScrollToPosition(chatAdapter.itemCount)
+            }
+
             et_message.text.clear()
         }
-
-        chatAdapter.submitList(state.messages)
     }
 
     private fun showDeleteMessageSnackbar(messageItem: MessageItem) {

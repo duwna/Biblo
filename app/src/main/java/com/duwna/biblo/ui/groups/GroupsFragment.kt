@@ -56,6 +56,10 @@ class GroupsFragment : BaseFragment<GroupsViewModel>() {
         }
 
         groupsAdapter.submitList(state.groups)
+
+        state.onNewGroupsLoaded?.setListener {
+            rv_groups.smoothScrollToPosition(0)
+        }
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

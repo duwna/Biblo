@@ -29,6 +29,7 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_member_name"
                 android:layout_width="match_parent"
+                android:inputType="textPersonName"
                 android:layout_height="wrap_content"
                 android:imeOptions="actionDone"
                 android:hint="@string/label_group_name"
@@ -53,7 +54,8 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_group_name"
                 android:layout_width="match_parent"
-                android:imeOptions="actionNext"
+                android:inputType="text"
+                android:imeOptions="actionDone"
                 android:layout_height="wrap_content"
                 android:hint="@string/label_group_name"
                 android:maxLines="1" />
