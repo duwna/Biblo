@@ -3,6 +3,7 @@ package com.duwna.biblo.utils
 import android.view.View
 import android.view.ViewAnimationUtils
 import android.view.ViewGroup
+import android.widget.RadioButton
 import androidx.core.animation.doOnEnd
 import androidx.core.animation.doOnStart
 import androidx.core.view.*
@@ -56,4 +57,10 @@ fun View.setPaddingOptionally(
 
 fun View.showSnackBar(message: String, length: Int = Snackbar.LENGTH_SHORT) {
     Snackbar.make(this, message, length).show()
+}
+
+fun RadioButton.setCheckedListener(onChecked: () -> Unit) {
+    setOnCheckedChangeListener { _, isChecked ->
+        if (isChecked) onChecked()
+    }
 }

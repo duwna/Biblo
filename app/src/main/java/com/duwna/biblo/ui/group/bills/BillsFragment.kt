@@ -146,7 +146,7 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
         )
         val intent = Intent(Intent.ACTION_SEND).apply {
             type = "text/plain"
-            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.share_statistics_subject))
+            putExtra(Intent.EXTRA_SUBJECT, getString(R.string.label_share_statistics))
             putExtra(Intent.EXTRA_TEXT, message)
         }
         startActivity(Intent.createChooser(intent, getString(R.string.label_send_by_email)))

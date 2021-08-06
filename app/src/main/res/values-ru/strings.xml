@@ -69,6 +69,11 @@
     <string name="label_open_settings">Открыть настройки</string>
     <string name="label_take_from_gallery">Выбрать из галереи</string>
     <string name="label_take_from_camera">Сделать снимок</string>
+    <string name="label_share_statistics">Biblo статистика</string>
+    <string name="label_system_theme_mode">Системная</string>
+    <string name="label_light_theme_mode">Стетлая</string>
+    <string name="label_dark_theme_mode">Темная</string>
+    <string name="label_theme_mode">Тема приложения</string>
 
     <string name="message_internet_error">Отсутствует подключение к интернету…</string>
     <string name="message_data_error">Произошла ошибка загрузки данных…</string>
@@ -91,7 +96,6 @@
     <string name="message_user_added">Пользователь добавлен!</string>
     <string name="message_need_open_settings">Необходимо предоставить разрешение на доступ к изображениям в настройках</string>
     <string name="message_delete_group">Вы действительно хотите удалить группу?</string>
-    <string name="share_statistics_subject">Biblo статистика</string>
 
     <string-array name="currency">
         <item>₽</item>

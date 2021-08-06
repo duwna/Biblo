@@ -12,6 +12,7 @@ import com.duwna.biblo.ui.base.Event
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.ui.base.Notify
 import com.duwna.biblo.utils.equalsDelta
+import kotlinx.coroutines.delay
 import java.util.*
 
 class AddBillViewModel(groupItem: GroupItem) : BaseViewModel<AddBillState>(
@@ -120,8 +121,8 @@ class AddBillViewModel(groupItem: GroupItem) : BaseViewModel<AddBillState>(
 }
 
 data class AddBillState(
-    val payerList: List<AddBillMemberItem>,
-    val debtorList: List<AddBillMemberItem>,
+    val payerList: List<AddBillMemberItem> = emptyList(),
+    val debtorList: List<AddBillMemberItem> = emptyList(),
     val sum: Double = 0.0,
     val showViews: Boolean = true,
     val date: Date = Date(),

@@ -1,7 +1,9 @@
 package com.duwna.biblo.repositories
 
 import android.content.Context
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.datastore.preferences.core.edit
+import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
 import com.duwna.biblo.App
@@ -33,10 +35,24 @@ object PrefManager {
         )
     }
 
+    suspend fun saveThemeMode(mode: Int) {
+        dataStore.edit { prefs ->
+            prefs[Keys.THEME_MODE_KEY] = mode
+        }
+    }
+
+    suspend fun loadThemeMode(): Int {
+        val prefs = dataStore.data.first()
+        return prefs[Keys.THEME_MODE_KEY] ?: AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
+    }
+
     private object Keys {
         val ID_USER_KEY = stringPreferencesKey("idUser")
         val NAME_KEY = stringPreferencesKey("name")
         val EMAIL_KEY = stringPreferencesKey("email")
         val AVATAR_URL_KEY = stringPreferencesKey("avatarUrl")
+
+        val THEME_MODE_KEY = intPreferencesKey("SYSTEM_MODE_KEY")
     }
+
 }

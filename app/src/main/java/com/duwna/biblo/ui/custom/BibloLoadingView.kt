@@ -10,7 +10,7 @@ import androidx.appcompat.widget.AppCompatImageView
 import androidx.core.animation.doOnEnd
 import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
-
+import com.duwna.biblo.R
 
 class BibloLoadingView @JvmOverloads constructor(
     context: Context,
@@ -19,21 +19,21 @@ class BibloLoadingView @JvmOverloads constructor(
 ) : AppCompatImageView(context, attrs, defStyleAttr) {
 
     init {
-//        setImageResource(R.mipmap.ic_launcher_foreground)
-//        ObjectAnimator.ofFloat(this, "rotationY", 0.0f, 360f).apply {
-//            duration = 2000
-//            repeatCount = ObjectAnimator.INFINITE
-//            interpolator = AccelerateDecelerateInterpolator()
-//            start()
-//        }
+        setImageResource(R.mipmap.ic_launcher_foreground)
+        ObjectAnimator.ofFloat(this, "rotationY", 0.0f, 360f).apply {
+            duration = 2000
+            repeatCount = ObjectAnimator.INFINITE
+            interpolator = AccelerateDecelerateInterpolator()
+            start()
+        }
 
-//        ValueAnimator.ofFloat(0.0f, 360f).apply {
-//            duration = 2000
-//            repeatCount = ObjectAnimator.INFINITE
-//            interpolator = AccelerateDecelerateInterpolator()
-//            addUpdateListener { rotationY = animatedValue as Float }
-//            start()
-//        }
+        ValueAnimator.ofFloat(0.0f, 360f).apply {
+            duration = 2000
+            repeatCount = ObjectAnimator.INFINITE
+            interpolator = AccelerateDecelerateInterpolator()
+            addUpdateListener { rotationY = animatedValue as Float }
+            start()
+        }
     }
 
     fun hide() {
