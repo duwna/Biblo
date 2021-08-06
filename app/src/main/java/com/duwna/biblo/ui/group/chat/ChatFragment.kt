@@ -87,7 +87,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         }
 
         if (state.imageUri != null) Glide.with(this).load(state.imageUri).into(iv_add_img)
-        else iv_add_img.setImageResource(R.drawable.ic_baseline_add_photo_alternate_24)
+        else iv_add_img.setImageResource(R.drawable.ic_baseline_insert_photo_24)
 
 
         chatAdapter.submitList(state.messages)

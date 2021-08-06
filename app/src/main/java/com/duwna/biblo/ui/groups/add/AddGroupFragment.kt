@@ -87,11 +87,6 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
             true
         }
 
-        et_group_name.setOnEditorActionListener { view, action, _ ->
-            view.hideKeyBoard()
-            true
-        }
-
         //edit group mode
         args.groupItem?.let { groupItem ->
             et_group_name.setText(groupItem.name)
