@@ -33,7 +33,7 @@ class RegistrationFragment : BaseFragment<RegistrationViewModel>() {
         iv_avatar.isAvatarMode = true
 
         btn_registration.setOnClickListener {
-            root.hideKeyBoard(container)
+            it.hideKeyBoard()
             viewModel.registerUser(
                 et_name.text.toString(),
                 et_email.text.toString(),

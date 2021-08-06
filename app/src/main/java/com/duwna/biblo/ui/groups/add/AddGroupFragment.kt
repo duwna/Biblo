@@ -3,8 +3,8 @@ package com.duwna.biblo.ui.groups.add
 import android.net.Uri
 import android.os.Bundle
 import android.view.inputmethod.EditorInfo
+import android.widget.ArrayAdapter
 import androidx.appcompat.widget.PopupMenu
-import androidx.core.view.isInvisible
 import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
@@ -18,6 +18,7 @@ import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.ui.custom.MemberView
 import com.duwna.biblo.ui.dialogs.ImageActionDialog
 import com.duwna.biblo.ui.dialogs.ImageActionDialog.Companion.showImageActionDialog
+import com.duwna.biblo.utils.dpToIntPx
 import com.duwna.biblo.utils.hideKeyBoard
 import com.duwna.biblo.utils.tryOrNull
 import kotlinx.android.synthetic.main.activity_main.*
@@ -45,13 +46,10 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
 
     override fun setupViews() {
 
-        switch_currency.setOnCheckedChangeListener { _, isChecked ->
-            spinner.isInvisible = isChecked
-            til_title.isInvisible = !isChecked
-        }
+        setupCurrencyAdapter()
 
         btn_create_group.setOnClickListener {
-            createGroup()
+            viewModel.createGroup(et_group_name.text.toString(), et_currency.text.toString())
         }
 
         btn_handle_mode.setOnClickListener {
@@ -77,27 +75,27 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
         btn_add_member.setOnClickListener {
             viewModel.insertMember(et_member_name.text.toString())
             if (!viewModel.currentState.isSearchMode) et_member_name.setText("")
-            requireContext().hideKeyBoard(it)
+            it.hideKeyBoard()
         }
 
         et_member_name.setOnEditorActionListener { view, action, _ ->
             if (action == EditorInfo.IME_ACTION_DONE) {
                 viewModel.insertMember(et_member_name.text.toString())
                 if (!viewModel.currentState.isSearchMode) et_member_name.setText("")
-                requireContext().hideKeyBoard(view)
+                view.hideKeyBoard()
             }
             true
         }
 
         et_group_name.setOnEditorActionListener { view, action, _ ->
-                requireContext().hideKeyBoard(view)
+            view.hideKeyBoard()
             true
         }
 
         //edit group mode
         args.groupItem?.let { groupItem ->
             et_group_name.setText(groupItem.name)
-            setupCurrency(groupItem.currency)
+            et_currency.setText(groupItem.currency)
             btn_create_group.setText(R.string.btn_save)
         }
     }
@@ -110,9 +108,9 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
     override fun bindState(state: IViewModelState) {
         state as AddGroupState
 
-        setupSearchMode(state.isSearchMode)
-        setupMembers(state.members)
-        setupAvatars(state.groupAvatarUri, state.memberAvatarUri, state.clearGroupAvatar)
+        bindSearchMode(state.isSearchMode)
+        bindMembers(state.members)
+        bindAvatars(state.groupAvatarUri, state.memberAvatarUri, state.clearGroupAvatar)
 
         container.isVisible = state.showViews
 
@@ -121,17 +119,7 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
         }
     }
 
-    private fun createGroup() {
-        val currency = if (switch_currency.isChecked) et_group_currency.text.toString()
-        else spinner.selectedItem as String
-
-        val name = et_group_name.text.toString()
-        if (!viewModel.validateInput(name, currency)) return
-
-        viewModel.createGroup(name, currency)
-    }
-
-    private fun setupAvatars(
+    private fun bindAvatars(
         groupAvatarUri: Uri?,
         memberAvatarUri: Uri?,
         clearGroupAvatar: Boolean
@@ -155,7 +143,7 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
         }
     }
 
-    private fun setupSearchMode(isSearchMode: Boolean) {
+    private fun bindSearchMode(isSearchMode: Boolean) {
         if (isSearchMode) {
             btn_add_member.setText(R.string.btn_make_search)
             btn_handle_mode.setText(R.string.btn_cancel)
@@ -173,7 +161,7 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
         }
     }
 
-    private fun setupMembers(members: List<AddMemberItem>) {
+    private fun bindMembers(members: List<AddMemberItem>) {
         flexbox_members.removeAllViews()
         members.forEachIndexed { index, member ->
             val memberView = MemberView(
@@ -199,17 +187,13 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
         }
     }
 
-    private fun setupCurrency(currency: String) {
-        // currency from spinner
-        for (i in 0 until spinner.adapter.count) {
-            if (spinner.adapter.getItem(i) == currency) {
-                spinner.setSelection(i)
-                switch_currency.isChecked = false
-                return
-            }
+    private fun setupCurrencyAdapter() {
+        val items = requireContext().resources.getStringArray(R.array.currency)
+        val adapter = ArrayAdapter(requireContext(), R.layout.item_dropdown_text, items)
+        et_currency.setAdapter(adapter)
+        et_currency.setOnItemClickListener { _, _, _, _ ->
+            et_currency.hideKeyBoard()
         }
-        // own currency
-        switch_currency.isChecked = true
-        et_group_currency.setText(currency)
+        et_currency.dropDownHeight = requireContext().dpToIntPx(60)
     }
 }

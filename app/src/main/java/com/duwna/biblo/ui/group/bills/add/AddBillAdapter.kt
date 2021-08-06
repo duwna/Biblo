@@ -88,7 +88,7 @@ class AddBillViewHolder(
         checkbox.setOnClickListener {
             onCheckBoxClicked(adapterPosition)
             et_sum.setText("")
-            context.hideKeyBoard(this)
+            hideKeyBoard()
         }
     }
 }

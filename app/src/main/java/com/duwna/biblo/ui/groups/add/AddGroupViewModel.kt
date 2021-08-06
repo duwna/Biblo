@@ -71,10 +71,7 @@ class AddGroupViewModel(private val groupItem: GroupItem?) : BaseViewModel<AddGr
 
     fun createGroup(groupName: String, groupCurrency: String) {
 
-        if (currentState.members.size < 2) {
-            notify(Notify.MessageFromRes(R.string.message_group_contain_two_members))
-            return
-        }
+        if(!isInputValid(groupName, groupCurrency)) return
 
         updateState { copy(showViews = false) }
         launchSafety(onError = { postUpdateState { copy(showViews = true) } }) {
@@ -102,16 +99,20 @@ class AddGroupViewModel(private val groupItem: GroupItem?) : BaseViewModel<AddGr
         }
     }
 
-    fun validateInput(name: String, currency: String): Boolean = when {
-        name.trim().isBlank() -> {
+    private fun isInputValid(name: String, currency: String): Boolean  {
+        if (currentState.members.size < 2) {
+            notify(Notify.MessageFromRes(R.string.message_group_contain_two_members))
+            return false
+        }
+        if (name.trim().isBlank()) {
             notify(Notify.MessageFromRes(R.string.message_add_group_name))
-            false
+            return false
         }
-        currency.trim().isBlank() -> {
+        if (currency.trim().isBlank() ) {
             notify(Notify.MessageFromRes(R.string.message_add_currency))
-            false
+            return false
         }
-        else -> true
+        return true
     }
 
     fun setImageUri(uri: Uri?) {

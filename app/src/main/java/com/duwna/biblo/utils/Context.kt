@@ -1,6 +1,5 @@
 package com.duwna.biblo.utils
 
-import android.app.Activity
 import android.content.Context
 import android.content.res.Resources
 import android.util.TypedValue
@@ -31,9 +30,9 @@ fun Context.attrValue(@AttrRes res: Int): Int {
     else throw Resources.NotFoundException("Resource with id $res not found")
 }
 
-fun Context.hideKeyBoard(view: View) {
-    val imm = view.context.getSystemService(InputMethodManager::class.java)
-    imm.hideSoftInputFromWindow(view.windowToken, 0)
+fun View.hideKeyBoard() {
+    val imm = context.getSystemService(InputMethodManager::class.java)
+    imm.hideSoftInputFromWindow(windowToken, 0)
 }
 
 fun Context.toast(msg: Any?, tag: String = this::class.java.simpleName) {

@@ -29,10 +29,10 @@
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_member_name"
                 android:layout_width="match_parent"
-                android:inputType="textPersonName"
                 android:layout_height="wrap_content"
-                android:imeOptions="actionDone"
                 android:hint="@string/label_group_name"
+                android:imeOptions="actionDone"
+                android:inputType="textPersonName"
                 android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
 
@@ -42,97 +42,32 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             android:layout_marginEnd="16dp"
             app:counterEnabled="true"
             app:counterMaxLength="20"
-            app:layout_constraintBottom_toBottomOf="@+id/iv_avatar"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toTopOf="@id/iv_avatar">
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/iv_avatar">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/et_group_name"
                 android:layout_width="match_parent"
-                android:inputType="text"
-                android:imeOptions="actionDone"
                 android:layout_height="wrap_content"
                 android:hint="@string/label_group_name"
+                android:imeOptions="actionDone"
+                android:inputType="text"
                 android:maxLines="1" />
         </com.google.android.material.textfield.TextInputLayout>
-
-
-        <TextView
-            android:id="@+id/tv_choose_currency"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
-            android:text="@string/label_choose_currency"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="18sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view" />
-
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="64dp"
-            android:layout_height="32dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="32dp"
-            android:background="@drawable/background_round_corners_transparent"
-            android:entries="@array/currency"
-            app:layout_constraintBottom_toBottomOf="@+id/tv_choose_currency"
-            app:layout_constraintStart_toEndOf="@id/tv_choose_currency"
-            app:layout_constraintTop_toBottomOf="@+id/view" />
-
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/til_title"
-            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:visibility="invisible"
-            app:counterEnabled="true"
-            app:counterMaxLength="10"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/switch_currency"
-            app:layout_constraintTop_toBottomOf="@+id/spinner"
-            tools:visibility="visible">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/et_group_currency"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:hint="@string/label_currency"
-                android:maxLines="1" />
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <androidx.appcompat.widget.SwitchCompat
-            android:id="@+id/switch_currency"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:text="@string/label_my_currency"
-            android:textColor="?attr/colorOnSurface"
-            android:textSize="18sp"
-            app:layout_constraintBottom_toBottomOf="@+id/til_title"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/tv_choose_currency" />
-
 
 
         <com.duwna.biblo.ui.custom.AvatarImageView
             android:id="@+id/iv_avatar"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
-            android:layout_marginStart="16dp"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginTop="16dp"
             app:aiv_borderColor="?attr/colorOnSurface"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -176,41 +111,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/flexbox_members" />
 
-        <View
-            android:id="@+id/view"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="?attr/colorOnSurface"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/til_group_name" />
-
-        <View
-            android:id="@+id/view5"
-            android:layout_width="0dp"
-            android:layout_height="1dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="16dp"
-            android:background="?attr/colorOnSurface"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/til_title" />
-
         <TextView
             android:id="@+id/textView"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="32dp"
             android:text="@string/label_add_members"
             android:textColor="?attr/colorOnSurface"
             android:textSize="18sp"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view5" />
+            app:layout_constraintTop_toBottomOf="@+id/til_currency" />
 
         <Button
             android:id="@+id/btn_add_member"
@@ -253,6 +164,29 @@
             app:layout_constraintBottom_toBottomOf="@+id/iv_member_avatar"
             app:layout_constraintStart_toEndOf="@+id/iv_member_avatar"
             app:srcCompat="@drawable/ic_baseline_add_photo_alternate_24" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/til_currency"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            app:counterEnabled="true"
+            app:counterMaxLength="10"
+            android:layout_margin="16dp"
+            android:hint="@string/label_currency"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/til_group_name">
+
+            <AutoCompleteTextView
+                android:id="@+id/et_currency"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:imeOptions="actionDone"
+                android:inputType="text" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

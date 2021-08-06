@@ -30,7 +30,7 @@ class AuthFragment : BaseFragment<AuthViewModel>() {
         }
 
         btn_enter.setOnClickListener {
-            root.hideKeyBoard(container)
+            it.hideKeyBoard()
             viewModel.enter(et_email.text.toString(), et_sum.text.toString())
         }
 
