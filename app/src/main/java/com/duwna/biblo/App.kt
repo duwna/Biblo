@@ -3,8 +3,7 @@ package com.duwna.biblo
 import android.app.Application
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
-import com.duwna.biblo.repositories.PrefManager
-import kotlinx.coroutines.coroutineScope
+import com.duwna.biblo.data.PrefManager
 import kotlinx.coroutines.runBlocking
 
 class App : Application() {

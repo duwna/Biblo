@@ -3,7 +3,7 @@ package com.duwna.biblo.ui.auth.profile
 import android.net.Uri
 import com.duwna.biblo.R
 import com.duwna.biblo.entities.database.User
-import com.duwna.biblo.repositories.AuthRepository
+import com.duwna.biblo.data.repositories.AuthRepository
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.ui.base.Notify
@@ -37,6 +37,10 @@ class ProfileViewModel : BaseViewModel<ProfileState>(ProfileState()) {
     fun deleteAvatar() {
         setImageUri(null)
         updateState { copy(user = currentState.user?.copy(avatarUrl = null)) }
+    }
+
+    fun saveTheme(mode: Int) {
+        launchSafety { repository.saveTheme(mode) }
     }
 
     fun signOut() = repository.signOut()

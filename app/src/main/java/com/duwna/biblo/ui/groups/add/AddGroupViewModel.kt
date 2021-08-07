@@ -7,7 +7,7 @@ import com.duwna.biblo.R
 import com.duwna.biblo.entities.database.User
 import com.duwna.biblo.entities.items.AddMemberItem
 import com.duwna.biblo.entities.items.GroupItem
-import com.duwna.biblo.repositories.GroupsRepository
+import com.duwna.biblo.data.repositories.GroupsRepository
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.Event
 import com.duwna.biblo.ui.base.IViewModelState

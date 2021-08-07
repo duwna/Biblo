@@ -10,7 +10,6 @@ import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.Glide
 import com.duwna.biblo.R
-import com.duwna.biblo.repositories.PrefManager
 import com.duwna.biblo.ui.base.BaseFragment
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.ui.dialogs.ImageActionDialog
@@ -18,7 +17,6 @@ import com.duwna.biblo.ui.dialogs.ImageActionDialog.Companion.showImageActionDia
 import com.duwna.biblo.utils.toInitials
 import com.duwna.biblo.utils.tryOrNull
 import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.coroutines.runBlocking
 
 class ProfileFragment : BaseFragment<ProfileViewModel>() {
 
@@ -98,7 +96,7 @@ class ProfileFragment : BaseFragment<ProfileViewModel>() {
 
     private fun applyTheme(mode: Int) {
         AppCompatDelegate.setDefaultNightMode(mode)
-        runBlocking { PrefManager.saveThemeMode(mode) }
+        viewModel.saveTheme(mode)
         setCheckedThemeMode(mode)
     }
 

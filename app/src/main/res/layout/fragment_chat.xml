@@ -41,7 +41,7 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <EditText
-            android:inputType="text"
+            android:inputType="textImeMultiLine"
             android:id="@+id/et_message"
             android:layout_width="0dp"
             android:layout_height="wrap_content"

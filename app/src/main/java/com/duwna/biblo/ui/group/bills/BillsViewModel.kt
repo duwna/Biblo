@@ -6,7 +6,7 @@ import com.duwna.biblo.entities.database.Bill
 import com.duwna.biblo.entities.items.BillMemberItem
 import com.duwna.biblo.entities.items.BillsViewItem
 import com.duwna.biblo.entities.items.GroupItem
-import com.duwna.biblo.repositories.BillsRepository
+import com.duwna.biblo.data.repositories.BillsRepository
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.Event
 import com.duwna.biblo.ui.base.IViewModelState

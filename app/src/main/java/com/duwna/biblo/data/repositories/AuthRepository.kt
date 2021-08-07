@@ -1,6 +1,7 @@
-package com.duwna.biblo.repositories
+package com.duwna.biblo.data.repositories
 
 import android.net.Uri
+import com.duwna.biblo.data.PrefManager
 import com.duwna.biblo.entities.database.User
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.ktx.toObject
@@ -69,5 +70,9 @@ class AuthRepository : BaseRepository() {
     private suspend fun updateLocalUserInfoFromNetwork() {
         val newUser = reference.document(firebaseUserId).get().await().toObject<User>()!!
         PrefManager.saveUser(newUser.copy(idUser = firebaseUserId))
+    }
+
+    suspend fun saveTheme(mode: Int) {
+        PrefManager.saveThemeMode(mode)
     }
 }

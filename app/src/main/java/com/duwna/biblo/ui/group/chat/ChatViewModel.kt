@@ -5,7 +5,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.entities.items.MessageItem
-import com.duwna.biblo.repositories.ChatRepository
+import com.duwna.biblo.data.repositories.ChatRepository
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.Event
 import com.duwna.biblo.ui.base.IViewModelState

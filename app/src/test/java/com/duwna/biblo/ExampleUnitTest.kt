@@ -1,6 +1,6 @@
 package com.duwna.biblo
 
-import com.duwna.biblo.repositories.GroupsRepository
+import com.duwna.biblo.data.repositories.GroupsRepository
 import kotlinx.coroutines.runBlocking
 import org.junit.Assert.assertEquals
 import org.junit.Test

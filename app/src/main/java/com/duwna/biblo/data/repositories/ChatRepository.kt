@@ -1,4 +1,4 @@
-package com.duwna.biblo.repositories
+package com.duwna.biblo.data.repositories
 
 import android.net.Uri
 import com.duwna.biblo.entities.database.Message

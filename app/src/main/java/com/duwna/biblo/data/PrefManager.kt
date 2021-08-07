@@ -1,4 +1,4 @@
-package com.duwna.biblo.repositories
+package com.duwna.biblo.data
 
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate

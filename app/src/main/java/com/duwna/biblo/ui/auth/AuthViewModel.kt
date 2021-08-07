@@ -2,7 +2,7 @@ package com.duwna.biblo.ui.auth
 
 import androidx.lifecycle.viewModelScope
 import com.duwna.biblo.R
-import com.duwna.biblo.repositories.AuthRepository
+import com.duwna.biblo.data.repositories.AuthRepository
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.ui.base.Notify

@@ -6,13 +6,12 @@ import com.duwna.biblo.R
 import com.duwna.biblo.entities.database.Bill
 import com.duwna.biblo.entities.items.AddBillMemberItem
 import com.duwna.biblo.entities.items.GroupItem
-import com.duwna.biblo.repositories.BillsRepository
+import com.duwna.biblo.data.repositories.BillsRepository
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.Event
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.ui.base.Notify
 import com.duwna.biblo.utils.equalsDelta
-import kotlinx.coroutines.delay
 import java.util.*
 
 class AddBillViewModel(groupItem: GroupItem) : BaseViewModel<AddBillState>(

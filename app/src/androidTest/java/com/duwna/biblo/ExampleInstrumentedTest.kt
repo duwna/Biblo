@@ -3,8 +3,7 @@ package com.duwna.biblo
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
 import com.duwna.biblo.entities.database.User
-import com.duwna.biblo.repositories.GroupsRepository
-import com.duwna.biblo.utils.log
+import com.duwna.biblo.data.repositories.GroupsRepository
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch

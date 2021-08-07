@@ -36,12 +36,17 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         ChatAdapter(onItemLongClicked = { showDeleteMessageSnackbar(it) })
     }
 
-    private val chatLayoutManager = LinearLayoutManager(context).apply {
-        stackFromEnd = true
+    private val chatLayoutManager: LinearLayoutManager by lazy {
+        LinearLayoutManager(context).apply { stackFromEnd = true }
     }
 
-    lateinit var linearSmoothScroller: LinearSmoothScroller
-
+    private val linearSmoothScroller: LinearSmoothScroller by lazy {
+        object : LinearSmoothScroller(context) {
+            override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
+                return 300f / displayMetrics.densityDpi
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,12 +62,6 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         rv_messages.apply {
             layoutManager = chatLayoutManager
             adapter = chatAdapter
-        }
-
-        linearSmoothScroller = object : LinearSmoothScroller(context) {
-            override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
-                return 300f / displayMetrics.densityDpi
-            }
         }
 
         iv_add_img.setOnClickListener {
@@ -127,4 +126,5 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         }
     }
 }
+
 

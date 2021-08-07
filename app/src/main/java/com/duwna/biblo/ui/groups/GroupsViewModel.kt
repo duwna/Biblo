@@ -1,7 +1,7 @@
 package com.duwna.biblo.ui.groups
 
 import com.duwna.biblo.entities.items.GroupItem
-import com.duwna.biblo.repositories.GroupsRepository
+import com.duwna.biblo.data.repositories.GroupsRepository
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.Event
 import com.duwna.biblo.ui.base.IViewModelState
