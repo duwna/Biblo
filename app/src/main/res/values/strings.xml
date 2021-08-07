@@ -28,7 +28,7 @@
     <string name="label_currency">Currency</string>
     <string name="label_my_currency">Own currency</string>
     <string name="label_choose_avatar">Choose avatar:</string>
-    <string name="label_add_members">Add members:</string>
+    <string name="label_add_members">Add members</string>
     <string name="label_name">Name</string>
     <string name="label_avatar">Avatar</string>
     <string name="label_all_groups">All groups</string>
@@ -73,6 +73,7 @@
     <string name="label_light_theme_mode">Light</string>
     <string name="label_dark_theme_mode">Dark</string>
     <string name="label_theme_mode">App theme</string>
+    <string name="label_password_reset">Reset password</string>
 
     <string name="message_internet_error">No internet connection…</string>
     <string name="message_data_error">Error loading data…</string>
@@ -85,8 +86,8 @@
     <string name="message_registration_error">Registration error occurred…</string>
     <string name="message_auth_error">Authorization error occurred…</string>
     <string name="message_enter_email">Please enter Email</string>
-    <string name="message_send_password_link">Link has been sent!</string>
-    <string name="message_password_link_sent">Send a password recovery link to</string>
+    <string name="message_password_link_sent">Link has been sent!</string>
+    <string name="message_send_password_link_question">Send a password recovery link to</string>
     <string name="message_no_user_found">No user with this address found…</string>
     <string name="message_member_contains">This member is already contained in the group</string>
     <string name="message_cant_delete_yourself">Unable to remove yourself from group</string>

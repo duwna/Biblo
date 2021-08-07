@@ -1,6 +1,7 @@
 package com.duwna.biblo.data.repositories
 
 import android.net.Uri
+import com.duwna.biblo.data.CompressManager
 import com.duwna.biblo.entities.database.Message
 import com.duwna.biblo.entities.items.MessageItem
 import com.google.firebase.firestore.Query
@@ -26,7 +27,7 @@ class ChatRepository(idGroup: String) : BaseRepository() {
             .id
 
         imgUri?.let {
-            val imgUrl = uploadImage("messages", id, it, Resolution.DEFAULT)
+            val imgUrl = uploadImage("messages", id, it, CompressManager.Resolution.DEFAULT)
             reference.document(id).update("imgUrl", imgUrl)
         }
     }

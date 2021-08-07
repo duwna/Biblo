@@ -1,23 +1,31 @@
 package com.duwna.biblo.ui.auth
 
-import android.content.Intent
-import android.widget.TextView
-import androidx.core.view.isVisible
+import android.app.Activity
+import android.app.AlertDialog
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import com.duwna.biblo.R
 import com.duwna.biblo.ui.base.BaseFragment
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.utils.hideKeyBoard
+import com.duwna.biblo.utils.showSnackBar
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_auth.*
 
 
 class AuthFragment : BaseFragment<AuthViewModel>() {
     override val viewModel: AuthViewModel by viewModels()
     override val layout: Int = R.layout.fragment_auth
+
+    private val googleSignInResult =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                viewModel.firebaseAuthWithGoogle(task.result?.idToken)
+            }
+        }
 
     override fun setupViews() {
 
@@ -35,30 +43,12 @@ class AuthFragment : BaseFragment<AuthViewModel>() {
         }
 
         tv_forgot_password.setOnClickListener {
-            if (et_email.text.toString().isBlank()) {
-                Snackbar.make(
-                    container,
-                    getString(R.string.message_enter_email),
-                    Snackbar.LENGTH_SHORT
-                ).show()
-                return@setOnClickListener
-            }
-            Snackbar.make(
-                container,
-                "${getString(R.string.message_send_password_link)} ${et_email.text}?",
-                Snackbar.LENGTH_LONG
-            ).apply {
-                setAction(getString(R.string.label_send)) { viewModel.resetPassword(et_email.text.toString()) }
-                view.findViewById<TextView>(com.google.android.material.R.id.snackbar_text)?.maxLines =
-                    5
-                show()
-            }
+            resetPassword()
         }
     }
 
     override fun bindState(state: IViewModelState) {
         state as AuthState
-        container.isVisible = !state.isLoading
 
         state.ready?.let { findNavController().navigate(R.id.action_auth_to_groups) }
     }
@@ -72,20 +62,20 @@ class AuthFragment : BaseFragment<AuthViewModel>() {
         val googleSignInClient = GoogleSignIn.getClient(root, gso)
 
         val signInIntent = googleSignInClient.signInIntent
-        startActivityForResult(signInIntent, RC_SIGN_IN)
+        googleSignInResult.launch(signInIntent)
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        when (requestCode) {
-            RC_SIGN_IN -> {
-                val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-                viewModel.firebaseAuthWithGoogle(task.result?.idToken)
-            }
+    private fun resetPassword() {
+        val email = et_email.text.toString()
+        if (email.isBlank()) {
+            container.showSnackBar(getString(R.string.message_enter_email))
+            return
         }
-    }
-
-    companion object {
-        private const val RC_SIGN_IN = 100
+        AlertDialog.Builder(requireContext())
+            .setTitle(getString(R.string.label_password_reset))
+            .setMessage("${getString(R.string.message_send_password_link_question)} $email?")
+            .setPositiveButton(R.string.label_send) { _, _ -> viewModel.resetPassword(email) }
+            .setNegativeButton(R.string.btn_cancel) { _, _ -> }
+            .show()
     }
 }

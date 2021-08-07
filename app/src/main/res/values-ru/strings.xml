@@ -29,7 +29,7 @@
     <string name="label_currency">Валюта</string>
     <string name="label_my_currency">Своя валюта</string>
     <string name="label_choose_avatar">Выберите аватар:</string>
-    <string name="label_add_members">Добавьте участников:</string>
+    <string name="label_add_members">Добавьте участников</string>
     <string name="label_name">Имя</string>
     <string name="label_avatar">Аватар</string>
     <string name="label_all_groups">Все группы</string>
@@ -74,6 +74,7 @@
     <string name="label_light_theme_mode">Стетлая</string>
     <string name="label_dark_theme_mode">Темная</string>
     <string name="label_theme_mode">Тема приложения</string>
+    <string name="label_password_reset">Сброс пароля</string>
 
     <string name="message_internet_error">Отсутствует подключение к интернету…</string>
     <string name="message_data_error">Произошла ошибка загрузки данных…</string>
@@ -86,8 +87,8 @@
     <string name="message_registration_error">Возникла ошибка регистрации…</string>
     <string name="message_auth_error">Возникла ошибка авторизации…</string>
     <string name="message_enter_email">Пожалуйста, введите E-mail</string>
-    <string name="message_send_password_link">Ссылка отправлена!</string>
-    <string name="message_password_link_sent">Отправить ссылку для восстановления пароля на адрес</string>
+    <string name="message_password_link_sent">Ссылка отправлена!</string>
+    <string name="message_send_password_link_question">Отправить ссылку для восстановления пароля на адрес</string>
     <string name="message_no_user_found">Пользователь с таким адресом не найден…</string>
     <string name="message_member_contains">Этот участник уже содержится в группе</string>
     <string name="message_cant_delete_yourself">Невозможно удалить себя из группы</string>
