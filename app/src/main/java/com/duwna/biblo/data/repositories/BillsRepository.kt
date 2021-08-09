@@ -1,5 +1,7 @@
 package com.duwna.biblo.data.repositories
 
+import com.duwna.biblo.data.DatabaseConstants.BILLS
+import com.duwna.biblo.data.DatabaseConstants.GROUPS
 import com.duwna.biblo.entities.database.Bill
 import com.duwna.biblo.entities.items.GroupItem
 import com.google.firebase.firestore.Query
@@ -12,15 +14,15 @@ import java.util.*
 
 class BillsRepository(private val idGroup: String) : BaseRepository() {
 
-    override val reference = database.collection("groups")
+    override val reference = database.collection(GROUPS)
         .document(idGroup)
-        .collection("bills")
+        .collection(BILLS)
 
     suspend fun insertBill(bill: Bill) {
         reference.add(bill)
             .await()
 
-        database.collection("groups")
+        database.collection(GROUPS)
             .document(idGroup)
             .update("lastUpdate", Date())
             .await()
@@ -49,7 +51,7 @@ class BillsRepository(private val idGroup: String) : BaseRepository() {
     }
 
     suspend fun deleteGroup(groupItem: GroupItem) {
-        database.collection("groups")
+        database.collection(GROUPS)
             .document(groupItem.id)
             .delete()
             .await()

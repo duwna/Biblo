@@ -4,10 +4,10 @@ import android.net.Uri
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.duwna.biblo.R
+import com.duwna.biblo.data.repositories.GroupsRepository
 import com.duwna.biblo.entities.database.User
 import com.duwna.biblo.entities.items.AddMemberItem
 import com.duwna.biblo.entities.items.GroupItem
-import com.duwna.biblo.data.repositories.GroupsRepository
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.Event
 import com.duwna.biblo.ui.base.IViewModelState
@@ -71,7 +71,7 @@ class AddGroupViewModel(private val groupItem: GroupItem?) : BaseViewModel<AddGr
 
     fun createGroup(groupName: String, groupCurrency: String) {
 
-        if(!isInputValid(groupName, groupCurrency)) return
+        if (!isInputValid(groupName, groupCurrency)) return
 
         updateState { copy(showViews = false) }
         launchSafety(onError = { postUpdateState { copy(showViews = true) } }) {
@@ -92,14 +92,17 @@ class AddGroupViewModel(private val groupItem: GroupItem?) : BaseViewModel<AddGr
 
     fun removeMember(position: Int) {
         when {
-            position == 0 -> notify(Notify.MessageFromRes(R.string.message_cant_delete_yourself))
-            groupItem?.members?.find { it.id == currentState.members[position].id } != null ->
+            groupItem == null && position == 0 -> {
+                notify(Notify.MessageFromRes(R.string.message_cant_delete_yourself))
+            }
+            groupItem?.members?.find { it.id == currentState.members[position].id } != null -> {
                 notify(Notify.MessageFromRes(R.string.message_cant_delete_user))
+            }
             else -> updateList { removeAt(position) }
         }
     }
 
-    private fun isInputValid(name: String, currency: String): Boolean  {
+    private fun isInputValid(name: String, currency: String): Boolean {
         if (currentState.members.size < 2) {
             notify(Notify.MessageFromRes(R.string.message_group_contain_two_members))
             return false
@@ -108,7 +111,7 @@ class AddGroupViewModel(private val groupItem: GroupItem?) : BaseViewModel<AddGr
             notify(Notify.MessageFromRes(R.string.message_add_group_name))
             return false
         }
-        if (currency.trim().isBlank() ) {
+        if (currency.trim().isBlank()) {
             notify(Notify.MessageFromRes(R.string.message_add_currency))
             return false
         }

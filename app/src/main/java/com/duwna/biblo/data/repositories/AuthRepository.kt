@@ -1,6 +1,8 @@
 package com.duwna.biblo.data.repositories
 
 import android.net.Uri
+import com.duwna.biblo.BuildConfig
+import com.duwna.biblo.data.DatabaseConstants.USERS
 import com.duwna.biblo.data.PrefManager
 import com.duwna.biblo.entities.database.User
 import com.google.firebase.auth.GoogleAuthProvider
@@ -9,7 +11,7 @@ import kotlinx.coroutines.tasks.await
 
 class AuthRepository : BaseRepository() {
 
-    override val reference = database.collection("users")
+    override val reference = database.collection(USERS)
 
     suspend fun authWithGoogle(idToken: String?) {
         val result = auth
@@ -19,7 +21,7 @@ class AuthRepository : BaseRepository() {
         // if first auth -> write data to db
         if (result.additionalUserInfo?.isNewUser == true) {
             val user = User(
-                name = auth.currentUser?.displayName ?: "",
+                name = auth.currentUser?.displayName ?: "name",
                 email = auth.currentUser?.email,
                 avatarUrl = auth.currentUser?.photoUrl?.toString()
             )
@@ -51,7 +53,7 @@ class AuthRepository : BaseRepository() {
     }
 
     suspend fun insertUser(user: User) {
-        val avatarUrl = user.avatarUri?.let { uploadImage("users", firebaseUserId, it) }
+        val avatarUrl = user.avatarUri?.let { uploadImage(USERS, firebaseUserId, it) }
         val newUser = if (avatarUrl != null) user.copy(avatarUrl = avatarUrl) else user
 
         reference.document(firebaseUserId)

@@ -24,6 +24,8 @@ class AuthFragment : BaseFragment<AuthViewModel>() {
             if (result.resultCode == Activity.RESULT_OK) {
                 val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
                 viewModel.firebaseAuthWithGoogle(task.result?.idToken)
+            } else {
+                container.showSnackBar(getString(R.string.message_auth_error))
             }
         }
 

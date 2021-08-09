@@ -36,10 +36,6 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         ChatAdapter(onItemLongClicked = { showDeleteMessageSnackbar(it) })
     }
 
-    private val chatLayoutManager: LinearLayoutManager by lazy {
-        LinearLayoutManager(context).apply { stackFromEnd = true }
-    }
-
     private val linearSmoothScroller: LinearSmoothScroller by lazy {
         object : LinearSmoothScroller(context) {
             override fun calculateSpeedPerPixel(displayMetrics: DisplayMetrics): Float {
@@ -60,7 +56,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
     override fun setupViews() {
 
         rv_messages.apply {
-            layoutManager = chatLayoutManager
+            layoutManager = LinearLayoutManager(context).apply { stackFromEnd = true }
             adapter = chatAdapter
         }
 
@@ -70,7 +66,7 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         }
 
         iv_send.setOnClickListener {
-            viewModel.sendMessage(et_message.text.toString())
+            viewModel.sendMessage(et_message.text.toString().trim())
         }
     }
 
@@ -88,19 +84,18 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
         if (state.imageUri != null) Glide.with(this).load(state.imageUri).into(iv_add_img)
         else iv_add_img.setImageResource(R.drawable.ic_baseline_insert_photo_24)
 
-
         chatAdapter.submitList(state.messages)
 
         state.onMessageSent?.setListener {
             // if list is not scrolled up -> slow scroll to end
             // else fast scroll
-            if (chatAdapter.itemCount - chatLayoutManager.findLastVisibleItemPosition() < 5) {
+            val layoutManager = rv_messages.layoutManager as LinearLayoutManager
+            if (chatAdapter.itemCount - layoutManager.findLastVisibleItemPosition() < 5) {
                 linearSmoothScroller.targetPosition = chatAdapter.itemCount
-                chatLayoutManager.startSmoothScroll(linearSmoothScroller)
+                layoutManager.startSmoothScroll(linearSmoothScroller)
             } else {
                 rv_messages.smoothScrollToPosition(chatAdapter.itemCount)
             }
-
             et_message.text.clear()
         }
     }

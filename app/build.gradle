@@ -19,7 +19,6 @@ android {
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
-
     buildTypes {
         release {
             minifyEnabled false
@@ -62,7 +61,7 @@ dependencies {
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
 
     // DataStore
-    implementation("androidx.datastore:datastore-preferences:1.0.0-rc02")
+    implementation 'androidx.datastore:datastore-preferences:1.0.0'
 
     // FlexboxLayout
     implementation 'com.google.android:flexbox:2.0.1'

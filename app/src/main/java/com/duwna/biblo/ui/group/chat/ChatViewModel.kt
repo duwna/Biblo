@@ -45,7 +45,7 @@ class ChatViewModel(private val groupItem: GroupItem) : BaseViewModel<ChatState>
     }
 
     fun sendMessage(text: String) {
-        if (currentState.imageUri == null && text.isBlank()) return
+        if (currentState.imageUri == null && text.isEmpty()) return
         val uri = currentState.imageUri
         setImageUri(null)
         launchSafety {

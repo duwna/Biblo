@@ -103,7 +103,7 @@ class AddBillFragment : BaseFragment<AddBillViewModel>() {
 
     private fun showDateDialog() {
         val calendar = Calendar.getInstance()
-        val listener = DatePickerDialog.OnDateSetListener { view, year, month, dayOfMonth ->
+        val listener = DatePickerDialog.OnDateSetListener { _, year, month, dayOfMonth ->
             calendar.apply {
                 set(Calendar.YEAR, year)
                 set(Calendar.MONTH, month)

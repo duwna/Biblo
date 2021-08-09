@@ -1,6 +1,8 @@
 package com.duwna.biblo.data.repositories
 
 import android.net.Uri
+import com.duwna.biblo.data.DatabaseConstants.GROUPS
+import com.duwna.biblo.data.DatabaseConstants.USERS
 import com.duwna.biblo.entities.database.Group
 import com.duwna.biblo.entities.database.User
 import com.duwna.biblo.entities.items.AddMemberItem
@@ -16,7 +18,7 @@ import java.util.*
 
 class GroupsRepository : BaseRepository() {
 
-    override val reference = database.collection("groups")
+    override val reference = database.collection(GROUPS)
 
     suspend fun loadGroupItems(): List<GroupItem> {
 
@@ -55,7 +57,7 @@ class GroupsRepository : BaseRepository() {
 
             val userIdsPart = userIds.drop(i).take(10)
 
-            val loadUsers = database.collection("users")
+            val loadUsers = database.collection(USERS)
                 .whereIn(FieldPath.documentId(), userIdsPart)
                 .get()
                 .await()
@@ -70,7 +72,7 @@ class GroupsRepository : BaseRepository() {
     }
 
     suspend fun searchMember(email: String): AddMemberItem? {
-        val user = database.collection("users")
+        val user = database.collection(USERS)
             .whereEqualTo("email", email)
             .get()
             .await()
@@ -89,7 +91,7 @@ class GroupsRepository : BaseRepository() {
         users: List<User>,
         groupItem: GroupItem?
     ) {
-        require(users[0].idUser == firebaseUserId)
+        if (groupItem == null) require(users[0].idUser == firebaseUserId)
         val userIds = mutableListOf<String>().apply {
             users.forEachIndexed { index, user ->
                 when {
@@ -119,7 +121,7 @@ class GroupsRepository : BaseRepository() {
         }
 
         avatarUri?.let {
-            val avatarUrl = uploadImage("groups", idGroup, it)
+            val avatarUrl = uploadImage(GROUPS, idGroup, it)
             reference.document(idGroup).update("avatarUrl", avatarUrl)
         }
     }
@@ -127,14 +129,14 @@ class GroupsRepository : BaseRepository() {
 
     private suspend fun createUser(user: User): String {
 
-        val idUser = database.collection("users")
+        val idUser = database.collection(USERS)
             .add(user)
             .await()
             .id
 
         user.avatarUri?.let {
-            val avatarUrl = uploadImage("users", idUser, it)
-            database.collection("users").document(idUser).update("avatarUrl", avatarUrl)
+            val avatarUrl = uploadImage(USERS, idUser, it)
+            database.collection(USERS).document(idUser).update("avatarUrl", avatarUrl)
         }
 
         return idUser
