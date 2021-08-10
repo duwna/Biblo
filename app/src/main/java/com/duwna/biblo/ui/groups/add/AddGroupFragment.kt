@@ -39,7 +39,7 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
         super.onCreate(savedInstanceState)
         setFragmentResultListener(ImageActionDialog.IMAGE_ACTIONS_KEY) { _, bundle ->
             val result = bundle[ImageActionDialog.SELECT_ACTION_KEY] as? String
-            if (result == ImageActionDialog.DELETE_ACTION_KEY) viewModel.clearGroupAvatar()
+            if (result == ImageActionDialog.DELETE_ACTION_KEY) viewModel.setImageUri(null)
             else viewModel.setImageUri(tryOrNull { Uri.parse(result) })
         }
     }
@@ -120,21 +120,20 @@ class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
         clearGroupAvatar: Boolean
     ) {
         when {
+            args.groupItem?.avatarUrl != null && !clearGroupAvatar -> Glide.with(this)
+                .load(args.groupItem?.avatarUrl).into(iv_avatar)
+
             groupAvatarUri != null -> Glide.with(this)
                 .load(groupAvatarUri).into(iv_avatar)
-
-            clearGroupAvatar -> iv_avatar.setImageResource(R.drawable.ic_baseline_supervised_user_circle_24)
-
-            args.groupItem?.avatarUrl != null -> Glide.with(this)
-                .load(args.groupItem?.avatarUrl).into(iv_avatar)
 
             else -> iv_avatar.setImageResource(R.drawable.ic_baseline_supervised_user_circle_24)
         }
 
-        if (memberAvatarUri != null) {
-            Glide.with(this).load(memberAvatarUri).into(iv_member_avatar)
-        } else {
-            iv_member_avatar.setImageResource(R.drawable.ic_baseline_account_circle_24)
+        when {
+            memberAvatarUri != null -> Glide.with(this)
+                .load(memberAvatarUri).into(iv_member_avatar)
+
+            else -> iv_member_avatar.setImageResource(R.drawable.ic_baseline_account_circle_24)
         }
     }
 

@@ -84,6 +84,7 @@ dependencies {
     // image compressor
     implementation 'id.zelory:compressor:3.0.0'
 
+    // fullscreen image viewer
     implementation 'com.github.chrisbanes:PhotoView:2.3.0'
 
     // tests

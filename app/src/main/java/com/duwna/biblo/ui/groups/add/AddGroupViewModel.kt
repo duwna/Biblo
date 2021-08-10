@@ -137,10 +137,6 @@ class AddGroupViewModel(private val groupItem: GroupItem?) : BaseViewModel<AddGr
         updateState { copy(imageAction = imageAction) }
     }
 
-    fun clearGroupAvatar() {
-        updateState { copy(clearGroupAvatar = true) }
-    }
-
     private fun updateList(block: MutableList<AddMemberItem>.() -> Unit) {
         updateState {
             copy(members = currentState.members.toMutableList().apply {
