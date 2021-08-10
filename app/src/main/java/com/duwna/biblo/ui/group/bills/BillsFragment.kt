@@ -16,6 +16,7 @@ import com.duwna.biblo.entities.items.BillsViewItem
 import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.ui.base.BaseFragment
 import com.duwna.biblo.ui.base.IViewModelState
+import com.duwna.biblo.ui.group.bills.add.AddBillFragment
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_bills.*
 
@@ -123,7 +124,7 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
     private fun navigateToAddBillScreen() {
         findNavController().navigate(
             R.id.navigation_add_bill,
-            bundleOf("groupItem" to groupItem),
+            AddBillFragment.args(groupItem),
             navOptions {
                 anim {
                     enter = R.anim.slide_from_right_to_center

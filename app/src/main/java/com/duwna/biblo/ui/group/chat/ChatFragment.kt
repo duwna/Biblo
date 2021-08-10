@@ -8,9 +8,11 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.setFragmentResultListener
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import com.bumptech.glide.Glide
+import com.duwna.biblo.ImageViewFragment
 import com.duwna.biblo.R
 import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.entities.items.MessageItem
@@ -33,7 +35,10 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
     }
 
     private val chatAdapter: ChatAdapter by lazy {
-        ChatAdapter(onItemLongClicked = { showDeleteMessageSnackbar(it) })
+        ChatAdapter(
+            onItemLongClicked = { showDeleteMessageSnackbar(it) },
+            onImageClicked = { showImageFragment(it) }
+        )
     }
 
     private val linearSmoothScroller: LinearSmoothScroller by lazy {
@@ -113,6 +118,21 @@ class ChatFragment : BaseFragment<ChatViewModel>() {
             anchorView = bottom_container
             show()
         }
+    }
+
+    private fun showImageFragment(url: String) {
+        findNavController().navigate(
+            R.id.navigation_image_view,
+            ImageViewFragment.args(url),
+            navOptions {
+                anim {
+                    enter = R.anim.slide_from_right_to_center
+                    exit = R.anim.slide_from_center_to_left
+                    popEnter = R.anim.slide_from_left_to_center
+                    popExit = R.anim.slide_from_center_to_right
+                }
+            }
+        )
     }
 
     companion object {

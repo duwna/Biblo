@@ -2,11 +2,11 @@ package com.duwna.biblo.ui.group.bills
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.duwna.biblo.data.repositories.BillsRepository
 import com.duwna.biblo.entities.database.Bill
 import com.duwna.biblo.entities.items.BillMemberItem
 import com.duwna.biblo.entities.items.BillsViewItem
 import com.duwna.biblo.entities.items.GroupItem
-import com.duwna.biblo.data.repositories.BillsRepository
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.Event
 import com.duwna.biblo.ui.base.IViewModelState
@@ -25,12 +25,8 @@ class BillsViewModel(private val groupItem: GroupItem) : BaseViewModel<BillsStat
         showLoading()
         repository.subscribeOnBills().collect { bills ->
             if (bills.isEmpty()) postUpdateState {
-                copy(
-                    bills = emptyList(),
-                    showNoBillsText = true
-                )
-            }
-            else postUpdateState {
+                copy(bills = emptyList(), showNoBillsText = true)
+            } else postUpdateState {
                 copy(bills = bills.toBillViewItemList(), showNoBillsText = false)
             }
             hideLoading()

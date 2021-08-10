@@ -9,6 +9,7 @@ import androidx.datastore.preferences.preferencesDataStore
 import com.duwna.biblo.App
 import com.duwna.biblo.entities.database.User
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.runBlocking
 
 object PrefManager {
 
@@ -41,10 +42,12 @@ object PrefManager {
         }
     }
 
-    suspend fun loadThemeMode(): Int {
+    private suspend fun loadThemeMode(): Int {
         val prefs = dataStore.data.first()
         return prefs[Keys.THEME_MODE_KEY] ?: AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM
     }
+
+    fun getThemeModeSync(): Int = runBlocking { loadThemeMode() }
 
     private object Keys {
         val ID_USER_KEY = stringPreferencesKey("idUser")

@@ -144,4 +144,8 @@
             android:name="has_image"
             app:argType="boolean" />
     </dialog>
+    <fragment
+        android:id="@+id/navigation_image_view"
+        android:name="com.duwna.biblo.ImageViewFragment"
+        tools:layout="@layout/fragment_image_view" />
 </navigation>

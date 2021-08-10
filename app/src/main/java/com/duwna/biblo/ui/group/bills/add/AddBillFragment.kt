@@ -2,6 +2,7 @@ package com.duwna.biblo.ui.group.bills.add
 
 import android.app.DatePickerDialog
 import android.os.Bundle
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -120,6 +121,10 @@ class AddBillFragment : BaseFragment<AddBillViewModel>() {
             calendar.get(Calendar.MONTH),
             calendar.get(Calendar.DAY_OF_MONTH)
         ).show()
+    }
+
+    companion object {
+        fun args(groupItem: GroupItem) = bundleOf("groupItem" to groupItem)
     }
 
 }

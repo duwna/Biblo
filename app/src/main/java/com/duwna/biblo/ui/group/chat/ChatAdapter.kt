@@ -14,12 +14,12 @@ import com.duwna.biblo.R
 import com.duwna.biblo.entities.items.MessageItem
 import com.duwna.biblo.utils.dpToIntPx
 import com.duwna.biblo.utils.toInitials
-import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_message.view.*
 
 class ChatAdapter(
-    private val onItemLongClicked: (MessageItem) -> Unit
+    private val onItemLongClicked: (MessageItem) -> Unit,
+    private val onImageClicked: (String) -> Unit
 ) : ListAdapter<MessageItem, MessageViewHolder>(MessagesDiffCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MessageViewHolder {
@@ -29,7 +29,7 @@ class ChatAdapter(
     }
 
     override fun onBindViewHolder(holder: MessageViewHolder, position: Int) {
-        holder.bind(getItem(position), onItemLongClicked)
+        holder.bind(getItem(position), onItemLongClicked, onImageClicked)
     }
 }
 
@@ -48,7 +48,8 @@ class MessageViewHolder(
 ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
     fun bind(
         item: MessageItem,
-        onItemLongClicked: (MessageItem) -> Unit
+        onItemLongClicked: (MessageItem) -> Unit,
+        onImageClicked: (String) -> Unit
     ) = itemView.run {
 
         tv_text.text = item.text
@@ -70,6 +71,7 @@ class MessageViewHolder(
             Glide.with(this).load(item.imgUrl)
                 .apply(RequestOptions().transform(RoundedCorners(context.dpToIntPx(8))))
                 .into(iv_image)
+            iv_image.setOnClickListener { onImageClicked(item.imgUrl) }
         } else {
             iv_image.isVisible = false
         }
