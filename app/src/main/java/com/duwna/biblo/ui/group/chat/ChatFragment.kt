@@ -12,7 +12,6 @@ import androidx.navigation.navOptions
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.LinearSmoothScroller
 import com.bumptech.glide.Glide
-import com.duwna.biblo.ImageViewFragment
 import com.duwna.biblo.R
 import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.entities.items.MessageItem

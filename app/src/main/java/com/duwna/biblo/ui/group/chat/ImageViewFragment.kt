@@ -1,22 +1,14 @@
-package com.duwna.biblo
+package com.duwna.biblo.ui.group.chat
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.duwna.biblo.R
 import kotlinx.android.synthetic.main.fragment_image_view.*
 
-class ImageViewFragment : Fragment() {
-
-    override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        return inflater.inflate(R.layout.fragment_image_view, container, false)
-    }
+class ImageViewFragment : Fragment(R.layout.fragment_image_view) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
