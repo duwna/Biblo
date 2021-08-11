@@ -102,7 +102,7 @@ class BillsFragment : BaseFragment<BillsViewModel>() {
             .setTitle(R.string.label_delete_group)
             .setMessage(R.string.message_delete_group)
             .setPositiveButton(R.string.label_delete) { _, _ -> viewModel.deleteGroup() }
-            .setNegativeButton(R.string.btn_cancel) { _, _ -> }
+            .setNegativeButton(R.string.btn_cancel, null)
             .show()
     }
 

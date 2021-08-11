@@ -77,7 +77,7 @@ class AuthFragment : BaseFragment<AuthViewModel>() {
             .setTitle(getString(R.string.label_password_reset))
             .setMessage("${getString(R.string.message_send_password_link_question)} $email?")
             .setPositiveButton(R.string.label_send) { _, _ -> viewModel.resetPassword(email) }
-            .setNegativeButton(R.string.btn_cancel) { _, _ -> }
+            .setNegativeButton(R.string.btn_cancel, null)
             .show()
     }
 }
