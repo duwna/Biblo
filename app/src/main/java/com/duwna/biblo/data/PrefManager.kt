@@ -6,15 +6,14 @@ import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.duwna.biblo.App
 import com.duwna.biblo.entities.database.User
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 
-object PrefManager {
+class PrefManager(context: Context) {
 
     private val Context.dataStore by preferencesDataStore("app_preferences")
-    private val dataStore = App.appContext.dataStore
+    private val dataStore = context.dataStore
 
 
     suspend fun saveUser(user: User) {
