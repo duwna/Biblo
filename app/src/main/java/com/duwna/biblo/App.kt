@@ -1,21 +1,20 @@
 package com.duwna.biblo
 
 import android.app.Application
-import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import com.duwna.biblo.data.PrefManager
-import com.duwna.biblo.di.components.AppComponent
+import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 
+@HiltAndroidApp
 class App : Application() {
+
+    @Inject
+    lateinit var prefs: PrefManager
 
     override fun onCreate() {
         super.onCreate()
-        val appComponent = AppComponent.Factory.create(applicationContext)
-        appContext = applicationContext
-        AppCompatDelegate.setDefaultNightMode(PrefManager.getThemeModeSync())
-    }
 
-    companion object {
-        lateinit var appContext: Context
+        AppCompatDelegate.setDefaultNightMode(prefs.getThemeModeSync())
     }
 }
