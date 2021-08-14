@@ -1,4 +1,4 @@
-package com.duwna.biblo.data
+package com.duwna.biblo.entities.database
 
 import com.duwna.biblo.BuildConfig
 

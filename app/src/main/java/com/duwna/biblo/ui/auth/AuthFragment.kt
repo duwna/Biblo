@@ -5,6 +5,7 @@ import android.app.AlertDialog
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import com.duwna.biblo.BuildConfig
 import com.duwna.biblo.R
 import com.duwna.biblo.ui.base.BaseFragment
 import com.duwna.biblo.ui.base.IViewModelState
@@ -12,12 +13,15 @@ import com.duwna.biblo.utils.hideKeyBoard
 import com.duwna.biblo.utils.showSnackBar
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_auth.*
 
 
+@AndroidEntryPoint
 class AuthFragment : BaseFragment<AuthViewModel>() {
-    override val viewModel: AuthViewModel by viewModels()
+
     override val layout: Int = R.layout.fragment_auth
+    override val viewModel: AuthViewModel by viewModels()
 
     private val googleSignInResult =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
@@ -41,7 +45,7 @@ class AuthFragment : BaseFragment<AuthViewModel>() {
 
         btn_enter.setOnClickListener {
             it.hideKeyBoard()
-            viewModel.enter(et_email.text.toString(), et_sum.text.toString())
+            viewModel.enter(et_email.text.toString(), et_password.text.toString())
         }
 
         tv_forgot_password.setOnClickListener {

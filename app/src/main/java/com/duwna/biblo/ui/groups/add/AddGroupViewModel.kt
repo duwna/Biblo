@@ -1,8 +1,7 @@
 package com.duwna.biblo.ui.groups.add
 
 import android.net.Uri
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.SavedStateHandle
 import com.duwna.biblo.R
 import com.duwna.biblo.data.repositories.GroupsRepository
 import com.duwna.biblo.entities.database.User
@@ -12,31 +11,37 @@ import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.Event
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.ui.base.Notify
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class AddGroupViewModel(private val groupItem: GroupItem?) : BaseViewModel<AddGroupState>(
-    AddGroupState(
-        members = groupItem?.members?.map {
-            AddMemberItem(it.name, null, it.id, it.avatarUrl)
-        } ?: emptyList()
-    )
-) {
+@HiltViewModel
+class AddGroupViewModel @Inject constructor(
+    private val repository: GroupsRepository,
+    handle: SavedStateHandle
+) : BaseViewModel<AddGroupState>(AddGroupState()) {
 
-    private val repository = GroupsRepository()
+    private val groupItem = handle.get<GroupItem>("groupItem")
 
     init {
-        // add current user to members list
+        initMembers()
+    }
+
+    private fun initMembers() {
         if (groupItem == null) {
+            // add current user to members list
             launchSafety {
-                val currentUser = repository.getLocalUserInfo()
-                val memberItem = AddMemberItem(
-                    name = currentUser.name,
-                    avatarUrl = currentUser.avatarUrl,
-                    id = currentUser.idUser
+                val currentUser = repository.loadCurrentUserItem()
+                postUpdateList { add(currentUser) }
+            }
+        } else {
+            updateState {
+                copy(
+                    members = groupItem.members.map {
+                        AddMemberItem(it.name, null, it.id, it.avatarUrl)
+                    }
                 )
-                postUpdateList { add(memberItem) }
             }
         }
-
     }
 
     fun insertMember(name: String) {
@@ -171,10 +176,4 @@ data class AddGroupState(
 ) : IViewModelState {
     // which image to change after activity result callback
     enum class ImageAction { GROUP_AVATAR, MEMBER_AVATAR }
-}
-
-class AddGroupViewModelFactory(private val groupItem: GroupItem?) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return AddGroupViewModel(groupItem) as T
-    }
 }

@@ -1,7 +1,6 @@
 package com.duwna.biblo.ui.group.bills
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.SavedStateHandle
 import com.duwna.biblo.data.repositories.BillsRepository
 import com.duwna.biblo.entities.database.Bill
 import com.duwna.biblo.entities.items.BillMemberItem
@@ -11,11 +10,17 @@ import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.Event
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.utils.format
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
+import javax.inject.Inject
 
-class BillsViewModel(private val groupItem: GroupItem) : BaseViewModel<BillsState>(BillsState()) {
+@HiltViewModel
+class BillsViewModel @Inject constructor(
+    private val repository: BillsRepository,
+    handle: SavedStateHandle
+) : BaseViewModel<BillsState>(BillsState()) {
 
-    private val repository = BillsRepository(groupItem.id)
+    private val groupItem = handle.get<GroupItem>("groupItem")!!
 
     init {
         launchSafety { subscribeOnBillsList() }
@@ -23,7 +28,7 @@ class BillsViewModel(private val groupItem: GroupItem) : BaseViewModel<BillsStat
 
     private suspend fun subscribeOnBillsList() {
         showLoading()
-        repository.subscribeOnBills().collect { bills ->
+        repository.subscribeOnBills(groupItem.id).collect { bills ->
             if (bills.isEmpty()) postUpdateState {
                 copy(bills = emptyList(), showNoBillsText = true)
             } else postUpdateState {
@@ -83,14 +88,14 @@ class BillsViewModel(private val groupItem: GroupItem) : BaseViewModel<BillsStat
     fun deleteBill(idBill: String) {
         launchSafety {
             showLoading()
-            repository.deleteBill(idBill)
+            repository.deleteBill(groupItem.id, idBill)
         }
     }
 
     fun deleteGroup() {
         launchSafety {
             showLoading()
-            repository.deleteGroup(groupItem)
+            repository.deleteGroup(groupItem.id)
             postUpdateState { copy(onGroupDeleted = Event(Unit)) }
         }
     }
@@ -150,9 +155,3 @@ data class BillsState(
     val showNoBillsText: Boolean = false,
     val onGroupDeleted: Event<Unit>? = null
 ) : IViewModelState
-
-class BillsViewModelFactory(private val groupItem: GroupItem) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return BillsViewModel(groupItem) as T
-    }
-}

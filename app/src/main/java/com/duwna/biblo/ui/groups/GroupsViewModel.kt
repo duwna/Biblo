@@ -1,15 +1,20 @@
 package com.duwna.biblo.ui.groups
 
-import com.duwna.biblo.entities.items.GroupItem
+import androidx.lifecycle.SavedStateHandle
 import com.duwna.biblo.data.repositories.GroupsRepository
+import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.Event
 import com.duwna.biblo.ui.base.IViewModelState
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class GroupsViewModel : BaseViewModel<GroupsViewModelState>(
+@HiltViewModel
+class GroupsViewModel @Inject constructor(
+    private val repository: GroupsRepository,
+) : BaseViewModel<GroupsViewModelState>(
     GroupsViewModelState()
 ) {
-    private val repository = GroupsRepository()
 
     fun initialize() {
         if (repository.userExists()) {

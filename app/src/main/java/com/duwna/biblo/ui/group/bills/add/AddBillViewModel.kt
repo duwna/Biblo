@@ -1,26 +1,31 @@
 package com.duwna.biblo.ui.group.bills.add
 
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.SavedStateHandle
 import com.duwna.biblo.R
+import com.duwna.biblo.data.repositories.BillsRepository
 import com.duwna.biblo.entities.database.Bill
 import com.duwna.biblo.entities.items.AddBillMemberItem
 import com.duwna.biblo.entities.items.GroupItem
-import com.duwna.biblo.data.repositories.BillsRepository
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.Event
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.ui.base.Notify
 import com.duwna.biblo.utils.equalsDelta
+import dagger.hilt.android.lifecycle.HiltViewModel
 import java.util.*
+import javax.inject.Inject
 
-class AddBillViewModel(groupItem: GroupItem) : BaseViewModel<AddBillState>(
-    AddBillState(
-        payerList = groupItem.members.map { AddBillMemberItem(it.id, it.name, it.avatarUrl) },
-        debtorList = groupItem.members.map { AddBillMemberItem(it.id, it.name, it.avatarUrl) }
-    )
-) {
-    private val repository = BillsRepository(groupItem.id)
+@HiltViewModel
+class AddBillViewModel @Inject constructor(
+    private val repository: BillsRepository,
+    handle: SavedStateHandle
+) : BaseViewModel<AddBillState>(AddBillState()) {
+
+    private val groupItem = handle.get<GroupItem>("groupItem")!!
+
+    init {
+        initMembers()
+    }
 
     fun setPayerSum(index: Int, value: Double) {
         updateState {
@@ -105,17 +110,38 @@ class AddBillViewModel(groupItem: GroupItem) : BaseViewModel<AddBillState>(
             }
             val bill = Bill(title, description, currentState.date, payers, debtors)
 
-            repository.insertBill(bill)
+            repository.insertBill(groupItem.id, bill)
             postUpdateState { copy(onBillAdded = Event(Unit)) }
         }
+    }
+
+    fun setDate(date: Date) {
+        updateState { copy(date = date) }
     }
 
     private fun isSumValid(): Boolean = currentState.sum.equalsDelta(
         currentState.debtorList.sumOf { if (it.isChecked) it.sum else 0.0 }
     )
 
-    fun setDate(date: Date) {
-        updateState { copy(date = date) }
+    private fun initMembers() {
+        updateState {
+            copy(
+                payerList = groupItem.members.map {
+                    AddBillMemberItem(
+                        it.id,
+                        it.name,
+                        it.avatarUrl
+                    )
+                },
+                debtorList = groupItem.members.map {
+                    AddBillMemberItem(
+                        it.id,
+                        it.name,
+                        it.avatarUrl
+                    )
+                }
+            )
+        }
     }
 }
 
@@ -127,10 +153,3 @@ data class AddBillState(
     val date: Date = Date(),
     val onBillAdded: Event<Unit>? = null
 ) : IViewModelState
-
-
-class AddBillViewModelFactory(private val groupItem: GroupItem) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return AddBillViewModel(groupItem) as T
-    }
-}

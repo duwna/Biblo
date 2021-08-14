@@ -7,10 +7,13 @@ import com.duwna.biblo.data.repositories.AuthRepository
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.ui.base.Notify
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class ProfileViewModel : BaseViewModel<ProfileState>(ProfileState()) {
-
-    private val repository = AuthRepository()
+@HiltViewModel
+class ProfileViewModel @Inject constructor(
+    private val repository: AuthRepository
+) : BaseViewModel<ProfileState>(ProfileState()) {
 
     init {
         launchSafety { postUpdateState { copy(user = repository.getLocalUserInfo()) } }

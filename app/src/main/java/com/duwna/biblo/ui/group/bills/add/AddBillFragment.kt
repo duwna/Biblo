@@ -1,7 +1,6 @@
 package com.duwna.biblo.ui.group.bills.add
 
 import android.app.DatePickerDialog
-import android.os.Bundle
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -13,17 +12,16 @@ import com.duwna.biblo.ui.base.BaseFragment
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.utils.format
 import com.robinhood.ticker.TickerUtils
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_add_bill.*
 import kotlinx.android.synthetic.main.item_add_bill.view.*
 import java.util.*
 
+@AndroidEntryPoint
 class AddBillFragment : BaseFragment<AddBillViewModel>() {
 
     override val layout: Int = R.layout.fragment_add_bill
-
-    override val viewModel: AddBillViewModel by viewModels {
-        AddBillViewModelFactory(arguments?.getSerializable("groupItem") as GroupItem)
-    }
+    override val viewModel: AddBillViewModel by viewModels()
 
     private val payersAdapter: AddBillAdapter by lazy {
         AddBillAdapter(

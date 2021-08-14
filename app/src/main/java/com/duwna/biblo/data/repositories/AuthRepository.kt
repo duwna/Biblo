@@ -1,17 +1,24 @@
 package com.duwna.biblo.data.repositories
 
 import android.net.Uri
-import com.duwna.biblo.BuildConfig
-import com.duwna.biblo.data.DatabaseConstants.USERS
+import com.duwna.biblo.entities.database.DatabaseConstants.USERS
 import com.duwna.biblo.data.PrefManager
+import com.duwna.biblo.data.UploadImageManager
 import com.duwna.biblo.entities.database.User
+import com.duwna.biblo.utils.userId
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.toObject
 import kotlinx.coroutines.tasks.await
+import javax.inject.Inject
 
-class AuthRepository : BaseRepository() {
-
-    override val reference = database.collection(USERS)
+class AuthRepository @Inject constructor(
+    private val auth: FirebaseAuth,
+    private val prefs: PrefManager,
+    private val imageManager: UploadImageManager,
+    private val database: FirebaseFirestore
+) {
 
     suspend fun authWithGoogle(idToken: String?) {
         val result = auth
@@ -26,7 +33,7 @@ class AuthRepository : BaseRepository() {
                 avatarUrl = auth.currentUser?.photoUrl?.toString()
             )
             insertUser(user)
-        // if user already exists -> load data from network
+            // if user already exists -> load data from network
         } else {
             updateLocalUserInfoFromNetwork()
         }
@@ -41,7 +48,7 @@ class AuthRepository : BaseRepository() {
         auth.createUserWithEmailAndPassword(email, password)
             .await()
 
-        val user = User(firebaseUserId, name, email, null, avatarUri)
+        val user = User(auth.userId(), name, email, null, avatarUri)
         insertUser(user)
     }
 
@@ -53,14 +60,15 @@ class AuthRepository : BaseRepository() {
     }
 
     suspend fun insertUser(user: User) {
-        val avatarUrl = user.avatarUri?.let { uploadImage(USERS, firebaseUserId, it) }
+        val avatarUrl = imageManager.uploadOrNull(USERS, auth.userId(), user.avatarUri)
         val newUser = if (avatarUrl != null) user.copy(avatarUrl = avatarUrl) else user
 
-        reference.document(firebaseUserId)
+        database.collection(USERS)
+            .document(auth.userId())
             .set(newUser)
             .await()
 
-        PrefManager.saveUser(newUser.copy(idUser = firebaseUserId))
+        prefs.saveUser(newUser.copy(idUser = auth.userId()))
     }
 
     suspend fun resetPassword(email: String) {
@@ -69,12 +77,22 @@ class AuthRepository : BaseRepository() {
 
     fun signOut() = auth.signOut()
 
-    private suspend fun updateLocalUserInfoFromNetwork() {
-        val newUser = reference.document(firebaseUserId).get().await().toObject<User>()!!
-        PrefManager.saveUser(newUser.copy(idUser = firebaseUserId))
+    suspend fun saveTheme(mode: Int) {
+        prefs.saveThemeMode(mode)
     }
 
-    suspend fun saveTheme(mode: Int) {
-        PrefManager.saveThemeMode(mode)
+    private suspend fun updateLocalUserInfoFromNetwork() {
+
+        val newUser = database.collection(USERS)
+            .document(auth.userId())
+            .get()
+            .await()
+            .toObject<User>()!!
+
+        prefs.saveUser(newUser.copy(idUser = auth.userId()))
+    }
+
+    suspend fun getLocalUserInfo(): User {
+        return prefs.loadUser()
     }
 }

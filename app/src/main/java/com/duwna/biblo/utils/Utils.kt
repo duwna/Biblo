@@ -1,6 +1,7 @@
 package com.duwna.biblo.utils
 
 import android.util.Log
+import com.google.firebase.auth.FirebaseAuth
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -10,8 +11,8 @@ fun Date.format(pattern: String = "HH:mm, dd.MM"): String {
 }
 
 fun Date.shortFormat(): String {
-    val pattern  = if(this.isSameDay(Date())) "HH:mm" else "HH:mm, dd.MM"
-    val dateFormat = SimpleDateFormat(pattern,Locale.getDefault())
+    val pattern = if (this.isSameDay(Date())) "HH:mm" else "HH:mm, dd.MM"
+    val dateFormat = SimpleDateFormat(pattern, Locale.getDefault())
     return dateFormat.format(this)
 }
 
@@ -20,9 +21,9 @@ const val MINUTE = 60 * SECOND
 const val HOUR = 60 * MINUTE
 const val DAY = 24 * HOUR
 
-fun Date.isSameDay(date:Date):Boolean{
-    val day1 = this.time/DAY
-    val day2 = date.time/DAY
+fun Date.isSameDay(date: Date): Boolean {
+    val day1 = this.time / DAY
+    val day2 = date.time / DAY
     return day1 == day2
 }
 
@@ -47,3 +48,5 @@ fun <T> tryOrNull(block: () -> T?): T? = try {
 } catch (t: Throwable) {
     null
 }
+
+fun FirebaseAuth.userId() = currentUser!!.uid

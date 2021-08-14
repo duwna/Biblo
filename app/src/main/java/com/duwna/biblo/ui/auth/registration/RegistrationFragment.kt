@@ -14,8 +14,10 @@ import com.duwna.biblo.ui.dialogs.ImageActionDialog
 import com.duwna.biblo.ui.dialogs.ImageActionDialog.Companion.showImageActionDialog
 import com.duwna.biblo.utils.hideKeyBoard
 import com.duwna.biblo.utils.tryOrNull
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_registration.*
 
+@AndroidEntryPoint
 class RegistrationFragment : BaseFragment<RegistrationViewModel>() {
     override val viewModel: RegistrationViewModel by viewModels()
     override val layout: Int = R.layout.fragment_registration

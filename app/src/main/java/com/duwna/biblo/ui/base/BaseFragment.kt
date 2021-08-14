@@ -6,7 +6,7 @@ import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
-import com.duwna.biblo.MainActivity
+import com.duwna.biblo.ui.MainActivity
 
 abstract class BaseFragment<T : BaseViewModel<out IViewModelState>> : Fragment() {
 

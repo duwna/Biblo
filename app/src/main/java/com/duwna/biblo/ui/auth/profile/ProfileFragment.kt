@@ -16,8 +16,10 @@ import com.duwna.biblo.ui.dialogs.ImageActionDialog
 import com.duwna.biblo.ui.dialogs.ImageActionDialog.Companion.showImageActionDialog
 import com.duwna.biblo.utils.toInitials
 import com.duwna.biblo.utils.tryOrNull
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_profile.*
 
+@AndroidEntryPoint
 class ProfileFragment : BaseFragment<ProfileViewModel>() {
 
     override val viewModel: ProfileViewModel by viewModels()

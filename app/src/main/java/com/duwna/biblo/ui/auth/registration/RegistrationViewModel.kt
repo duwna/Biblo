@@ -7,12 +7,15 @@ import com.duwna.biblo.data.repositories.AuthRepository
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.ui.base.Notify
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class RegistrationViewModel : BaseViewModel<RegistrationState>(RegistrationState()) {
-
-    private val repository = AuthRepository()
+@HiltViewModel
+class RegistrationViewModel @Inject constructor(
+    private val repository: AuthRepository
+) : BaseViewModel<RegistrationState>(RegistrationState()) {
 
     fun registerUser(name: String, email: String, password: String) {
         updateState { copy(isLoading = true) }

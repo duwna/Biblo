@@ -10,8 +10,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.duwna.biblo.R
 import com.duwna.biblo.ui.base.BaseFragment
 import com.duwna.biblo.ui.base.IViewModelState
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_groups.*
 
+@AndroidEntryPoint
 class GroupsFragment : BaseFragment<GroupsViewModel>() {
 
     override val viewModel: GroupsViewModel by viewModels()

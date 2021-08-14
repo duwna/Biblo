@@ -21,17 +21,14 @@ import com.duwna.biblo.ui.dialogs.ImageActionDialog
 import com.duwna.biblo.ui.dialogs.ImageActionDialog.Companion.showImageActionDialog
 import com.duwna.biblo.utils.tryOrNull
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_chat.*
 
-
+@AndroidEntryPoint
 class ChatFragment : BaseFragment<ChatViewModel>() {
 
     override val layout: Int = R.layout.fragment_chat
-
-    override val viewModel: ChatViewModel by viewModels {
-        val groupItem = arguments?.getSerializable("groupItem") as GroupItem
-        ChatViewModelFactory(groupItem)
-    }
+    override val viewModel: ChatViewModel by viewModels()
 
     private val chatAdapter: ChatAdapter by lazy {
         ChatAdapter(

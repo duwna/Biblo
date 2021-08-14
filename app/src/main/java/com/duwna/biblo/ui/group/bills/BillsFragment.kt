@@ -18,17 +18,17 @@ import com.duwna.biblo.ui.base.BaseFragment
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.ui.group.bills.add.AddBillFragment
 import com.google.android.material.snackbar.Snackbar
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_bills.*
 
-
+@AndroidEntryPoint
 class BillsFragment : BaseFragment<BillsViewModel>() {
 
     override val layout: Int = R.layout.fragment_bills
-    private lateinit var groupItem: GroupItem
+    override val viewModel: BillsViewModel by viewModels()
 
-    override val viewModel: BillsViewModel by viewModels {
-        groupItem = arguments?.getSerializable("groupItem") as GroupItem
-        BillsViewModelFactory(groupItem)
+    private val groupItem: GroupItem by lazy {
+        arguments?.getSerializable("groupItem") as GroupItem
     }
 
     private val billsAdapter: BillsAdapter by lazy {

@@ -1,20 +1,25 @@
 package com.duwna.biblo.ui.group.chat
 
 import android.net.Uri
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.SavedStateHandle
+import com.duwna.biblo.data.repositories.ChatRepository
 import com.duwna.biblo.entities.items.GroupItem
 import com.duwna.biblo.entities.items.MessageItem
-import com.duwna.biblo.data.repositories.ChatRepository
 import com.duwna.biblo.ui.base.BaseViewModel
 import com.duwna.biblo.ui.base.Event
 import com.duwna.biblo.ui.base.IViewModelState
 import com.duwna.biblo.utils.shortFormat
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.collect
+import javax.inject.Inject
 
-class ChatViewModel(private val groupItem: GroupItem) : BaseViewModel<ChatState>(ChatState()) {
+@HiltViewModel
+class ChatViewModel @Inject constructor(
+    private val repository: ChatRepository,
+    handle: SavedStateHandle
+) : BaseViewModel<ChatState>(ChatState()) {
 
-    private val repository = ChatRepository(groupItem.id)
+    private val groupItem = handle.get<GroupItem>("groupItem")!!
 
     init {
         launchSafety { subscribeOnMessagesList() }
@@ -22,7 +27,7 @@ class ChatViewModel(private val groupItem: GroupItem) : BaseViewModel<ChatState>
 
     private suspend fun subscribeOnMessagesList() {
         showLoading()
-        repository.subscribeOnMessages().collect { messages ->
+        repository.subscribeOnMessages(groupItem.id).collect { messages ->
             val messageItems = messages.map { message ->
                 val member = groupItem.members.find { it.id == message.from }!!
                 MessageItem(
@@ -34,7 +39,12 @@ class ChatViewModel(private val groupItem: GroupItem) : BaseViewModel<ChatState>
                     message.imgUrl
                 )
             }
-            if (messageItems.isEmpty()) postUpdateState { copy(messages = emptyList(), showNoMessagesText = true) }
+            if (messageItems.isEmpty()) postUpdateState {
+                copy(
+                    messages = emptyList(),
+                    showNoMessagesText = true
+                )
+            }
             else postUpdateState { copy(messages = messageItems, showNoMessagesText = false) }
             hideLoading()
         }
@@ -49,13 +59,13 @@ class ChatViewModel(private val groupItem: GroupItem) : BaseViewModel<ChatState>
         val uri = currentState.imageUri
         setImageUri(null)
         launchSafety {
-            repository.insertMessage(text, uri)
+            repository.insertMessage(groupItem.id, text, uri)
             postUpdateState { copy(imageUri = null, onMessageSent = Event(Unit)) }
         }
     }
 
     fun deleteMessage(messageItem: MessageItem) {
-        launchSafety { repository.deleteMessage(messageItem) }
+        launchSafety { repository.deleteMessage(groupItem.id, messageItem) }
     }
 }
 
@@ -65,9 +75,3 @@ data class ChatState(
     val onMessageSent: Event<Unit>? = null,
     val showNoMessagesText: Boolean = false
 ) : IViewModelState
-
-class ChatViewModelFactory(private val groupItem: GroupItem) : ViewModelProvider.Factory {
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        return ChatViewModel(groupItem) as T
-    }
-}

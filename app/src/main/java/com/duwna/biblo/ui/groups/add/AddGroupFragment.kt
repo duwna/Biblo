@@ -21,19 +21,18 @@ import com.duwna.biblo.ui.dialogs.ImageActionDialog.Companion.showImageActionDia
 import com.duwna.biblo.utils.dpToIntPx
 import com.duwna.biblo.utils.hideKeyBoard
 import com.duwna.biblo.utils.tryOrNull
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_add_group.*
 import kotlinx.android.synthetic.main.fragment_add_group.container
 
-
+@AndroidEntryPoint
 class AddGroupFragment : BaseFragment<AddGroupViewModel>() {
 
     private val args: AddGroupFragmentArgs by navArgs()
     override val layout: Int = R.layout.fragment_add_group
 
-    override val viewModel: AddGroupViewModel by viewModels {
-        AddGroupViewModelFactory(args.groupItem)
-    }
+    override val viewModel: AddGroupViewModel by viewModels()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
