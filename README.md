@@ -1,7 +1,7 @@
 # Biblo - shared expenses
 
 [Biblo on Google Play](https://play.google.com/store/apps/details?id=com.duwna.biblo)
-![Biblo logo](app/src/main/res/mipmap-anydpi-v26/ic_launcher_foreground.png)
+![Biblo logo](app/src/main/res/mipmap-xhdpi/ic_launcher_foreground.png)
 #### Android app to split money between groups of people.
 ##### Fast calculation of expenses and distribution of debts between company.
 
